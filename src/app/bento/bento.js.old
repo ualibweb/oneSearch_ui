@@ -1,0 +1,85 @@
+angular.module('oneSearch.bento', [])
+
+    .config(['$routeProvider', function($routeProvider) {
+
+        $routeProvider
+            .when('/bento/:s', {
+                templateUrl: 'bento/bento.tpl.html',
+                controller: 'BentoCtrl'
+            })
+    }])
+
+    .controller('BentoCtrl', ['$scope', '$filter', '$routeParams', 'MediaTypes', 'oneSearch', function($scope, $filter, $routeParams, MediaTypes, oneSearch){
+        $scope.bento = {};
+        $scope.os = oneSearch;
+
+        $scope.$on('$routeChangeSuccess', function(){
+            var res = oneSearch.searchAll($routeParams);
+
+            angular.forEach(res, function(engine, name){
+                engine.response.success(function(data){
+
+                    var d = engine.getResults(data);
+
+                        var grouped =  MediaTypes.groupBy(d, engine.mediaTypes);
+                        /*
+                        angular.forEach(grouped, function(collection, group){
+                            grouped[group] = $filter('limitTo')(collection, 6);
+                            typeLoaded(group, name);
+                        });
+                        */
+                        //$scope.bento[name] = grouped;
+                       // console.log($filter('filter')(oneSearch.mediaTypes, '!'+name));
+
+                }).error(function(msg){
+                    console.log(msg);
+                    return msg;
+                });
+            })
+        });
+        
+        function typeLoaded(type, engine, reset){
+            if (!type){
+                $scope.os.mediaTypes[type].engines = [];
+                $scope.os.mediaTypes[type].loaded = true;
+            }
+            else {
+                var i = $scope.os.mediaTypes[type].engines.indexOf(engine);
+                if(i != -1) {
+                    $scope.os.mediaTypes[type].engines.splice(i, 1);
+                    if ($scope.os.mediaTypes[type].engines.length <= 0){
+                        $scope.os.mediaTypes[type].loaded = true;
+                    }
+                }
+            }
+        }
+    }])
+
+    .directive('bentoBox', ['$animate', 'oneSearch', function($animate, oneSearch){
+        return {
+            restrict: 'AC',
+            scope: {
+                bentoBox: '@'
+            },
+            controller: function($scope, $element){
+                var spinner = angular.element('<div id="loading-bar-spinner"><div class="spinner-icon"></div></div>');
+
+                var loader = $scope.$watch(
+                    function(){
+                        return oneSearch.mediaTypes[$scope.bentoBox].loaded;
+                    },
+                    function(newVal){
+                        if (newVal) $animate.leave(spinner);
+                        else $animate.enter(spinner, $element.find('h3'), angular.element($element.find('h3')[0].lastChild));
+
+                    }
+                );
+
+                // Destroy watcher when directive is removed from $scope
+                $scope.$on('$destroy', function(){
+                    loader();
+                });
+
+            }
+        }
+    }])

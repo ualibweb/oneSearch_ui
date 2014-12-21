@@ -1,0 +1,12 @@
+<div class="media">
+    <div class="media-body">
+        <h5 class="media-heading">{{item.title}}</h5>
+        <div class="media">
+            <div class="media-body">
+                <h6 class="media-heading" ng-repeat="link in item.links">
+                    <a ng-href="{{link.href}}">{{link.name}}</a>
+                </h6>
+            </div>
+        </div>
+    </div>
+</div>
