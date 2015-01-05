@@ -48,3 +48,11 @@ angular.module('common.oneSearch', [])
             }
         }]
     }])
+
+    .controller('OneSearchCtrl', ['$scope', '$location', function($scope, $location){
+        $scope.search = function(){
+            if ($scope.searchText){
+                $location.path('/bento/'+$scope.searchText);
+            }
+        }
+    }])
