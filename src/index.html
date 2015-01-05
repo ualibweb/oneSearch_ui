@@ -10,10 +10,10 @@
 </head>
 <body>
 <div class="onesearch-container">
-    <div class="container">
-        <form action="/sample-page/onesearch/">
+    <div class="container" ng-controller="OneSearchCtrl">
+        <form ng-submit="search()">
             <div class="input-group input-group-lg">
-                <input type="text" name="search" class="form-control onesearch-text" placeholder="Search all library resources">
+                <input type="text" name="search" ng-model="searchText" class="form-control onesearch-text" placeholder="Search all library resources">
                 <div class="input-group-btn">
                     <button type="submit" class="btn btn-onesearch btn-primary"><span class="fa fa-search"></span></button>
                 </div>
