@@ -13,11 +13,7 @@ angular.module('oneSearch.bento', [])
         this.boxes = {};
         this.engines = {};
 
-        angular.copy(mediaTypes.types, this.boxes);
 
-        angular.forEach(this.boxes, function(box, type){
-            self.boxes[type].results = {};
-        })
 
         function loadProgress(type, engine){
             var i = self.boxes[type].engines.indexOf(engine);
@@ -31,6 +27,12 @@ angular.module('oneSearch.bento', [])
 
         this.getBoxes = function(){
             var engines = oneSearch.searchAll($routeParams);
+
+            angular.copy(mediaTypes.types, self.boxes);
+
+            angular.forEach(self.boxes, function(box, type){
+                self.boxes[type].results = {};
+            });
 
             angular.forEach(engines, function(engine, name){
                 engine.response
@@ -47,13 +49,6 @@ angular.module('oneSearch.bento', [])
                                 loadProgress(type, name);
                             });
 
-                            /*angular.forEach(grouped, function(items, type){
-                                if (!self.boxes[type].results){
-                                    self.boxes[type].results = {};
-                                }
-                                self.boxes[type].results[name] = $filter('limitTo')(items, 3);
-                                loadProgress(type, name);
-                            });*/
                             //preload the engine's template for easy access for directives
                             self.engines[name] = oneSearch.getEngineTemplate(engine);
                         }
@@ -86,12 +81,12 @@ angular.module('oneSearch.bento', [])
             link: function(scope, elm, attrs){
                 var spinner = angular.element('<div id="loading-bar-spinner"><div class="spinner-icon"></div></div>');
                 var titleElm = elm.find('h2');
-                scope.limit = Bento.boxes[scope.box].limitEach;
 
                 $animate.enter(spinner, titleElm, angular.element(titleElm[0].lastChild));
 
                 var boxWatcher = scope.$watch(
                     function(){
+
                         return Bento.boxes[scope.box]['engines'];
                     },
                     function(newVal, oldVal) {
@@ -117,42 +112,12 @@ angular.module('oneSearch.bento', [])
 
                             if (newVal.length == 0){
                                 $animate.leave(spinner);
+                                boxWatcher();
                             }
                         }
                     },
                     true
                 )
-
-                /*scope.$watch(
-                    function(){
-                        return Bento.boxes[scope.box];
-                    },
-                    function(val){
-                        if (angular.isDefined(val.results)){
-                            console.log(val);
-
-
-                            for (index, len = loaded.length; index < len; index++){
-                                var engScope
-                            }
-
-                            angular.forEach(val.results, function(result, engine){
-                                if (!inArray(loaded)){
-                                    var eScope = $rootScope.new(true);
-                                    eScope.items = val[engine];
-
-                                    var template = angular.element(Bento.boxes.engines[engine]);
-                                    var html = $compile(template)(eScope);
-                                    elm.append(html);
-                                    loaded.push(engine);
-                                    console.log(html);
-                                }
-                            });
-                        }
-
-
-                    }
-                )*/
             }
         }
     }])
