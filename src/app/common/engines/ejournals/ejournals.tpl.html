@@ -1,12 +1,19 @@
-<div class="media">
-    <div class="media-body">
-        <h5 class="media-heading">{{item.title}}</h5>
-        <div class="media">
-            <div class="media-body">
-                <h6 class="media-heading" ng-repeat="link in item.links">
-                    <a ng-href="{{link.href}}">{{link.name}}</a>
-                </h6>
-            </div>
-        </div>
-    </div>
-</div>
+
+<ul class="source-list">
+    <li class="source-link">
+        <h4>
+            <a ng-href="{{item.links[0].href}}" title="{{item.title}}">{{item.title | ltrim | truncate: 40: '...': true}}</a>
+            <div class="small source-info"><span class="fa fa-level-up fa-rotate-90"></span> Available through {{item.links[0].name}}</div>
+
+        </h4>
+    </li>
+    <li ng-if="item.links[1]">
+        <ul class="source-link-more" collapse="isCollapsed">
+            <li div class="source-links" ng-repeat="link in item.links | after:1">
+                <span class="fa fa-angle-right text-muted"></span> <a ng-href="{{link.href}}" title="{{link.name}}" class="source-link">{{link.name | ltrim | truncate: 25: '...': true}}</a>
+            </li>
+        </ul>
+        <button ng-show="item.links[1]" type="button" class="btn btn-collapser btn-link btn-sm btn-block" ng-click="isCollapsed = !isCollapsed">{{isCollapsed ? 'more' : 'less'}} sources</button>
+    </li>
+</ul>
+

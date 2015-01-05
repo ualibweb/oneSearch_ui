@@ -4,7 +4,8 @@ angular.module('engines.databases', [])
         oneSearchProvider.engine('databases', {
             id: 2,
             resultsPath: 'Databases.results',
-            totalsPath: 'Databases.total'
+            totalsPath: 'Databases.total',
+            templateUrl: 'common/engines/databases/databases.tpl.html'
         })
     }])
 

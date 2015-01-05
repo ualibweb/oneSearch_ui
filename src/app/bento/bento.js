@@ -8,12 +8,16 @@ angular.module('oneSearch.bento', [])
             })
     }])
 
-    .service('Bento', ['$routeParams', 'oneSearch', 'mediaTypes', function($routeParams, oneSearch, mediaTypes){
+    .service('Bento', ['$routeParams', '$filter', 'oneSearch', 'mediaTypes', function($routeParams, $filter, oneSearch, mediaTypes){
         var self = this;
         this.boxes = {};
         this.engines = {};
 
         angular.copy(mediaTypes.types, this.boxes);
+
+        angular.forEach(this.boxes, function(box, type){
+            self.boxes[type].results = {};
+        })
 
         function loadProgress(type, engine){
             var i = self.boxes[type].engines.indexOf(engine);
@@ -36,53 +40,102 @@ angular.module('oneSearch.bento', [])
                             var res = engine.getResults(data);
                             var grouped = mediaTypes.groupBy(res, engine.mediaTypes);
 
-                            angular.forEach(grouped, function(items, type){
+                            Object.keys(self.boxes).forEach(function(type){
+                                if (grouped.hasOwnProperty(type)){
+                                    self.boxes[type].results[name] = $filter('limitTo')(grouped[type], 3);
+                                }
+                                loadProgress(type, name);
+                            });
+
+                            /*angular.forEach(grouped, function(items, type){
                                 if (!self.boxes[type].results){
                                     self.boxes[type].results = {};
                                 }
-                                self.boxes[type].results[name] = items;
-
+                                self.boxes[type].results[name] = $filter('limitTo')(items, 3);
                                 loadProgress(type, name);
-                            });
+                            });*/
                             //preload the engine's template for easy access for directives
                             self.engines[name] = oneSearch.getEngineTemplate(engine);
                         }
                     })
                     .error(function(msg){
-                        angular.forEach(bento, function(box, name){
-                            self.boxes[box].engines.filter(function(engine){
+                        angular.forEach(self.boxes, function(box, type){
+                            self.boxes[type].engines.filter(function(engine){
                                 return name != engine;
                             })
                         })
                     });
             });
+
         }
 
     }])
 
     .controller('BentoCtrl', ['$scope', 'Bento', function($scope, Bento){
-        this.bento = Bento;
         $scope.$on('$routeChangeSuccess', function(){
             Bento.getBoxes();
         })
     }])
 
-    .directive('bentoBox', ['$rootScope', '$compile', 'Bento', function($rootScope, $compile, Bento){
+    .directive('bentoBox', ['$rootScope', '$compile', '$animate', 'Bento', function($rootScope, $compile, $animate, Bento){
         return {
             restrict: 'A',
             scope: {
                 box: '@bentoBox'
             },
             link: function(scope, elm, attrs){
+                var spinner = angular.element('<div id="loading-bar-spinner"><div class="spinner-icon"></div></div>');
+                var titleElm = elm.find('h2');
+                scope.limit = Bento.boxes[scope.box].limitEach;
 
-                var loaded = [];
-                scope.$watch(
+                $animate.enter(spinner, titleElm, angular.element(titleElm[0].lastChild));
+
+                var boxWatcher = scope.$watch(
+                    function(){
+                        return Bento.boxes[scope.box]['engines'];
+                    },
+                    function(newVal, oldVal) {
+
+                        if (newVal !== oldVal){
+
+                            var engine = '';
+                            for (var i = 0, len = oldVal.length; i < len; i++){
+                                var eng = oldVal[i];
+                                if (!(newVal.indexOf(eng) > -1)){
+                                    engine = eng;
+                                    break;
+                                }
+                            }
+
+                            var eScope = $rootScope.$new(true);
+                            eScope.items = Bento.boxes[scope.box]['results'][engine];
+                            eScope.isCollapsed = true; //Need to manually inject controller that can be specified by each engine's config, instead of putting in scope vars generically.
+
+                            var template = angular.element('<div class="animate-repeat bento-item" ng-repeat="item in items">'+Bento.engines[engine].$$state.value+'</div>');
+                            var html = $compile(template)(eScope);
+                            elm.append(html);
+
+                            if (newVal.length == 0){
+                                $animate.leave(spinner);
+                            }
+                        }
+                    },
+                    true
+                )
+
+                /*scope.$watch(
                     function(){
                         return Bento.boxes[scope.box];
                     },
                     function(val){
-                        if (angular.isDefined(val)){
-                            console.log(val.results);
+                        if (angular.isDefined(val.results)){
+                            console.log(val);
+
+
+                            for (index, len = loaded.length; index < len; index++){
+                                var engScope
+                            }
+
                             angular.forEach(val.results, function(result, engine){
                                 if (!inArray(loaded)){
                                     var eScope = $rootScope.new(true);
@@ -99,7 +152,7 @@ angular.module('oneSearch.bento', [])
 
 
                     }
-                )
+                )*/
             }
         }
     }])

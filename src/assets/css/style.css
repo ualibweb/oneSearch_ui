@@ -9,6 +9,31 @@ a[href^="http"]:after, a[href^="https"]:after{
     -o-transition: 200ms cubic-bezier(0.420, 0.000, 0.580, 1.000) all;
     transition: 200ms cubic-bezier(0.420, 0.000, 0.580, 1.000) all;
 }
+
+/* Engine results source list and collapse styles */
+
+.source-info{
+    margin-left: 10px;
+}
+
+.source-link-more{
+    margin-bottom: 5px;
+}
+
+.btn-collapser{
+    padding: 2px;
+}
+
+.source-list, .source-list li, .source-list ul{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.source-list a {
+    padding: 5px 2px;
+}
+
 .animate-repeat.ng-move,
 .animate-repeat.ng-enter,
 .animate-repeat.ng-leave
@@ -77,6 +102,7 @@ a[href^="http"]:after, a[href^="https"]:after{
     top: 10px;
     left: 10px;*/
     display: inline-block;
+    margin-left: 15px;
 }
 
 #loading-bar-spinner .spinner-icon {

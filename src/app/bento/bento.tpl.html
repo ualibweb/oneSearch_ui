@@ -1,64 +1,48 @@
-<div class="row">
-    <div bento-box="books">
-        <h3>Books</h3>
-    </div>
-    <!--div class="col-xs-2">
-        <div class="list-group">
-            <a href="#articles" class="list-group-item">Articles <span ng-hide="mediaTypes.articles.loaded" class="label label-warning">loading</span></a>
-            <a href="#articles" class="list-group-item">Books</a>
-            <a href="#articles" class="list-group-item">Journals</a>
-            <a href="#articles" class="list-group-item">Multimedia</a>
-            <a href="#articles" class="list-group-item">Other Media</a>
-            <a href="#articles" class="list-group-item">Acumen</a>
-            <a href="#articles" class="list-group-item">Databases</a>
-            <a href="#articles" class="list-group-item">Libraries' Website</a>
+<div class="bento-box-container">
+    <div class="row">
+        <div bento-box="recommend">
+            <h2>Recommended</h2>
         </div>
     </div>
-    <div class="col-xs-10 bento-results">
-        <div class="row">
-            <div class="bento-box" bento-box="books">
-                <h3>Books</h3>
-                <div class="animate-repeat" ng-repeat="item in bento.scout.books" scout></div>
-                <div class="animate-repeat" ng-repeat="item in bento.ejournals.books" ejournals></div>
-                <div class="animate-repeat" ng-repeat="item in bento.catalog.books" catalog></div>
-            </div>
-            <div class="bento-box" bento-box="journals">
-                <h3>Journals</h3>
-                <div class="animate-repeat" ng-repeat="item in bento.scout.journals" scout></div>
-                <div class="animate-repeat" ng-repeat="item in bento.ejournals.journals" ejournals></div>
-                <div class="animate-repeat" ng-repeat="item in bento.catalog.journals" catalog></div>
-            </div>
-            <div class="bento-box">
-                <h3>Articles</h3>
-                <div class="animate-repeat" ng-repeat="item in bento.scout.articles" scout></div>
-                <div class="animate-repeat" ng-repeat="item in bento.ejournals.articles" ejournals></div>
-                <div class="animate-repeat" ng-repeat="item in bento.catalog.articles" catalog></div>
-            </div>
-            <div class="bento-box" bento-box="media">
-                <h3>Multimedia</h3>
-                <div class="animate-repeat" ng-repeat="item in bento.scout.media" scout></div>
-                <div class="animate-repeat" ng-repeat="item in bento.ejournals.media" ejournals></div>
-                <div class="animate-repeat" ng-repeat="item in bento.catalog.media" catalog></div>
-            </div>
-            <div class="bento-box" bento-box="acumen">
-                <h3>Acumen</h3>
-                <div class="animate-repeat" ng-repeat="item in bento.acumen.acumen" acumen></div>
-            </div>
-            <div class="bento-box" bento-box="databases">
-                <h3>Databases</h3>
-                <div class="animate-repeat" ng-repeat="item in bento.databases.databases" databases></div>
-            </div>
-            <div class="bento-box" bento-box="googleCS">
-                <h3>Libraries Website</h3>
-                <div class="animate-repeat" ng-repeat="item in bento.googleCS.googleCS" google-cs></div>
+    <div class="row">
+        <div class="col-sm-4">
+            <div bento-box="books">
+                <h2>Books</h2>
             </div>
 
-            <div class="bento-box" bento-box="other">
-                <h3>Other Media</h3>
-                <div class="animate-repeat" ng-repeat="item in bento.scout.other" scout></div>
-                <div class="animate-repeat" ng-repeat="item in bento.ejournals.other" ejournals></div>
-                <div class="animate-repeat" ng-repeat="item in bento.catalog.other" catalog></div>
+        </div>
+
+        <div class="col-sm-4">
+            <div bento-box="journals">
+                <h2>Journals</h2>
             </div>
         </div>
-    </div-->
+
+        <div class="col-sm-4">
+            <div bento-box="articles">
+                <h2>Articles</h2>
+            </div>
+            <div bento-box="databases">
+                <h2>Databases</h2>
+            </div>
+            <div bento-box="media">
+                <h2>Multimedia</h2>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div bento-box="acumen">
+                <h2>Acumen</h2>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div bento-box="googleCS">
+                <h2>Libraries' Website</h2>
+            </div>
+            <div bento-box="other">
+                <h2>Other Media</h2>
+            </div>
+        </div>
+    </div>
 </div>

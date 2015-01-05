@@ -1,5 +1,23 @@
 <div class="media">
     <div class="media-body">
-        <h5 class="media-heading"><a ng-href="{{item.link}}">{{item.title}}</a></h5>
+        <h4 class="media-heading"><a ng-href="{{item.link}}" title="{{item.title}}">{{item.title | truncate: 40: '...': true}}</a></h4>
     </div>
 </div>
+<!--div class="media">
+    <div class="media-body">
+        <h4 class="media-heading"><a href="http://guides.lib.ua.edu">Library Guides</a></h4>
+        <div class="media" ng-repeat="guide in items | limitTo:2 | filter:{link:'guides.lib.ua.edu'}">
+            <a class="media-left" ng-href="{{guide.link}}" title="{{guide.title}}">
+                <img ng-src="guide.pagemap.cse_thumbnail[0].src"
+                     width="{{guide.pagemap.cse_thumbnail[0].width}}"
+                     height="{{guide.pagemap.cse_thumbnail[0].height}}">
+            </a>
+            <div class="media-body">
+                <h4 class="media-heading">
+                    <a ng-href="{{guide.link}}">{{guide.title}}</a>
+                </h4>
+                <p>{{guide.snippet}}</p>
+            </div>
+        </div>
+    </div>
+</div-->

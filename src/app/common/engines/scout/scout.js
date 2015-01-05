@@ -13,7 +13,8 @@ angular.module('engines.scout', [])
                     articles: 'academicJournal',
                     media: ['audio', 'videoRecording']
                 }
-            }
+            },
+            templateUrl: 'common/engines/scout/scout.tpl.html'
         })
     }])
 

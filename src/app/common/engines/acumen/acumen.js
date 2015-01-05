@@ -4,7 +4,8 @@ angular.module('engines.acumen', [])
         oneSearchProvider.engine('acumen', {
             id: 8,
             resultsPath: 'Acumen.data',
-            totalsPath: 'Acumen.metadata.numFound'
+            totalsPath: 'Acumen.metadata.numFound',
+            templateUrl: 'common/engines/acumen/acumen.tpl.html'
         })
     }])
 

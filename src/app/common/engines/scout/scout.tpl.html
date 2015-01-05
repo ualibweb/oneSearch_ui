@@ -1,5 +1,5 @@
 <div class="media">
     <div class="media-body">
-        <h5 class="media-heading"><a ng-href="{{item.PLink}}">{{item.RecordInfo.BibRecord.BibEntity.Titles[0].TitleFull}}</a></h5>
+        <h4 class="media-heading"><a ng-href="{{item.PLink}}" title="{{item.RecordInfo.BibRecord.BibEntity.Titles[0].TitleFull}}">{{item.RecordInfo.BibRecord.BibEntity.Titles[0].TitleFull | truncate: 40: '...': true}}</a></h4>
     </div>
 </div>

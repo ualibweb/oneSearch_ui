@@ -1,3 +1,11 @@
-.bento-box-container > h3 > #loading-bar-spinner{
+.bento-box-container h2{
+    margin-bottom: 15px;
+}
+
+.bento-box-container h2 > #loading-bar-spinner{
     margin-left: 10px;
+}
+
+.bento-item{
+    margin-bottom: 15px;
 }

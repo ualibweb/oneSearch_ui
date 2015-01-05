@@ -19,7 +19,12 @@ angular.module('common.mediaTypes', [])
                     loaded: false
                 };
             }
+            if (!(_types['other'].engines.indexOf(engine) > -1)){
+                //Automatically assume the registered engine will contain 'other' media types
+                _types['other'].engines.push(engine);
+            }
             _types[type].engines.push(engine);
+
         }
 
         // Helper function

@@ -11,7 +11,9 @@ angular.module('engines.ejournals', [])
                     books: 'book',
                     journals: 'periodical'
                 }
-            }
+            },
+            templateUrl: 'common/engines/ejournals/ejournals.tpl.html'
+
         })
     }])
 

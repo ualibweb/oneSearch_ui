@@ -13,7 +13,8 @@ angular.module('engines.catalog', [])
                     articles: 'tm',
                     media: ['jm', 'gm']
                 }
-            }
+            },
+            templateUrl: 'common/engines/catalog/catalog.tpl.html'
         })
     }])
 

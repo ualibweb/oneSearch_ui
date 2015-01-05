@@ -1,8 +1,9 @@
 <div class="media">
-    <a class="pull-left" ng-href="http://acumen.lib.ua.edu/{{item.link}}">
+    <a class="pull-left" ng-href="http://acumen.lib.ua.edu/{{item.link}}" title="{{item.title}}">
         <img ng-src="{{item.thumb_path}}" style="max-height: 64px; max-width: 64px;">
     </a>
     <div class="media-body">
-        <h5 class="media-heading">{{item.title}}</h5>
+        <h4 class="media-heading"><a ng-href="http://acumen.lib.ua.edu/{{item.link}}" title="item.title">{{item.title | truncate: 40: '...': true}}</a></h4>
+        <p>{{item.description}}</p>
     </div>
 </div>
