@@ -1,3 +1,35 @@
+/**
+ * oneSearch Provider:
+ *  This is the core of the oneSearch application.
+ *  Search engines (i.e., resources) use the oneSearch Provider to register as searchable.
+ *  This allows resources/engines to be easily plug-able and templated independent of each other.
+ *
+ *  The oneSearch Provider expects engines to register in the config phase.
+ *  Engines are registered using the Provider's engine(engine_name, params) function:
+ *      engine_name: String - defines the identifier for the engine
+ *      params: Object - defines details for querying the engine (see example below)
+ *
+ *  Example:
+ *
+ *  // Define the engine as an Angular module
+ *  angular.module('engines.MY_ENGINES_NAME')
+ *
+ *  //Register the engine's configuration with the oneSearch Provider
+ *  .config(['oneSearchProvider', function(oneSearchProvider){
+ *      oneSearchProvider.engine('MY_ENGIENS_NAME', {
+ *          id: String|Integer, //The id given to the backend JSON response handler that identifies the engine
+ *          resultsPath: String, // A string representing the Object path to the search results (e.g., "engine.path.to.results")
+            totalsPath: String, // Optional - A string representing the Object path to the total number of results found
+            mediaTypes: { // Optional - Requires mediaTypesProvider module - An Object that specify media type qualifiers within the engines results
+                path: String // The base path in the results object for the media type qualifier
+                types: {    // Object that specifies what media types there are and how to identify them
+                    TYPE_LABEL: String // TYPE_LABEL will be the type id and the String will represent the value given from the 'path' specified above.
+                }
+            }
+        });
+    });
+ *
+ */
 angular.module('common.oneSearch', [])
 
     .provider('oneSearch', ['mediaTypesProvider', function oneSearchProvider(mediaTypesProvider){
