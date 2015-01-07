@@ -8,10 +8,3 @@ angular.module('engines.googleCS', [])
             templateUrl: 'common/engines/google-cs/google-cs.tpl.html'
         })
     }])
-
-    .directive('googleCs', [function(){
-        return {
-            restrict: 'AC',
-            templateUrl: 'common/engines/google-cs/google-cs.tpl.html'
-        }
-    }])

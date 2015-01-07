@@ -12,14 +12,12 @@ angular.module('engines.ejournals', [])
                     journals: 'periodical'
                 }
             },
-            templateUrl: 'common/engines/ejournals/ejournals.tpl.html'
+            templateUrl: 'common/engines/ejournals/ejournals.tpl.html',
+            controller: ['$scope', function($scope){
+                for (var i = 0, len = $scope.items.length; i < len; i++){
+                    $scope.items[i]['ctrltest'] = 'wut';
+                }
+            }]
 
         })
-    }])
-
-    .directive('ejournals', [function(){
-        return {
-            restrict: 'AC',
-            templateUrl: 'common/engines/ejournals/ejournals.tpl.html'
-        }
     }])

@@ -7,10 +7,3 @@ angular.module('engines.recommend', [])
             templateUrl: 'common/engines/recommend/recommend.tpl.html'
         })
     }])
-
-    .directive('recommend', [function(){
-        return {
-            restrict: 'AC',
-            templateUrl: 'common/engines/recommend/recommend.tpl.html'
-        }
-    }])

@@ -17,10 +17,3 @@ angular.module('engines.scout', [])
             templateUrl: 'common/engines/scout/scout.tpl.html'
         })
     }])
-
-    .directive('scout', [function(){
-        return {
-            restrict: 'AC',
-            templateUrl: 'common/engines/scout/scout.tpl.html'
-        }
-    }])

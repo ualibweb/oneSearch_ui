@@ -1,4 +1,3 @@
-
 <ul class="source-list">
     <li class="source-link">
         <h4>
@@ -9,11 +8,10 @@
     </li>
     <li ng-if="item.links[1]">
         <ul class="source-link-more" collapse="isCollapsed">
-            <li div class="source-links" ng-repeat="link in item.links | after:1">
-                <span class="fa fa-angle-right text-muted"></span> <a ng-href="{{link.href}}" title="{{link.name}}" class="source-link">{{link.name | ltrim | truncate: 25: '...': true}}</a>
+            <li class="source-links" ng-repeat="link in item.links | after:1">
+                <span class="fa fa-level-up fa-rotate-90 text-muted"></span>  <a ng-href="{{link.href}}" title="{{link.name}}" class="source-link">{{link.name | ltrim | truncate: 25: '...': true}}</a>
             </li>
         </ul>
         <button ng-show="item.links[1]" type="button" class="btn btn-collapser btn-link btn-sm btn-block" ng-click="isCollapsed = !isCollapsed">{{isCollapsed ? 'more' : 'less'}} sources</button>
     </li>
 </ul>
-

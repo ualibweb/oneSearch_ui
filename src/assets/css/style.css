@@ -1,20 +1,9 @@
 a[href^="http"]:after, a[href^="https"]:after{
     content: none;
 }
-.bento-box{
-    position: relative;
-    -webkit-transition: 200ms cubic-bezier(0.420, 0.000, 0.580, 1.000) all;
-    -moz-transition: 200ms cubic-bezier(0.420, 0.000, 0.580, 1.000) all;
-    -ms-transition: 200ms cubic-bezier(0.420, 0.000, 0.580, 1.000) all;
-    -o-transition: 200ms cubic-bezier(0.420, 0.000, 0.580, 1.000) all;
-    transition: 200ms cubic-bezier(0.420, 0.000, 0.580, 1.000) all;
-}
+
 
 /* Engine results source list and collapse styles */
-
-.source-info{
-    margin-left: 10px;
-}
 
 .source-link-more{
     margin-bottom: 5px;
@@ -32,6 +21,10 @@ a[href^="http"]:after, a[href^="https"]:after{
 
 .source-list a {
     padding: 5px 2px;
+}
+
+.source-info, .source-links{
+    margin-left: 10px !important;
 }
 
 .animate-repeat.ng-move,
@@ -114,11 +107,11 @@ a[href^="http"]:after, a[href^="https"]:after{
     border-left-color: #29d;
     border-radius: 10px;
 
-    -webkit-animation: loading-bar-spinner 400ms linear infinite;
-    -moz-animation:    loading-bar-spinner 400ms linear infinite;
-    -ms-animation:     loading-bar-spinner 400ms linear infinite;
-    -o-animation:      loading-bar-spinner 400ms linear infinite;
-    animation:         loading-bar-spinner 400ms linear infinite;
+    -webkit-animation: loading-bar-spinner 300ms linear infinite;
+    -moz-animation:    loading-bar-spinner 300ms linear infinite;
+    -ms-animation:     loading-bar-spinner 300ms linear infinite;
+    -o-animation:      loading-bar-spinner 300ms linear infinite;
+    animation:         loading-bar-spinner 300ms linear infinite;
 }
 
 @-webkit-keyframes loading-bar-spinner {
