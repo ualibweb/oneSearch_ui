@@ -19,9 +19,9 @@ npm install -g grunt-cli
 ```
 
 ## Install Grunt dependencies
-If you haven't used [grunt][http://gruntjs.com] before, be sure to check out the [Getting Started][http://gruntjs.com/getting-started] guide.
+If you haven't used [grunt](http://gruntjs.com) before, be sure to check out the [Getting Started](http://gruntjs.com/getting-started) guide.
 
-From the same directory as the repository's [Gruntfile.js][http://gruntjs.com/getting-started#the-gruntfile] and [package.json][http://gruntjs.com/getting-started#package.json], run the following command:
+From the same directory as the repository's [Gruntfile.js](http://gruntjs.com/getting-started#the-gruntfile) and [package.json](http://gruntjs.com/getting-started#package.json), run the following command:
 
 ```bash
 npm install
