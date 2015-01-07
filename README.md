@@ -29,6 +29,8 @@ npm install
 
 ## Build it!
 
+After running the following command, the files will be built to the _/dist_ folder.
+
 ```bash
 grunt
 ```
