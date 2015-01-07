@@ -17,4 +17,4 @@ angular.module('oneSearch', [
     // Default search parameters
     .value('SearchParams', {
         pp: 100
-    });
+    })

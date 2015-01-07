@@ -17,10 +17,3 @@ angular.module('engines.catalog', [])
             templateUrl: 'common/engines/catalog/catalog.tpl.html'
         })
     }])
-
-    .directive('catalog', [function(){
-        return {
-            restrict: 'AC',
-            templateUrl: 'common/engines/catalog/catalog.tpl.html'
-        }
-    }])

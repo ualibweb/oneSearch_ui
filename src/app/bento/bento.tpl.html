@@ -1,46 +1,51 @@
 <div class="bento-box-container">
     <div class="row">
-        <div bento-box="recommend">
+        <div class="bento-box well" bento-box="recommend">
             <h2>Recommended</h2>
         </div>
     </div>
     <div class="row">
         <div class="col-sm-4">
-            <div bento-box="books">
+            <div class="bento-box" bento-box="books">
                 <h2>Books</h2>
             </div>
 
         </div>
 
         <div class="col-sm-4">
-            <div bento-box="journals">
+            <div class="bento-box" bento-box="journals">
                 <h2>Journals</h2>
             </div>
         </div>
 
         <div class="col-sm-4">
-            <div bento-box="articles">
+            <div class="bento-box" bento-box="articles">
                 <h2>Articles</h2>
+
             </div>
-            <div bento-box="databases">
+            <div class="bento-box" bento-box="databases">
                 <h2>Databases</h2>
             </div>
-            <div bento-box="media">
+            <div class="bento-box" bento-box="media">
                 <h2>Multimedia</h2>
+
+                <div ng-show="box.noResults">
+                    No results
+                </div>
             </div>
         </div>
     </div>
     <div class="row">
         <div class="col-sm-6">
-            <div bento-box="acumen">
+            <div class="bento-box" bento-box="acumen">
                 <h2>Acumen</h2>
             </div>
         </div>
         <div class="col-sm-6">
-            <div bento-box="googleCS">
+            <div class="bento-box" bento-box="googleCS">
                 <h2>Libraries' Website</h2>
             </div>
-            <div bento-box="other">
+            <div class="bento-box" bento-box="other">
                 <h2>Other Media</h2>
             </div>
         </div>

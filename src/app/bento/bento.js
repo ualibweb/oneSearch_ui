@@ -13,8 +13,6 @@ angular.module('oneSearch.bento', [])
         this.boxes = {};
         this.engines = {};
 
-
-
         function loadProgress(type, engine){
             var i = self.boxes[type].engines.indexOf(engine);
             if(i != -1) {
@@ -50,7 +48,9 @@ angular.module('oneSearch.bento', [])
                             });
 
                             //preload the engine's template for easy access for directives
-                            self.engines[name] = oneSearch.getEngineTemplate(engine);
+                            self.engines[name] = {}
+                            self.engines[name].tpl = oneSearch.getEngineTemplate(engine);
+                            self.engines[name].controller = oneSearch.getEngineController(engine);
                         }
                     })
                     .error(function(msg){
@@ -72,28 +72,24 @@ angular.module('oneSearch.bento', [])
         })
     }])
 
-    .directive('bentoBox', ['$rootScope', '$compile', '$animate', 'Bento', function($rootScope, $compile, $animate, Bento){
+    .directive('bentoBox', ['$rootScope', '$controller', '$compile', '$animate', 'Bento', function($rootScope, $controller, $compile, $animate, Bento){
         return {
             restrict: 'A',
-            scope: {
-                box: '@bentoBox'
-            },
             link: function(scope, elm, attrs){
+                var box = attrs.bentoBox;
                 var spinner = angular.element('<div id="loading-bar-spinner"><div class="spinner-icon"></div></div>');
                 var titleElm = elm.find('h2');
-
+                
                 $animate.enter(spinner, titleElm, angular.element(titleElm[0].lastChild));
 
                 var boxWatcher = scope.$watch(
                     function(){
-
-                        return Bento.boxes[scope.box]['engines'];
+                        return Bento.boxes[box]['engines'];
                     },
                     function(newVal, oldVal) {
-
                         if (newVal !== oldVal){
-
                             var engine = '';
+
                             for (var i = 0, len = oldVal.length; i < len; i++){
                                 var eng = oldVal[i];
                                 if (!(newVal.indexOf(eng) > -1)){
@@ -102,22 +98,39 @@ angular.module('oneSearch.bento', [])
                                 }
                             }
 
-                            var eScope = $rootScope.$new(true);
-                            eScope.items = Bento.boxes[scope.box]['results'][engine];
-                            eScope.isCollapsed = true; //Need to manually inject controller that can be specified by each engine's config, instead of putting in scope vars generically.
+                            var engineScope = $rootScope.$new(true);
+                            engineScope.items = Bento.boxes[box]['results'][engine];
+                            engineScope.isCollapsed = true;
 
-                            var template = angular.element('<div class="animate-repeat bento-item" ng-repeat="item in items">'+Bento.engines[engine].$$state.value+'</div>');
-                            var html = $compile(template)(eScope);
-                            elm.append(html);
+                            Bento.engines[engine].tpl.then(function(data){
+
+                                if (Bento.engines[engine].controller){
+                                    var controller = $controller(Bento.engines[engine].controller, {$scope: engineScope});
+                                    console.log(Bento.engines[engine].controller);
+                                    elm.data('$ngControllerController', controller);
+                                    elm.children().data('$ngControllerController', controller);
+                                }
+                                var template = angular.element('<div class="animate-repeat bento-box-item" ng-repeat="item in items">'+Bento.engines[engine].tpl.$$state.value+'</div>');
+                                var html = $compile(template)(engineScope);
+                                elm.append(html);
+                            });
 
                             if (newVal.length == 0){
-                                $animate.leave(spinner);
-                                boxWatcher();
+                                done();
                             }
                         }
                     },
                     true
-                )
+                );
+
+                function done(){
+                    if (isEmpty(Bento.boxes[box]['results'])){
+                        elm.append("<strong>No Results</strong>");
+                        elm.addClass('text-muted');
+                    }
+                    $animate.leave(spinner);
+                    boxWatcher();
+                }
             }
         }
     }])

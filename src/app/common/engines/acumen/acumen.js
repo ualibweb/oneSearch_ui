@@ -8,10 +8,3 @@ angular.module('engines.acumen', [])
             templateUrl: 'common/engines/acumen/acumen.tpl.html'
         })
     }])
-
-    .directive('acumen', [function(){
-        return {
-            restrict: 'AC',
-            templateUrl: 'common/engines/acumen/acumen.tpl.html'
-        }
-    }])
