@@ -19,7 +19,7 @@ npm install -g grunt-cli
 ```
 
 ## Install Grunt dependencies
-_If you haven't used [grunt][] before, be sure to check out the [Getting Started][] guide._
+_If you haven't used [grunt][http://gruntjs.com] before, be sure to check out the [Getting Started][http://gruntjs.com/getting-started] guide._
 
 From the same directory the repository's [Gruntfile][Getting Started] and [package.json][], run the following command:
 
