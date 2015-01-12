@@ -1,4 +1,4 @@
-oneSearch_ui
+oneSearch UI
 ============
 
 Interface for oneSearch academic federated search tool
