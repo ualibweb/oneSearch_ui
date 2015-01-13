@@ -41,20 +41,28 @@ angular.module('common.oneSearch', [])
 
         //function to allow engines to register as searchable
         this.engine = function(name, engine){
+            if (angular.isString(name)){
+                var defaults = {
+                    id: null, resultsPath: null, totalsPath: null, mediaTypes: null, templateUrl: null, controller: null
+                };
 
-            if (angular.isString(name) && angular.isDefined(engine.id)){
-
-                if (angular.isDefined(engine.mediaTypes)){
-                    Object.keys(engine.mediaTypes.types).map(function(type){
-                        mediaTypesProvider.type(type, name);
-                    })
+                var e = angular.extend(defaults, engine);
+                if (e.id){
+                    if (e.mediaTypes){
+                        Object.keys(e.mediaTypes.types).map(function(type){
+                            mediaTypesProvider.type(type, name);
+                        })
+                    }
+                    else{ //if no mediaTypes are defined, the engine is considered it's own media type
+                        mediaTypesProvider.type(name, name);
+                        e.mediaTypes = name;
+                    }
+                    e.name = name;
+                    _engines[name] = e;
                 }
-                else{ //if no mediaTypes are defined, the engine is considered it's own media type
-                    mediaTypesProvider.type(name, name);
-                    engine.mediaTypes = name;
-                }
-                engine.name = name;
-                _engines[name] = engine;
+            }
+            else{
+                console.log({Error: "oneSearch engine must have STRING defined name", engineParams: engine});
             }
         };
 

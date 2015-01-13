@@ -1,7 +1,7 @@
 angular.module('common.mediaTypes', [])
 
     .provider('mediaTypes', [function mediaTypesProvider(){
-
+        // Private Object for registered types
         var _types = {
             other: {
                 engines: [],
@@ -45,6 +45,11 @@ angular.module('common.mediaTypes', [])
                         break;
                 }
                 v[type] = value;
+
+                //function at: /common/helpers/invert-array-to-object.js
+                // This was the best name I could think of so far for this type of operation.
+                // If you can think of a better name, let me know!
+                // Honestly, I had almost no clue what to call it...
                 v = invertArrayToObject(v);
                 angular.extend(groups, v);
             })
@@ -54,6 +59,9 @@ angular.module('common.mediaTypes', [])
         this.$get = ['$parse', function($parse){
             return {
                 types: _types,
+
+                // Heavily influenced by angular-filter's group-by function:
+                // https://github.com/a8m/angular-filter/blob/master/src/_filter/collection/group-by.js
                 groupBy: function(collection, media){
                     var result = {};
 
