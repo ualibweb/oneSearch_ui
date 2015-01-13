@@ -62,7 +62,6 @@ angular.module('oneSearch.bento', [])
          */
         this.engines = {};
 
-
         // Helper function that removes an engine's name from a box's "engines" Array
         // Once the "engines" Array is empty, the box is considered "loaded"
         function loadProgress(type, engine){
@@ -70,6 +69,13 @@ angular.module('oneSearch.bento', [])
             if(i != -1) {
                 self.boxes[type].engines.splice(i, 1);
             }
+        }
+
+        // Remove an engine from all boxes
+        function removeFromBoxes(engine){
+            angular.forEach(self.boxes, function(box, type){
+                loadProgress(type, engine);
+            })
         }
 
         // Gets all boxes
@@ -87,18 +93,23 @@ angular.module('oneSearch.bento', [])
                 self.boxes[type].results = {};
             });
 
-            //  Iterate over the Promises for each engine returned by the oneSearch.searchAll() funciton
+            //  Iterate over the Promises for each engine returned by the oneSearch.searchAll() function
             angular.forEach(engines, function(engine, name){
                 engine.response
                     .success(function(data){ // If $http call was a success
+
+                        // User the engine's results getter to get the results object
+                        // The results getter is defined by the JSON path defined by the
+                        // "resultsPath" param in an engine's config
+                        var res = engine.getResults(data);
+
                         // Double check that the data is defined, in case the search API returned a '200' status with empty results.
-                        if (angular.isDefined(data)){
-
-                            // User the engine's results getter to get the results object
-                            // The results getter is defined by the JSON path defined by the
-                            // "resultsPath" param in an engine's config
-                            var res = engine.getResults(data);
-
+                        if (isEmpty(res)){
+                            console.log(self.boxes);
+                            removeFromBoxes(name);
+                            console.log(self.boxes);
+                        }
+                        else {
                             // Group the results by defined media types
                             var grouped = mediaTypes.groupBy(res, engine.mediaTypes);
 
@@ -126,13 +137,7 @@ angular.module('oneSearch.bento', [])
                     .error(function(msg){
                         // If error code return from $http, iterate through boxes object
                         // and remove any instance engine from a box's "engines" array
-                        angular.forEach(self.boxes, function(box, type){
-                            //  This filter operation returns a new array that doesn't contain the engine's name
-                            // (see: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter)
-                            self.boxes[type].engines.filter(function(engine){
-                                return name != engine;
-                            })
-                        })
+                        removeFromBoxes(name);
                     });
             });
 
@@ -213,34 +218,36 @@ angular.module('oneSearch.bento', [])
                             // Place engine results for the current box under an "items" object in the new local scope
                             engineScope.items = Bento.boxes[box]['results'][engine];
 
-                            // Set isCollapsed boolean to true
-                            // For engines that have collapsible results (see /common/engines/ejournals/ejournals.tpl.html for example)
-                            engineScope.isCollapsed = true;
+                            if (engineScope.items && engineScope.items.length > 0){
+                                // Set isCollapsed boolean to true
+                                // For engines that have collapsible results (see /common/engines/ejournals/ejournals.tpl.html for example)
+                                engineScope.isCollapsed = true;
 
-                            // When the engine's promise is ready, then load the engine's contorller/template data applying
-                            // the new isolated scope.
-                            Bento.engines[engine].tpl.then(function(data){
-                                // manually inject controller if one is defined by the engine's config
-                                if (Bento.engines[engine].controller){
-                                    var controller = $controller(Bento.engines[engine].controller, {$scope: engineScope});
-                                    console.log(Bento.engines[engine].controller);
-                                    elm.data('$ngControllerController', controller);
-                                    elm.children().data('$ngControllerController', controller);
-                                }
-                                // Wrap the template in an element that specifies ng-repeat over the "items" object (i.e., the results),
-                                // gives the generic classes for items in a bento box.
-                                var template = angular.element('<div class="animate-repeat bento-box-item" ng-repeat="item in items">'+data+'</div>');
+                                // When the engine's promise is ready, then load the engine's contorller/template data applying
+                                // the new isolated scope.
+                                Bento.engines[engine].tpl.then(function(data){
+                                    // manually inject controller if one is defined by the engine's config
+                                    if (Bento.engines[engine].controller){
+                                        var controller = $controller(Bento.engines[engine].controller, {$scope: engineScope});
 
-                                // Compile wrapped template with the isolated scope's context
-                                var html = $compile(template)(engineScope);
+                                        elm.data('$ngControllerController', controller);
+                                        elm.children().data('$ngControllerController', controller);
+                                    }
+                                    // Wrap the template in an element that specifies ng-repeat over the "items" object (i.e., the results),
+                                    // gives the generic classes for items in a bento box.
+                                    var template = angular.element('<div class="animate-repeat bento-box-item" ng-repeat="item in items">'+data+'</div>');
 
-                                // Append compiled HTML to box element
-                                elm.append(html);
-                            });
+                                    // Compile wrapped template with the isolated scope's context
+                                    var html = $compile(template)(engineScope);
 
+                                    // Append compiled HTML to box element
+                                    elm.append(html);
+                                });
+                            }
+                            //if (box == "recommend") console.log(newVal.length);
                             // If new array is empty, the box is considered "loaded"
                             if (newVal.length == 0){
-                                done();
+                                done(box);
                             }
                         }
                     },
@@ -248,11 +255,18 @@ angular.module('oneSearch.bento', [])
                 );
 
                 // Loaded and cleanup function
-                function done(){
+                function done(b){
+                    console.log({b: b, box: box});
                     // If there are no results, print generated message
-                    if (isEmpty(Bento.boxes[box]['results'])){
-                        elm.append("<strong>No Results</strong>");
-                        elm.addClass('text-muted');
+                    if (isEmpty(Bento.boxes[b]['results'])){
+
+                        if (attrs.hideIfEmpty){
+                            elm.addClass('hidden');
+                        }
+                        else{
+                            elm.append("<strong>No Results</strong>");
+                            elm.addClass('text-muted');
+                        }
                     }
 
                     // Tell spinner to exit animation

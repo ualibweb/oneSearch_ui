@@ -43,14 +43,13 @@ angular.module('common.oneSearch', [])
         this.engine = function(name, engine){
             if (angular.isString(name)){
                 var defaults = {
-                    id: null, resultsPath: null, totalsPath: null, mediaTypes: null, templateUrl: null, controller: null, hideIfEmpty: false
+                    id: null, resultsPath: null, totalsPath: null, mediaTypes: null, templateUrl: null, controller: null
                 };
 
                 var e = angular.extend(defaults, engine);
                 if (e.id){
                     if (e.mediaTypes){
                         Object.keys(e.mediaTypes.types).map(function(type){
-                            console.log('e.mediaTypes object map');
                             mediaTypesProvider.type(type, name);
                         })
                     }
