@@ -17,7 +17,7 @@ Given the following search results for an engine, where a book, article, and vid
         },
         {
             "title": "Not-so-real World Applications of the Hamster Wheel",
-            typeIdKey: "newspaper"
+            "typeIdKey": "newspaper"
         },
         {
             "title": "Wheel See Who Gets the Last Word on Hamster Wheels",
