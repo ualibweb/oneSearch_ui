@@ -12,20 +12,20 @@ Given the following search results for an engine, where a book, article, and vid
 {
     "results": [
         {
-            title: "Real World Applications of the Hamster Wheel",
-            typeIdKey: "book"                           
+            "title": "Real World Applications of the Hamster Wheel",
+            "typeIdKey": "book"                           
         },
         {
-            title: "Not-so-real World Applications of the Hamster Wheel",
+            "title": "Not-so-real World Applications of the Hamster Wheel",
             typeIdKey: "newspaper"
         },
         {
-            title: "Wheel See Who Gets the Last Word on Hamster Wheels",
-            typeIdKey: "broadcastNewsClip"
+            "title": "Wheel See Who Gets the Last Word on Hamster Wheels",
+            "typeIdKey": "broadcastNewsClip"
         },
         {
-            title: "7 Hamster Wheels So Crazy You Will Literally Go Insane and Need a Full Time Care Taker. P.S., This is totally not hyperbole click-baiting",
-            typeIdKey: "youtubeVideo"
+            "title": "7 Hamster Wheels So Crazy You Will Literally Go Insane and Need a Full Time Care Taker. P.S., This is totally not hyperbole click-baiting",
+            "typeIdKey": "youtubeVideo"
         }
     ]
     
@@ -34,7 +34,7 @@ Given the following search results for an engine, where a book, article, and vid
 
 You could tell `oneSearch` about media types in this engine's erratic results by defining the `mediaTypes` parameter in the engine's config options:
 
-```json
+```javascript
 {
 //...options
 // This will define books, articles, and videos as media types
