@@ -63,5 +63,5 @@ module.exports = function(grunt){
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-clean');
 
-    grunt.registerTask('default', ['html2js', 'concat']);
+    grunt.registerTask('default', ['clean', 'html2js', 'concat','cssmin', 'uglify',]);
 };
