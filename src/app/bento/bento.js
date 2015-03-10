@@ -105,9 +105,9 @@ angular.module('oneSearch.bento', [])
 
                         // Double check that the data is defined, in case the search API returned a '200' status with empty results.
                         if (isEmpty(res)){
-                            console.log(self.boxes);
+                            //console.log(self.boxes);
                             removeFromBoxes(name);
-                            console.log(self.boxes);
+                            //console.log(self.boxes);
                         }
                         else {
                             // Group the results by defined media types

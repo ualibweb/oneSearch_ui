@@ -12,6 +12,8 @@ angular.module('common.engines', [
     'engines.ejournals',
     'engines.scout',
     'engines.googleCS',
+    'engines.faq',
+    'engines.libguides',
     'engines.recommend'
 ])
 /**

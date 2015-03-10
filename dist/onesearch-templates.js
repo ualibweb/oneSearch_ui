@@ -4,11 +4,17 @@ angular.module("bento/bento.tpl.html", []).run(["$templateCache", function($temp
   $templateCache.put("bento/bento.tpl.html",
     "<div class=\"bento-box-container\">\n" +
     "    <div class=\"row\">\n" +
-    "        <div class=\"bento-box well\" bento-box=\"recommend\" hide-if-empty=\"true\">\n" +
+    "        <div class=\"recommended well\" bento-box=\"recommend\" hide-if-empty=\"true\">\n" +
     "            <h2>Recommended</h2>\n" +
     "        </div>\n" +
     "    </div>\n" +
     "    <div class=\"row\">\n" +
+    "        <div class=\"col-sm-4\">\n" +
+    "            <div class=\"bento-box\" bento-box=\"articles\">\n" +
+    "                <h2>Articles</h2>\n" +
+    "\n" +
+    "            </div>\n" +
+    "        </div>\n" +
     "        <div class=\"col-sm-4\">\n" +
     "            <div class=\"bento-box\" bento-box=\"books\">\n" +
     "                <h2>Books</h2>\n" +
@@ -20,36 +26,45 @@ angular.module("bento/bento.tpl.html", []).run(["$templateCache", function($temp
     "                <h2>Journals</h2>\n" +
     "            </div>\n" +
     "        </div>\n" +
-    "\n" +
-    "        <div class=\"col-sm-4\">\n" +
-    "            <div class=\"bento-box\" bento-box=\"articles\">\n" +
-    "                <h2>Articles</h2>\n" +
-    "\n" +
-    "            </div>\n" +
-    "            <div class=\"bento-box\" bento-box=\"databases\">\n" +
-    "                <h2>Databases</h2>\n" +
-    "            </div>\n" +
-    "            <div class=\"bento-box\" bento-box=\"media\">\n" +
-    "                <h2>Multimedia</h2>\n" +
-    "\n" +
-    "                <div ng-show=\"box.noResults\">\n" +
-    "                    No results\n" +
-    "                </div>\n" +
-    "            </div>\n" +
-    "        </div>\n" +
     "    </div>\n" +
     "    <div class=\"row\">\n" +
-    "        <div class=\"col-sm-6\">\n" +
+    "        <div class=\"col-sm-4\">\n" +
+    "            <div class=\"bento-box\" bento-box=\"media\">\n" +
+    "                <h2>Multimedia</h2>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "        <div class=\"col-sm-4\">\n" +
+    "            <div class=\"bento-box\" bento-box=\"other\">\n" +
+    "                <h2>Other Media</h2>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "        <div class=\"col-sm-4\">\n" +
     "            <div class=\"bento-box\" bento-box=\"acumen\">\n" +
     "                <h2>Acumen</h2>\n" +
     "            </div>\n" +
     "        </div>\n" +
-    "        <div class=\"col-sm-6\">\n" +
+    "    </div>\n" +
+    "    <div class=\"row\">\n" +
+    "        <div class=\"col-sm-4\">\n" +
+    "            <div class=\"bento-box\" bento-box=\"databases\">\n" +
+    "                <h2>Databases</h2>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "        <div class=\"col-sm-4\">\n" +
+    "            <div class=\"bento-box\" bento-box=\"libguides\">\n" +
+    "                <h2>LibGuides</h2>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "        <div class=\"col-sm-4\">\n" +
+    "            <div class=\"bento-box\" bento-box=\"faq\">\n" +
+    "                <h2>FAQ</h2>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "    <div class=\"row\">\n" +
+    "        <div class=\"col-sm-12\">\n" +
     "            <div class=\"bento-box\" bento-box=\"googleCS\">\n" +
     "                <h2>Libraries' Website</h2>\n" +
-    "            </div>\n" +
-    "            <div class=\"bento-box\" bento-box=\"other\">\n" +
-    "                <h2>Other Media</h2>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "    </div>\n" +
@@ -82,7 +97,10 @@ angular.module("common/engines/databases/databases.tpl.html", []).run(["$templat
   $templateCache.put("common/engines/databases/databases.tpl.html",
     "<div class=\"media\">\n" +
     "    <div class=\"media-body\">\n" +
-    "        <h4 class=\"media-heading\"><a ng-href=\"{{item[5]}}\" title=\"{{item[0]}}\">{{item[0] | truncate: 40: '...': true}}</a></h4>\n" +
+    "        <h4 class=\"media-heading\"><a ng-href=\"{{item[5]}}\" title=\"{{item[0]}}\">{{item[0] | truncate: 40: '...': true}}</a> <small>{{item[14]}}</small></h4>\n" +
+    "        <p>\n" +
+    "            {{item[15] | truncate: 100: '...'}}\n" +
+    "        </p>\n" +
     "    </div>\n" +
     "</div>");
 }]);
@@ -113,6 +131,7 @@ angular.module("common/engines/google-cs/google-cs.tpl.html", []).run(["$templat
     "<div class=\"media\">\n" +
     "    <div class=\"media-body\">\n" +
     "        <h4 class=\"media-heading\"><a ng-href=\"{{item.link}}\" title=\"{{item.title}}\">{{item.title | truncate: 40: '...': true}}</a></h4>\n" +
+    "        <p>{{item.htmlSnippet}}</p>\n" +
     "    </div>\n" +
     "</div>\n" +
     "<!--div class=\"media\">\n" +
@@ -148,7 +167,18 @@ angular.module("common/engines/scout/scout.tpl.html", []).run(["$templateCache",
   $templateCache.put("common/engines/scout/scout.tpl.html",
     "<div class=\"media\">\n" +
     "    <div class=\"media-body\">\n" +
-    "        <h4 class=\"media-heading\"><a ng-href=\"{{item.PLink}}\" title=\"{{item.Items[0].Data}}\">{{item.Items[0].Data | truncate: 40: '...': true}}</a></h4>\n" +
+    "        <h4 class=\"media-heading\">\n" +
+    "            <a ng-href=\"{{item.PLink}}\" title=\"{{item.Items[0].Data}}\">{{item.Items[0].Data | truncate: 40: '...': true}}</a>\n" +
+    "            <small>{{item.RecordInfo.BibRecord.BibRelationships.IsPartOfRelationships[0].BibEntity.Dates[0].Y}}</small>\n" +
+    "        </h4>\n" +
+    "        <p>\n" +
+    "            <span ng-if=\"item.FullText.Text.Availability\">Full Text Online</span>\n" +
+    "            <ul class=\"list-unstyled\">\n" +
+    "                <li ng-repeat=\"author in item.RecordInfo.BibRecord.BibRelationships.HasContributorRelationships\">\n" +
+    "                    {{author.PersonEntity.Name.NameFull}}\n" +
+    "                </li>\n" +
+    "            </ul>\n" +
+    "        </p>\n" +
     "    </div>\n" +
     "</div>");
 }]);

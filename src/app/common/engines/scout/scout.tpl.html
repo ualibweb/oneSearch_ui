@@ -1,5 +1,16 @@
 <div class="media">
     <div class="media-body">
-        <h4 class="media-heading"><a ng-href="{{item.PLink}}" title="{{item.Items[0].Data}}">{{item.Items[0].Data | truncate: 40: '...': true}}</a></h4>
+        <h4 class="media-heading">
+            <a ng-href="{{item.PLink}}" title="{{item.Items[0].Data}}">{{item.Items[0].Data | truncate: 40: '...': true}}</a>
+            <small>{{item.RecordInfo.BibRecord.BibRelationships.IsPartOfRelationships[0].BibEntity.Dates[0].Y}}</small>
+        </h4>
+        <p>
+            <span ng-if="item.FullText.Text.Availability">Full Text Online</span>
+            <ul class="list-unstyled">
+                <li ng-repeat="author in item.RecordInfo.BibRecord.BibRelationships.HasContributorRelationships">
+                    {{author.PersonEntity.Name.NameFull}}
+                </li>
+            </ul>
+        </p>
     </div>
 </div>

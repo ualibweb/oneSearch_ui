@@ -129,9 +129,9 @@ angular.module('oneSearch.bento', [])
 
                         // Double check that the data is defined, in case the search API returned a '200' status with empty results.
                         if (isEmpty(res)){
-                            console.log(self.boxes);
+                            //console.log(self.boxes);
                             removeFromBoxes(name);
-                            console.log(self.boxes);
+                            //console.log(self.boxes);
                         }
                         else {
                             // Group the results by defined media types
@@ -369,7 +369,7 @@ angular.module('engines.ejournals', [])
             templateUrl: 'common/engines/ejournals/ejournals.tpl.html',
             controller: ['$scope', function($scope){
                 for (var i = 0, len = $scope.items.length; i < len; i++){
-                    $scope.items[i]['ctrltest'] = 'wut';
+                    console.log($scope.items);
                 }
             }]
 
@@ -389,6 +389,8 @@ angular.module('common.engines', [
     'engines.ejournals',
     'engines.scout',
     'engines.googleCS',
+    'engines.faq',
+    'engines.libguides',
     'engines.recommend'
 ])
 /**
@@ -419,6 +421,17 @@ angular.module('common.engines', [
         };
 
     }])
+angular.module('engines.faq', [])
+
+    .config(['oneSearchProvider', function(oneSearchProvider){
+        oneSearchProvider.engine('faq', {
+            id: 16,
+            resultsPath: 'GoogleCS.items',
+            totalsPath: 'GoogleCS.searchInformation.totalResults',
+            filterQuery: 'site:ask.lib.ua.edu',
+            templateUrl: 'common/engines/google-cs/google-cs.tpl.html'
+        })
+    }])
 angular.module('engines.googleCS', [])
 
     .config(['oneSearchProvider', function(oneSearchProvider){
@@ -426,6 +439,18 @@ angular.module('engines.googleCS', [])
             id: 16,
             resultsPath: 'GoogleCS.items',
             totalsPath: 'GoogleCS.searchInformation.totalResults',
+            filterQuery: '-side:guides.lib.ua.edu -site:ask.lib.ua.edu',
+            templateUrl: 'common/engines/google-cs/google-cs.tpl.html'
+        })
+    }])
+angular.module('engines.libguides', [])
+
+    .config(['oneSearchProvider', function(oneSearchProvider){
+        oneSearchProvider.engine('libguides', {
+            id: 16,
+            resultsPath: 'GoogleCS.items',
+            totalsPath: 'GoogleCS.searchInformation.totalResults',
+            filterQuery: 'side:guides.lib.ua.edu',
             templateUrl: 'common/engines/google-cs/google-cs.tpl.html'
         })
     }])
@@ -707,7 +732,7 @@ angular.module('common.oneSearch', [])
         this.engine = function(name, engine){
             if (angular.isString(name)){
                 var defaults = {
-                    id: null, resultsPath: null, totalsPath: null, mediaTypes: null, templateUrl: null, controller: null
+                    id: null, resultsPath: null, totalsPath: null, mediaTypes: null, templateUrl: null, controller: null, filterQuery: null
                 };
 
                 var e = angular.extend(defaults, engine);
@@ -746,6 +771,17 @@ angular.module('common.oneSearch', [])
 
                         //Extend local parameters by global params.
                         angular.extend(p, params);
+
+                        //if filterQuery present, add it to query
+                        // TODO: add proper REST support by accepting filter queries as objects and not just strings
+                        if (engine.filterQuery !== null){
+                            p.s += ' ' + engine.filterQuery;
+                        }
+
+                        console.log({
+                            engine: engine,
+                            params: p
+                        });
 
                         // Store the $http response promise in the engine's object with key 'response
                         engine.response = $http({method: 'GET', url: url, params: p});

@@ -1,5 +1,8 @@
 <div class="media">
     <div class="media-body">
-        <h4 class="media-heading"><a ng-href="{{item[5]}}" title="{{item[0]}}">{{item[0] | truncate: 40: '...': true}}</a></h4>
+        <h4 class="media-heading"><a ng-href="{{item[5]}}" title="{{item[0]}}">{{item[0] | truncate: 40: '...': true}}</a> <small>{{item[14]}}</small></h4>
+        <p>
+            {{item[15] | truncate: 100: '...'}}
+        </p>
     </div>
 </div>

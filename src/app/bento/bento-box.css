@@ -1,6 +1,7 @@
 
-.bento-box-container > .row{
-    border-bottom: 1px solid #eee;
+.bento-box-container > .row:not(:first-child){
+    margin-bottom: 15px;
+    border-top: 1px solid #eee;
 }
 
 .bento-box-container h4{
@@ -16,7 +17,8 @@
 }
 
 .bento-box{
-    min-height: 100px;
+    height: 350px;
+    overflow: hidden;
     -webkit-transition: 200ms cubic-bezier(0.420, 0.000, 0.580, 1.000) all;
     -moz-transition: 200ms cubic-bezier(0.420, 0.000, 0.580, 1.000) all;
     -ms-transition: 200ms cubic-bezier(0.420, 0.000, 0.580, 1.000) all;
@@ -26,4 +28,12 @@
 
 .bento-box-item{
     margin-bottom: 15px;
+}
+
+.recommended{
+    min-height: 100px;
+}
+
+.recommended > h2{
+    font-size: 1.75em;
 }
