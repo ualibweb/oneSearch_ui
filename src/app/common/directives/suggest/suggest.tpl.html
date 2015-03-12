@@ -1,0 +1,44 @@
+<div class="input-group input-group-lg">
+    <input type="text" name="search" class="form-control onesearch-text" placeholder="{{prompt}}"
+           ng-model="model" ng-change="onChange()" autocomplete="off" />
+    <div class="input-group-btn">
+        <button type="submit" class="btn btn-onesearch btn-primary"><span class="fa fa-search"></span></button>
+    </div>
+</div>
+<div class="suggest">
+    <div ng-hide="model.length < 3 || items.suggest.searches.length == 0 || selected">
+        <div class="item" ng-repeat="item in items.suggest.searches | filter:model | limitTo:5 track by $index"
+             ng-click="handleSelection(item.search)" style="cursor:pointer" ng-class="{active:isCurrent($index)}"
+             ng-mouseenter="setCurrent($index)">
+            <p class="title">{{item.search}}</p>
+        </div>
+    </div>
+    <div ng-hide="model.length < 3 || items.suggest.recommend.length == 0 || selected">
+        <h4>Recommendations</h4>
+        <div ng-repeat="recommendation in items.suggest.recommend">
+            <div ng-repeat="keyword in recommendation.keywords | filter:model | limitTo:10">
+                <div ng-if="$index == 0">
+                    <a href="{{recommendation.link}}">
+                        {{recommendation.description}}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div ng-hide="model.length < 3 || items.subjects.length == 0 || selected">
+        <h4>LibGuides Subjects</h4>
+        <div ng-repeat="person in items.subjects">
+            <div ng-repeat="subject in person.subjects">
+                <div ng-repeat="keyword in subject.keywords | filter:model | limitTo:10">
+                    <div ng-if="$index == 0">
+                        <a href="{{subject.link}}">
+                            {{subject.subject}}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
