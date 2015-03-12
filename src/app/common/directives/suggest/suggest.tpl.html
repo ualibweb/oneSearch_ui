@@ -8,7 +8,7 @@
 <div class="suggest" ng-hide="model.length < 3 || selected">
     <div ng-hide="items.suggest.searches.length == 0">
         <div class="item" ng-repeat="item in items.suggest.searches | limitTo:5 track by $index"
-             ng-click="handleSelection(item.search)" style="cursor:pointer" ng-class="{active:isCurrent($index)}"
+             ng-mousedown="handleSelection(item.search)" style="cursor:pointer" ng-class="{active:isCurrent($index)}"
              ng-mouseenter="setCurrent($index)">
             <p class="title">{{item.search}}</p>
         </div>
@@ -18,7 +18,7 @@
         <div ng-repeat="recommendation in items.suggest.recommend">
             <div ng-repeat="keyword in recommendation.keywords | limitTo:10 track by $index">
                 <div ng-if="$index == 0">
-                    <a href="{{recommendation.link}}">
+                    <a href="{{recommendation.link}}" ng-mousedown="go(recommendation.link)">
                         {{recommendation.description}}
                     </a>
                 </div>
@@ -31,7 +31,7 @@
             <div ng-repeat="subject in person.subjects">
                 <div ng-repeat="keyword in subject.keywords | limitTo:10 track by $index">
                     <div ng-if="$index == 0">
-                        <a href="{{subject.link}}">
+                        <a href="{{subject.link}}" ng-mousedown="go(subject.link)">
                             {{subject.subject}}
                         </a>
                     </div>

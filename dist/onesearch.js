@@ -329,15 +329,10 @@ angular.module('oneSearch.common', [
                 prompt: '@',
                 model: '='
             },
-            controller: function($scope, dataFactory){
+            controller: function($scope, $window, dataFactory){
                 $scope.items = {};
                 $scope.dataRequested = false;
-                $scope.isOpen = false;
                 $scope.model = "";
-                $scope.current = 0;
-
-                // hides the list initially
-                $scope.selected = true;
 
                 $scope.onItemSelected = function() { // this gets executed when an item is selected
                     console.log('selected=' + $scope.model);
@@ -360,18 +355,9 @@ angular.module('oneSearch.common', [
                             $scope.dataRequested = false;
                         }
                 };
-                $scope.onFocus = function(){
-                    if ($scope.model.length > 2)
-                        $scope.selected = false;
-                };
-                $scope.onBlur = function(){
-                    $scope.selected = true;
-                };
-                $scope.isCurrent = function(index) {
-                    return $scope.current == index;
-                };
-                $scope.setCurrent = function(index) {
-                    $scope.current = index;
+                $scope.go = function ( path ) {
+                    $scope.model = "";
+                    $window.location.href = path;
                 };
             },
             link: function(scope, elem, attrs) {
@@ -379,10 +365,29 @@ angular.module('oneSearch.common', [
                     scope.model = selectedItem;
                     scope.current = 0;
                     scope.selected = true;
-                    scope.isOpen = false;
                     $timeout(function() {
                         scope.onItemSelected();
                     }, 200);
+                };
+                scope.current = 0;
+
+                // hides the list initially
+                scope.selected = true;
+
+                scope.isCurrent = function(index) {
+                    return scope.current == index;
+                };
+                scope.setCurrent = function(index) {
+                    scope.current = index;
+                };
+                scope.onFocus = function(){
+                    if (scope.model.length > 2){
+                        scope.selected = false;
+                        console.log(scope.model);
+                    }
+                };
+                scope.onBlur = function($event){
+                    scope.selected = true;
                 };
             },
             templateUrl: 'common/directives/suggest/suggest.tpl.html'
