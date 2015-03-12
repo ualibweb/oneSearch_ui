@@ -1,15 +1,14 @@
-angular.module('oneSearch.templates', ['bento/bento.tpl.html', 'common/directives/suggest/suggest.tpl.html', 'common/engines/acumen/acumen.tpl.html', 'common/engines/catalog/catalog.tpl.html', 'common/engines/databases/databases.tpl.html', 'common/engines/ejournals/ejournals.tpl.html', 'common/engines/google-cs/google-cs.tpl.html', 'common/engines/libguides/libguides.tpl.html', 'common/engines/recommend/recommend.tpl.html', 'common/engines/scout/scout.tpl.html']);
+angular.module('oneSearch.templates', ['bento/bento.tpl.html', 'common/directives/suggest/suggest.tpl.html', 'common/engines/acumen/acumen.tpl.html', 'common/engines/catalog/catalog.tpl.html', 'common/engines/databases/databases.tpl.html', 'common/engines/ejournals/ejournals.tpl.html', 'common/engines/google-cs/google-cs.tpl.html', 'common/engines/recommend/recommend.tpl.html', 'common/engines/scout/scout.tpl.html']);
 
 angular.module("bento/bento.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("bento/bento.tpl.html",
     "<div class=\"bento-box-container\">\n" +
     "    <div class=\"row\">\n" +
-    "        <div class=\"col-sm-4\">\n" +
-    "            <div class=\"bento-box\" bento-box=\"articles\">\n" +
-    "                <h2>Articles</h2>\n" +
-    "\n" +
-    "            </div>\n" +
+    "        <div class=\"bento-box well\" bento-box=\"recommend\" hide-if-empty=\"true\">\n" +
+    "            <h2>Recommended</h2>\n" +
     "        </div>\n" +
+    "    </div>\n" +
+    "    <div class=\"row\">\n" +
     "        <div class=\"col-sm-4\">\n" +
     "            <div class=\"bento-box\" bento-box=\"books\">\n" +
     "                <h2>Books</h2>\n" +
@@ -21,46 +20,36 @@ angular.module("bento/bento.tpl.html", []).run(["$templateCache", function($temp
     "                <h2>Journals</h2>\n" +
     "            </div>\n" +
     "        </div>\n" +
-    "    </div>\n" +
-    "    <div class=\"row\">\n" +
-    "        <div class=\"col-sm-6\">\n" +
+    "\n" +
+    "        <div class=\"col-sm-4\">\n" +
+    "            <div class=\"bento-box\" bento-box=\"articles\">\n" +
+    "                <h2>Articles</h2>\n" +
+    "\n" +
+    "            </div>\n" +
+    "            <div class=\"bento-box\" bento-box=\"databases\">\n" +
+    "                <h2>Databases</h2>\n" +
+    "            </div>\n" +
     "            <div class=\"bento-box\" bento-box=\"media\">\n" +
     "                <h2>Multimedia</h2>\n" +
+    "\n" +
+    "                <div ng-show=\"box.noResults\">\n" +
+    "                    No results\n" +
+    "                </div>\n" +
     "            </div>\n" +
     "        </div>\n" +
+    "    </div>\n" +
+    "    <div class=\"row\">\n" +
     "        <div class=\"col-sm-6\">\n" +
     "            <div class=\"bento-box\" bento-box=\"acumen\">\n" +
     "                <h2>Acumen</h2>\n" +
     "            </div>\n" +
     "        </div>\n" +
-    "    </div>\n" +
-    "    <div class=\"row\">\n" +
-    "        <div class=\"col-sm-4\">\n" +
-    "            <div class=\"bento-box\" bento-box=\"databases\">\n" +
-    "                <h2>Databases</h2>\n" +
-    "            </div>\n" +
-    "        </div>\n" +
-    "        <div class=\"col-sm-4\">\n" +
-    "            <div class=\"bento-box\" bento-box=\"other\">\n" +
-    "                <h2>Other Media</h2>\n" +
-    "            </div>\n" +
-    "        </div>\n" +
-    "        <div class=\"col-sm-4\">\n" +
-    "            <div class=\"bento-box\" bento-box=\"libguides\">\n" +
-    "                <h2>LibGuides</h2>\n" +
-    "            </div>\n" +
-    "        </div>\n" +
-    "    </div>\n" +
-    "    <div class=\"row\">\n" +
     "        <div class=\"col-sm-6\">\n" +
     "            <div class=\"bento-box\" bento-box=\"googleCS\">\n" +
     "                <h2>Libraries' Website</h2>\n" +
     "            </div>\n" +
-    "        </div>\n" +
-    "\n" +
-    "        <div class=\"col-sm-6\">\n" +
-    "            <div class=\"bento-box\" bento-box=\"faq\">\n" +
-    "                <h2>FAQ</h2>\n" +
+    "            <div class=\"bento-box\" bento-box=\"other\">\n" +
+    "                <h2>Other Media</h2>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "    </div>\n" +
@@ -71,80 +60,60 @@ angular.module("common/directives/suggest/suggest.tpl.html", []).run(["$template
   $templateCache.put("common/directives/suggest/suggest.tpl.html",
     "<div class=\"input-group input-group-lg\">\n" +
     "    <input type=\"text\" name=\"search\" class=\"form-control onesearch-text\" placeholder=\"{{prompt}}\"\n" +
-    "           ng-model=\"model\" ng-change=\"onChange()\" autocomplete=\"off\" ng-blur=\"onBlur()\" ng-focus=\"onFocus()\" />\n" +
+    "           ng-model=\"model\" ng-change=\"onChange()\" autocomplete=\"off\" />\n" +
     "    <div class=\"input-group-btn\">\n" +
     "        <button type=\"submit\" class=\"btn btn-onesearch btn-primary\"><span class=\"fa fa-search\"></span></button>\n" +
     "    </div>\n" +
     "</div>\n" +
-    "<div class=\"suggest\" ng-hide=\"model.length < 3 || selected\">\n" +
-    "    <div class=\"row\" ng-hide=\"items.suggest.length == 0\">\n" +
-    "        <ul class=\"nav nav-pills nav-stacked\">\n" +
-    "            <li role=\"presentation\"\n" +
-    "                ng-repeat=\"item in filteredItems = (items.suggest | filter:compare(originalValue)) | limitTo:numShow track by $index\"\n" +
-    "                ng-mousedown=\"handleSelection(item.search)\" ng-class=\"item.class\"\n" +
-    "                ng-mouseenter=\"setCurrent($index, false)\">\n" +
-    "                <a href=\"#\">{{item.search}}</a>\n" +
-    "            </li>\n" +
-    "        </ul>\n" +
+    "<div class=\"suggest\">\n" +
+    "    <div ng-hide=\"model.length < 3 || items.suggest.searches.length == 0 || selected\">\n" +
+    "        <div class=\"item\" ng-repeat=\"item in items.suggest.searches | filter:model | limitTo:5 track by $index\"\n" +
+    "             ng-click=\"handleSelection(item.search)\" style=\"cursor:pointer\" ng-class=\"{active:isCurrent($index)}\"\n" +
+    "             ng-mouseenter=\"setCurrent($index)\">\n" +
+    "            <p class=\"title\">{{item.search}}</p>\n" +
+    "        </div>\n" +
     "    </div>\n" +
-    "    <div class=\"suggest-row\" ng-show=\"items.recommend.length || items.subjects.length || items.faq.searchInformation.totalResults > 0\">\n" +
-    "        <div class=\"row\">\n" +
-    "            <div class=\"col-sm-4\" ng-show=\"items.recommend.length\">\n" +
-    "                <div class=\"suggest-col\">\n" +
-    "                    <h4>Web site pages</h4>\n" +
-    "                    <div ng-repeat=\"recommendation in items.recommend | limitTo:10\">\n" +
-    "                        <a href=\"{{recommendation.link}}\" ng-mousedown=\"go(recommendation.link)\">\n" +
-    "                            {{recommendation.description}}\n" +
-    "                        </a>\n" +
-    "                    </div>\n" +
+    "    <div ng-hide=\"model.length < 3 || items.suggest.recommend.length == 0 || selected\">\n" +
+    "        <h4>Recommendations</h4>\n" +
+    "        <div ng-repeat=\"recommendation in items.suggest.recommend\">\n" +
+    "            <div ng-repeat=\"keyword in recommendation.keywords | filter:model | limitTo:10\">\n" +
+    "                <div ng-if=\"$index == 0\">\n" +
+    "                    <a href=\"{{recommendation.link}}\">\n" +
+    "                        {{recommendation.description}}\n" +
+    "                    </a>\n" +
     "                </div>\n" +
     "            </div>\n" +
-    "            <div class=\"col-sm-4\" ng-show=\"items.subjects.length\">\n" +
-    "                <div class=\"suggest-col\">\n" +
-    "                    <h4>LibGuides Subjects <a href=\"http://guides.lib.ua.edu/\" class=\"small\" ng-mousedown=\"go('http://guides.lib.ua.edu/')\">more</a></h4>\n" +
-    "                    <div ng-repeat=\"person in items.subjects | limitTo:10\">\n" +
-    "                        <div ng-repeat=\"subject in person.subjects | limitTo:2\">\n" +
-    "                            <a ng-if=\"subject.link.length > 7\" href=\"{{subject.link}}\" ng-mousedown=\"go(subject.link)\">\n" +
-    "                                {{subject.subject}}\n" +
-    "                            </a>\n" +
-    "                            <a ng-if=\"subject.link.length <= 7\" href=\"#\"\n" +
-    "                               ng-mousedown=\"go('mailto:' + person.email + '?subject=Question')\">\n" +
-    "                                Ask {{person.name}}, {{person.title}} at {{person.department}}\n" +
-    "                            </a>\n" +
-    "                        </div>\n" +
-    "                    </div>\n" +
-    "                </div>\n" +
-    "            </div>\n" +
-    "            <div class=\"col-sm-4\" ng-show=\"items.faq.searchInformation.totalResults > 0\">\n" +
-    "                <div class=\"suggest-col\">\n" +
-    "                    <h4>FAQ <a href=\"http://ask.lib.ua.edu/\" class=\"small\" ng-mousedown=\"go('http://ask.lib.ua.edu/')\">more</a></h4>\n" +
-    "                    <div ng-repeat=\"faq in items.faq.items | limitTo:5\">\n" +
-    "                        <a href=\"{{faq.link}}\" ng-mousedown=\"go(faq.link)\">\n" +
-    "                            {{faq.title}}\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "    <div ng-hide=\"model.length < 3 || items.subjects.length == 0 || selected\">\n" +
+    "        <h4>LibGuides Subjects</h4>\n" +
+    "        <div ng-repeat=\"person in items.subjects\">\n" +
+    "            <div ng-repeat=\"subject in person.subjects\">\n" +
+    "                <div ng-repeat=\"keyword in subject.keywords | filter:model | limitTo:10\">\n" +
+    "                    <div ng-if=\"$index == 0\">\n" +
+    "                        <a href=\"{{subject.link}}\">\n" +
+    "                            {{subject.subject}}\n" +
     "                        </a>\n" +
     "                    </div>\n" +
     "                </div>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "    </div>\n" +
-    "</div>");
+    "</div>\n" +
+    "\n" +
+    "\n" +
+    "");
 }]);
 
 angular.module("common/engines/acumen/acumen.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("common/engines/acumen/acumen.tpl.html",
     "<div class=\"media\">\n" +
-    "    <a class=\"pull-left\" ng-href=\"http://acumen.lib.ua.edu/{{item.link}}\" title=\"{{item.title}}\" style=\"width: 64px; height: 64%;\">\n" +
-    "        <img ng-src=\"{{item.thumb_path}}\" style=\"max-height: 64px; max-width: 64px; margin: 0 auto;\">\n" +
+    "    <a class=\"pull-left\" ng-href=\"http://acumen.lib.ua.edu/{{item.link}}\" title=\"{{item.title}}\">\n" +
+    "        <img ng-src=\"{{item.thumb_path}}\" style=\"max-height: 64px; max-width: 64px;\">\n" +
     "    </a>\n" +
     "    <div class=\"media-body\">\n" +
-    "        <h4 class=\"media-heading\">\n" +
-    "            <a ng-href=\"http://acumen.lib.ua.edu/{{item.link}}\" title=\"item.title\">{{item.title | truncate: 40: '...': true}}</a>\n" +
-    "        </h4>\n" +
-    "        <div class=\"details-context\">\n" +
-    "            <span ng-if=\"item.date\" ng-bind-html=\"item.date\"></span>\n" +
-    "            <span ng-if=\"item.type\" ng-bind-html=\"item.type | ucfirst\"></span>\n" +
-    "        </div>\n" +
-    "        <p>{{item.description | truncate: 125: '...': true}}</p>\n" +
+    "        <h4 class=\"media-heading\"><a ng-href=\"http://acumen.lib.ua.edu/{{item.link}}\" title=\"item.title\">{{item.title | truncate: 40: '...': true}}</a></h4>\n" +
+    "        <p>{{item.description}}</p>\n" +
     "    </div>\n" +
     "</div>");
 }]);
@@ -153,22 +122,7 @@ angular.module("common/engines/catalog/catalog.tpl.html", []).run(["$templateCac
   $templateCache.put("common/engines/catalog/catalog.tpl.html",
     "<div class=\"media\">\n" +
     "    <div class=\"media-body\">\n" +
-    "        <h4 class=\"media-heading\">\n" +
-    "            <a ng-href=\"{{item.href}}\"\n" +
-    "               title=\"{{item.title}}\"\n" +
-    "               ng-bind-html=\"item.title | truncate: 50: '...': true\"></a>\n" +
-    "        </h4>\n" +
-    "        <div class=\"details-context\">\n" +
-    "            <span ng-if=\"item.year && item.year | number\" ng-bind-html=\"item.year\"></span>\n" +
-    "            <span ng-if=\"item.mediaType\" ng-bind-html=\"item.mediaType\"></span>\n" +
-    "            <span ng-if=\"item.issn\">ISSN: {{item.issn}}</span>\n" +
-    "        </div>\n" +
-    "        <div class=\"details-container\">\n" +
-    "            <span class=\"text-muted\">Author(s)</span>\n" +
-    "            <span class=\"detail\">\n" +
-    "                <span ng-if=\"item.author\" ng-bind-html=\"item.author | lowercase | ucfirst\"></span>\n" +
-    "            </span>\n" +
-    "        </div>\n" +
+    "        <h4 class=\"media-heading\"><a ng-href=\"{{item.href}}\" title=\"{{item.title}}\">{{item.title | truncate: 40: '...': true}}</a></h4>\n" +
     "    </div>\n" +
     "</div>");
 }]);
@@ -177,53 +131,30 @@ angular.module("common/engines/databases/databases.tpl.html", []).run(["$templat
   $templateCache.put("common/engines/databases/databases.tpl.html",
     "<div class=\"media\">\n" +
     "    <div class=\"media-body\">\n" +
-    "        <h4 class=\"media-heading\">\n" +
-    "            <a ng-href=\"{{item[5]}}\" title=\"{{item[0]}}\">{{item[0] | truncate: 40: '...': true}}</a>\n" +
-    "        </h4>\n" +
-    "        <div class=\"details-context\">\n" +
-    "            <span ng-if=\"item[14]\" ng-bind-html=\"item[14]\"></span>\n" +
-    "        </div>\n" +
-    "        <p>\n" +
-    "            {{item[15] | truncate: 125: '...'}}\n" +
-    "        </p>\n" +
+    "        <h4 class=\"media-heading\"><a ng-href=\"{{item[5]}}\" title=\"{{item[0]}}\">{{item[0] | truncate: 40: '...': true}}</a></h4>\n" +
     "    </div>\n" +
     "</div>");
 }]);
 
 angular.module("common/engines/ejournals/ejournals.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("common/engines/ejournals/ejournals.tpl.html",
-    "<div class=\"media\">\n" +
-    "    <div class=\"media-body\">\n" +
-    "        <h4 class=\"media-heading\">\n" +
-    "            <a ng-href=\"{{item.links[0].href}}\" title=\"{{item.title}}\">{{item.title | ltrim | truncate: 50: '...': true}}</a>\n" +
+    "<ul class=\"source-list\">\n" +
+    "    <li class=\"source-link\">\n" +
+    "        <h4>\n" +
+    "            <a ng-href=\"{{item.links[0].href}}\" title=\"{{item.title}}\">{{item.title | ltrim | truncate: 40: '...': true}}</a>\n" +
+    "            <div class=\"small source-info\"><span class=\"fa fa-level-up fa-rotate-90\"></span> Available through {{item.links[0].name}}</div>\n" +
+    "\n" +
     "        </h4>\n" +
-    "\n" +
-    "        <div class=\"details-context\">\n" +
-    "            <span ng-if=\"item.date\" ng-bind-html=\"item.date\"></span>\n" +
-    "            <span ng-if=\"item.links[0]\">\n" +
-    "                Source: <span title=\"{{item.links[0].name}}\">{{item.links[0].name | ltrim | truncate: 35: '...'}}</span>\n" +
-    "            </span>\n" +
-    "        </div>\n" +
-    "\n" +
-    "        <div class=\"details-container\" ng-if=\"item.authors\">\n" +
-    "            <span class=\"text-muted\">Author(s)</span>\n" +
-    "            <span class=\"details\" ng-bind-html=\"item.authors\"></span>\n" +
-    "        </div>\n" +
-    "\n" +
-    "        <div class=\"details-container\" ng-if=\"item.links[1]\">\n" +
-    "            <span class=\"text-muted\">Other Sources: </span>\n" +
-    "            <span class=\"details\" ng-repeat=\"link in item.links | after:1 | limitTo : (sourceLimit ? 10 : 2)\">\n" +
-    "                <a ng-href=\"{{link.href}}\"\n" +
-    "                   title=\"{{link.name}}\"\n" +
-    "                   class=\"source-link\"\n" +
-    "                   ng-bind-html=\"link.name | ltrim | truncate: 35: '...': true\"></a>\n" +
-    "            </span>\n" +
-    "            <div ng-show=\"item.links[3]\">\n" +
-    "                <button type=\"button\" class=\"btn btn-default btn-collapser\" ng-click=\"sourceLimit = !sourceLimit\">{{sourceLimit? 'more' : 'less'}}</button>\n" +
-    "            </div>\n" +
-    "        </div>\n" +
-    "    </div>\n" +
-    "</div>");
+    "    </li>\n" +
+    "    <li ng-if=\"item.links[1]\">\n" +
+    "        <ul class=\"source-link-more\" collapse=\"isCollapsed\">\n" +
+    "            <li class=\"source-links\" ng-repeat=\"link in item.links | after:1\">\n" +
+    "                <span class=\"fa fa-level-up fa-rotate-90 text-muted\"></span>  <a ng-href=\"{{link.href}}\" title=\"{{link.name}}\" class=\"source-link\">{{link.name | ltrim | truncate: 25: '...': true}}</a>\n" +
+    "            </li>\n" +
+    "        </ul>\n" +
+    "        <button ng-show=\"item.links[1]\" type=\"button\" class=\"btn btn-collapser btn-link btn-sm btn-block\" ng-click=\"isCollapsed = !isCollapsed\">{{isCollapsed ? 'more' : 'less'}} sources</button>\n" +
+    "    </li>\n" +
+    "</ul>");
 }]);
 
 angular.module("common/engines/google-cs/google-cs.tpl.html", []).run(["$templateCache", function($templateCache) {
@@ -231,7 +162,6 @@ angular.module("common/engines/google-cs/google-cs.tpl.html", []).run(["$templat
     "<div class=\"media\">\n" +
     "    <div class=\"media-body\">\n" +
     "        <h4 class=\"media-heading\"><a ng-href=\"{{item.link}}\" title=\"{{item.title}}\">{{item.title | truncate: 40: '...': true}}</a></h4>\n" +
-    "        <p ng-bind-html=\"item.htmlSnippet\"></p>\n" +
     "    </div>\n" +
     "</div>\n" +
     "<!--div class=\"media\">\n" +
@@ -254,16 +184,6 @@ angular.module("common/engines/google-cs/google-cs.tpl.html", []).run(["$templat
     "</div-->");
 }]);
 
-angular.module("common/engines/libguides/libguides.tpl.html", []).run(["$templateCache", function($templateCache) {
-  $templateCache.put("common/engines/libguides/libguides.tpl.html",
-    "<div class=\"media\">\n" +
-    "    <div class=\"media-body\">\n" +
-    "        <h4 class=\"media-heading\"><a ng-href=\"{{item.link}}\" title=\"{{item.title}}\">{{item.title | truncate: 40: '...': true}}</a></h4>\n" +
-    "        <p ng-bind-html=\"item.htmlSnippet\"></p>\n" +
-    "    </div>\n" +
-    "</div>");
-}]);
-
 angular.module("common/engines/recommend/recommend.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("common/engines/recommend/recommend.tpl.html",
     "<div class=\"media\">\n" +
@@ -277,39 +197,7 @@ angular.module("common/engines/scout/scout.tpl.html", []).run(["$templateCache",
   $templateCache.put("common/engines/scout/scout.tpl.html",
     "<div class=\"media\">\n" +
     "    <div class=\"media-body\">\n" +
-    "        <h4 class=\"media-heading\">\n" +
-    "            <a ng-href=\"{{item.PLink}}\"\n" +
-    "               title=\"{{item.Items[0].Data}}\"\n" +
-    "               ng-bind-html=\"item.Items[0].Data | lowercase | ucfirst\"></a>\n" +
-    "        </h4>\n" +
-    "        <div class=\"details-context\">\n" +
-    "            <span ng-if=\"item.RecordInfo.BibRecord.BibRelationships.IsPartOfRelationships[0].BibEntity.Dates[0]\">{{item.RecordInfo.BibRecord.BibRelationships.IsPartOfRelationships[0].BibEntity.Dates[0].Y}} </span>\n" +
-    "            <span ng-if=\"item.mediaType\">{{item.mediaType}} </span>\n" +
-    "            <span ng-if=\"item.FullText.Text.Availability\">Full Text Online</span>\n" +
-    "        </div>\n" +
-    "        <div collapse=\"isCollapsed\">\n" +
-    "            <div class=\"details-container\" ng-if=\"item.RecordInfo.BibRecord.BibRelationships.HasContributorRelationships\">\n" +
-    "                <span class=\"text-muted\">Author(s): </span>\n" +
-    "            <span class=\"details\"\n" +
-    "                  ng-repeat=\"author in item.RecordInfo.BibRecord.BibRelationships.HasContributorRelationships | unique: 'PersonEntity.Name.NameFull'\"\n" +
-    "                  ng-bind-html=\"author.PersonEntity.Name.NameFull | lowercase | ucfirst\"></span>\n" +
-    "            </div>\n" +
-    "\n" +
-    "            <div class=\"details-container\" ng-if=\"item.source\">\n" +
-    "                <span class=\"text-muted\">Source(s): </span>\n" +
-    "                <span class=\"details\" ng-bind-html=\"item.source\"></span>\n" +
-    "            </div>\n" +
-    "\n" +
-    "            <div class=\"details-container\" ng-if=\"item.RecordInfo.BibRecord.BibEntity.Subjects\">\n" +
-    "                <span class=\"text-muted\">Subejct(s): </span>\n" +
-    "            <span class=\"details\"\n" +
-    "                  ng-repeat=\"subject in item.RecordInfo.BibRecord.BibEntity.Subjects\"\n" +
-    "                  ng-bind-html=\"subject.SubjectFull\"></span>\n" +
-    "            </div>\n" +
-    "        </div>\n" +
-    "        <div>\n" +
-    "            <button type=\"button\" class=\"btn btn-default btn-xs\" ng-click=\"isCollapsed = !isCollapsed\">{{!isCollapsed ? 'less' : 'more'}} detail</button>\n" +
-    "        </div>\n" +
+    "        <h4 class=\"media-heading\"><a ng-href=\"{{item.PLink}}\" title=\"{{item.Items[0].Data}}\">{{item.Items[0].Data | truncate: 40: '...': true}}</a></h4>\n" +
     "    </div>\n" +
     "</div>");
 }]);

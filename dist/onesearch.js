@@ -9,7 +9,6 @@
 angular.module('oneSearch', [
     'ngRoute',
     'ngAnimate',
-    'ngSanitize',
     'ui.bootstrap',
     'angular.filter',
     'oneSearch.common',
@@ -112,12 +111,10 @@ angular.module('oneSearch.bento', [])
             // Deep copy media types defined by registered engines to the this.boxes object.
             angular.copy(mediaTypes.types, self.boxes);
 
-            // Pre-define the "results" object for each media type - I only do this here so I don't have to check if it's defined later
+            // Pre-define the "results" object for each media type
+            // I only do this here so I don't have to check if it's defined later
             angular.forEach(self.boxes, function(box, type){
-                var limit = self.boxes[type]['engines'].length > 1 ? 1 : 3;
-
                 self.boxes[type].results = {};
-                self.boxes[type].resultLimit = limit;
             });
 
             //  Iterate over the Promises for each engine returned by the oneSearch.searchAll() function
@@ -132,9 +129,9 @@ angular.module('oneSearch.bento', [])
 
                         // Double check that the data is defined, in case the search API returned a '200' status with empty results.
                         if (isEmpty(res)){
-                            //console.log(self.boxes);
+                            console.log(self.boxes);
                             removeFromBoxes(name);
-                            //console.log(self.boxes);
+                            console.log(self.boxes);
                         }
                         else {
                             // Group the results by defined media types
@@ -169,6 +166,7 @@ angular.module('oneSearch.bento', [])
             });
 
         }
+
     }])
 
 /**
@@ -313,10 +311,8 @@ angular.module('oneSearch.bento', [])
 angular.module('oneSearch.common', [
     'common.mediaTypes',
     'common.oneSearch',
-    'common.engines',
-    'filters.nameFilter'
+    'common.engines'
 ])
-angular.module('oneSearch.common')
     .factory('dataFactory', function($http) {
         return {
             get: function(url) {
@@ -331,140 +327,61 @@ angular.module('oneSearch.common')
             restrict: 'AEC',
             scope: {
                 prompt: '@',
-                model: '=',
-                search: '='
+                model: '='
             },
-            controller: function($scope, $window, $timeout, dataFactory){
+            controller: function($scope, dataFactory){
                 $scope.items = {};
-                $scope.filteredItems = [];
-                $scope.model = "";
-                $scope.current = -1;
-                $scope.originalValue = $scope.model;
                 $scope.dataRequested = false;
-                $scope.numShow = 5;
+                $scope.isOpen = false;
+                $scope.model = "";
 
-                // hides the list initially
-                $scope.selected = true;
+                $scope.onItemSelected = function() { // this gets executed when an item is selected
+                    console.log('selected=' + $scope.model);
+                };
 
                 $scope.onChange = function(){
-                    var lastSpace = $scope.model.lastIndexOf(" ");
                     $scope.selected = false;
-
-                    if ($scope.model.length - lastSpace <= 3 || $scope.model.indexOf($scope.originalValue) < 0){
+                    $scope.isOpen = true;
+                    if ($scope.model.length > 2 && !$scope.dataRequested){
+                        dataFactory.get('//wwwdev2.lib.ua.edu/oneSearch/api/suggest/' + $scope.model).then(function(data) {
+                            $scope.items.suggest = data;
+                            console.dir(data);
+                        });
+                        dataFactory.get('//wwwdev2.lib.ua.edu/staffDir/api/subject/' + $scope.model + '/match/startwith').then(function(data) {
+                            $scope.items.subjects = data;
+                            console.dir(data);
+                        });
+                        $scope.dataRequested = true;
+                    } else
+                    if ($scope.model.length <= 2){
                         $scope.items = {};
-                        $scope.setCurrent(-1, false);
                         $scope.dataRequested = false;
                     }
-                    if ($scope.model.length - lastSpace > 3 && !$scope.dataRequested){
-                        dataFactory.get('//wwwdev2.lib.ua.edu/oneSearch/api/suggest/' + $scope.model)
-                            .then(function(data) {
-                                $scope.items.suggest = data;
-                                $scope.setCurrent(-1, false);
-                            });
-                        $scope.dataRequested = true;
-                    }
-                    if ($scope.model.length > 2){
-                        $timeout(function() {
-                            dataFactory.get('//wwwdev2.lib.ua.edu/oneSearch/api/recommend/' + $scope.model)
-                                .then(function(data) {
-                                    $scope.items.recommend = data;
-                                });
-                            dataFactory.get('//wwwdev2.lib.ua.edu/staffDir/api/subject/' + $scope.model + '/match/startwith')
-                                .then(function(data) {
-                                    $scope.items.subjects = data;
-                                });
-                            dataFactory.get('//www.googleapis.com/customsearch/v1?key=AIzaSyCMGfdDaSfjqv5zYoS0mTJnOT3e9MURWkU&cx=003453353330912650815:lfyr_-azrxe&q=' +
-                            $scope.model + '&siteSearch=ask.lib.ua.edu')
-                                .then(function(data) {
-                                    $scope.items.faq = data;
-                                });
-                        }, 200);
-                    }
-                    $scope.originalValue = $scope.model;
-                };
-                $scope.go = function ( path ) {
-                    $scope.model = "";
-                    $scope.originalValue = $scope.model;
-                    $window.location.href = path;
-                };
-                $scope.setCurrent = function(index, forceModel) {
-                    $scope.current = index;
-                    if (typeof $scope.items.suggest != 'undefined')
-                        for (var i = 0; i < $scope.items.suggest.length; i++)
-                            $scope.items.suggest[i].class = '';
-                    if (index >= 0)
-                        if ($scope.filteredItems.length > 0){
-                            if (index > $scope.filteredItems.length - 1)
-                                index = $scope.filteredItems.length - 1;
-                            if (forceModel)
-                                $scope.model = $scope.filteredItems[index].search;
-                            $scope.filteredItems[index].class = 'active';
-                            $scope.current = index;
-                        }
-                };
-                $scope.onFocus = function(){
-                    if ($scope.model.length > 2){
-                        $scope.selected = false;
-                    }
-                };
-                $scope.onBlur = function($event){
-                    $scope.selected = true;
-                };
-                $scope.compare = function(query){
-                    return function(item){
-                        if (item.search.indexOf(query) == 0 &&
-                            !angular.equals(item.search.toLowerCase(), query.toLowerCase()))
-                            return true;
-                        return false;
-                    };
                 };
             },
             link: function(scope, elem, attrs) {
-                elem.bind("keydown", function (event) {
-                    switch(event.keyCode){
-                        //ArrowUp
-                        case 38:
-                            if (scope.current > 0){
-                                scope.setCurrent(scope.current - 1, true);
-                                event.preventDefault();
-                            } else {
-                                scope.setCurrent(-1, false);
-                                scope.model = scope.originalValue;
-                                event.preventDefault();
-                            }
-                            break;
-
-                        //ArrowDown
-                        case 40:
-                            if (scope.model.length > 2 && scope.current < scope.numShow - 1)
-                                if (scope.current < scope.items.suggest.length - 1){
-                                    scope.setCurrent(scope.current + 1, true);
-                                    event.preventDefault();
-                                }
-                            break;
-
-                        //Enter
-                        case 13:
-                            scope.selected = true;
-                            break;
-
-                        default:
-                            break;
-                    }
-                    scope.$apply();
-                });
                 scope.handleSelection = function(selectedItem) {
+                    scope.model = selectedItem;
+                    scope.current = 0;
+                    scope.selected = true;
+                    scope.isOpen = false;
                     $timeout(function() {
-                        scope.model = selectedItem;
-                        scope.selected = true;
-                        scope.$apply();
-                        scope.search();
-                    }, 0);
+                        scope.onItemSelected();
+                    }, 200);
+                };
+                scope.current = 0;
+                scope.selected = true; // hides the list initially
+                scope.isCurrent = function(index) {
+                    return scope.current == index;
+                };
+                scope.setCurrent = function(index) {
+                    scope.current = index;
                 };
             },
-            templateUrl: 'common/directives/suggest/suggest.tpl.html'
+            templateUrl: '//wwwdev2.lib.ua.edu/oneSearch/templates/suggest.tpl.html'
         };
     })
+
 angular.module('engines.acumen', [])
 
     .config(['oneSearchProvider', function(oneSearchProvider){
@@ -472,18 +389,7 @@ angular.module('engines.acumen', [])
             id: 8,
             resultsPath: 'Acumen.data',
             totalsPath: 'Acumen.metadata.numFound',
-            templateUrl: 'common/engines/acumen/acumen.tpl.html',
-            controller: function($scope, $filter){
-                var items = $scope.items;
-
-                for (var i = 0, len = items.length; i < len; i++) {
-                    if (items[i].type) {
-                        console.log(items[i].type);
-                        if (items[i].type[0] == 'text' && items[i].details.genre) items[i].type = items[i].details.genre.sort().shift();
-                        else items[i].type = items[i].type.sort().shift();
-                    }
-                }
-            }
+            templateUrl: 'common/engines/acumen/acumen.tpl.html'
         })
     }])
 angular.module('engines.catalog', [])
@@ -502,51 +408,9 @@ angular.module('engines.catalog', [])
                     media: ['jm', 'gm']
                 }
             },
-            templateUrl: 'common/engines/catalog/catalog.tpl.html',
-            controller: function($scope, $filter){
-                var types = {
-                    bc: "Archive/Manuscript",
-                    cm: "Music Score",
-                    em: "Map",
-                    im: "Nonmusical Recording",
-                    jm: "Musical Recording",
-                    mm: "Computer File/Software",
-                    om: "Kit",
-                    pc: "Mixed Material/Collection",
-                    pm: "Mixed Material",
-                    rm: "Visual Material"
-                };
-                var items = $scope.items;
-
-                for (var i = 0; i < items.length; i++){
-                    var t = items[i]['bibFormat'];
-                    items[i].mediaType = types[t];
-
-                    //Check for authors field. If not there, check the title for author names.
-                    if (!items[i].author){
-                        var split = $filter('catalogSplitTitleAuthor')(items[i].title);
-                        console.log(split);
-                        if (angular.isArray(split)){
-                            items[i].title = split[0];
-                            items[i].author = split[2];
-                        }
-                    }
-                }
-
-                $scope.items = items;
-            }
+            templateUrl: 'common/engines/catalog/catalog.tpl.html'
         })
     }])
-
-    .filter('catalogSplitTitleAuthor', [function(){
-        return function(title){
-            if (title.indexOf('/') > -1){
-                var titleParts = title.split(/\s\/\sedited\sby\s([^.+]+)\./);
-                title = titleParts
-            }
-            return title;
-        }
-    }]);
 angular.module('engines.databases', [])
 
     .config(['oneSearchProvider', function(oneSearchProvider){
@@ -574,7 +438,7 @@ angular.module('engines.ejournals', [])
             templateUrl: 'common/engines/ejournals/ejournals.tpl.html',
             controller: ['$scope', function($scope){
                 for (var i = 0, len = $scope.items.length; i < len; i++){
-                    console.log($scope.items);
+                    $scope.items[i]['ctrltest'] = 'wut';
                 }
             }]
 
@@ -591,11 +455,9 @@ angular.module('common.engines', [
     'engines.acumen',
     'engines.catalog',
     'engines.databases',
+    'engines.ejournals',
     'engines.scout',
     'engines.googleCS',
-    'engines.faq',
-    'engines.libguides',
-    'engines.ejournals',
     'engines.recommend'
 ])
 /**
@@ -626,17 +488,6 @@ angular.module('common.engines', [
         };
 
     }])
-angular.module('engines.faq', [])
-
-    .config(['oneSearchProvider', function(oneSearchProvider){
-        oneSearchProvider.engine('faq', {
-            id: 16,
-            resultsPath: 'GoogleCS.items',
-            totalsPath: 'GoogleCS.searchInformation.totalResults',
-            filterQuery: 'site:ask.lib.ua.edu',
-            templateUrl: 'common/engines/google-cs/google-cs.tpl.html'
-        })
-    }])
 angular.module('engines.googleCS', [])
 
     .config(['oneSearchProvider', function(oneSearchProvider){
@@ -644,19 +495,7 @@ angular.module('engines.googleCS', [])
             id: 16,
             resultsPath: 'GoogleCS.items',
             totalsPath: 'GoogleCS.searchInformation.totalResults',
-            filterQuery: '-side:guides.lib.ua.edu -site:ask.lib.ua.edu',
             templateUrl: 'common/engines/google-cs/google-cs.tpl.html'
-        })
-    }])
-angular.module('engines.libguides', [])
-
-    .config(['oneSearchProvider', function(oneSearchProvider){
-        oneSearchProvider.engine('libguides', {
-            id: 16,
-            resultsPath: 'GoogleCS.items',
-            totalsPath: 'GoogleCS.searchInformation.totalResults',
-            filterQuery: 'site:guides.lib.ua.edu',
-            templateUrl: 'common/engines/libguides/libguides.tpl.html'
         })
     }])
 angular.module('engines.recommend', [])
@@ -679,48 +518,14 @@ angular.module('engines.scout', [])
                 path: 'Header.PubTypeId',
                 types: {
                     books: ['book', 'ebook'],
-                    //journals: 'serialPeriodical',
+                    journals: 'serialPeriodical',
                     articles: 'academicJournal',
                     media: ['audio', 'videoRecording']
                 }
             },
-            templateUrl: 'common/engines/scout/scout.tpl.html',
-            controller: function($scope){
-                var items = $scope.items;
-                for (var i = 0; i < items.length; i++){
-                    if (items[i].Header.PubTypeId == 'audio'){
-                        items[i].mediaType = 'Audio';
-                    }
-                    if (items[i].Header.PubTypeId == 'videoRecording'){
-                        items[i].mediaType = 'Video Recording';
-                    }
-
-                    //Search for "source"
-
-                    for (var x = 0; x < items[i].Items.length; x++){
-                        if (items[i].Items[x].Group == 'Src'){
-                            console.log(items[i].Items[x].Group);
-                            items[i].source = items[i].Items[x].Data;
-                        }
-                    }
-                }
-                $scope.items = items;
-            }
+            templateUrl: 'common/engines/scout/scout.tpl.html'
         })
     }])
-angular.module('filters.nameFilter', [])
-
-    .filter('nameFilter', ['$filter', function($filter){
-        return function(name){
-            if (name.indexOf(',') > -1) {
-                var nameParts = name.split(',');
-                name = nameParts.map(function (obj) {
-                    return obj.trim();
-                }).reverse().join(' ');
-            }
-            return name;
-        }
-    }]);
 function inArray(val, arr){
     return arr.indexOf(val) > -1;
 }
@@ -772,52 +577,6 @@ function isEmpty(obj) {
     }
 
     return true;
-}
-/**
- * @description
- * Checks an object's type given an options object
- *
- * @param opt Object   An object who's keys represent the type and the value is the object to be tested
- *                      Multiple object types act as a OR condition
- *
- * @returns Boolean
- */
-var toString = Object.prototype.toString;
-
-function isType(opt){
-    if (!isType({object: opt})) return null;
-
-    var result = false;
-
-    for (var key in opt){
-        var obj = opt[key];
-        var type = getType(obj);
-
-        if (type === key) result = true;
-    }
-
-    return result;
-}
-
-function getType(obj){
-    var type;
-    var t = toString.call(obj);
-
-    switch (type){
-        case "[object Object]":
-            type = 'object';
-            break;
-        case "[object String]":
-            type = 'string';
-            break;
-        case "[object Array]":
-            type = 'array';
-            break;
-        default:
-            type = null;
-    }
-
-    return type;
 }
 // adopted from https://github.com/a8m/angular-filter/blob/master/src/_common.js
 function toArray(object) {
@@ -971,9 +730,8 @@ angular.module('common.oneSearch', [])
         this.engine = function(name, engine){
             if (angular.isString(name)){
                 var defaults = {
-                    id: null, resultsPath: null, totalsPath: null, mediaTypes: null, templateUrl: null, filterQuery: null, controller: null
+                    id: null, resultsPath: null, totalsPath: null, mediaTypes: null, templateUrl: null, controller: null
                 };
-
 
                 var e = angular.extend(defaults, engine);
                 if (e.id){
@@ -1011,17 +769,6 @@ angular.module('common.oneSearch', [])
 
                         //Extend local parameters by global params.
                         angular.extend(p, params);
-
-                        //if filterQuery present, add it to query
-                        // TODO: add proper REST support by accepting filter queries as objects and not just strings
-                        if (engine.filterQuery !== null){
-                            p.s += ' ' + engine.filterQuery;
-                        }
-
-                        console.log({
-                            engine: engine,
-                            params: p
-                        });
 
                         // Store the $http response promise in the engine's object with key 'response
                         engine.response = $http({method: 'GET', url: url, params: p});
