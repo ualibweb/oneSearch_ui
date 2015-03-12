@@ -68,7 +68,7 @@ angular.module("common/directives/suggest/suggest.tpl.html", []).run(["$template
     "<div class=\"suggest\" ng-hide=\"model.length < 3 || selected\">\n" +
     "    <div ng-hide=\"items.suggest.searches.length == 0\">\n" +
     "        <div class=\"item\" ng-repeat=\"item in items.suggest.searches | limitTo:5 track by $index\"\n" +
-    "             ng-click=\"handleSelection(item.search)\" style=\"cursor:pointer\" ng-class=\"{active:isCurrent($index)}\"\n" +
+    "             ng-mousedown=\"handleSelection(item.search)\" style=\"cursor:pointer\" ng-class=\"{active:isCurrent($index)}\"\n" +
     "             ng-mouseenter=\"setCurrent($index)\">\n" +
     "            <p class=\"title\">{{item.search}}</p>\n" +
     "        </div>\n" +
@@ -78,7 +78,7 @@ angular.module("common/directives/suggest/suggest.tpl.html", []).run(["$template
     "        <div ng-repeat=\"recommendation in items.suggest.recommend\">\n" +
     "            <div ng-repeat=\"keyword in recommendation.keywords | limitTo:10 track by $index\">\n" +
     "                <div ng-if=\"$index == 0\">\n" +
-    "                    <a href=\"{{recommendation.link}}\">\n" +
+    "                    <a href=\"{{recommendation.link}}\" ng-mousedown=\"go(recommendation.link)\">\n" +
     "                        {{recommendation.description}}\n" +
     "                    </a>\n" +
     "                </div>\n" +
@@ -91,7 +91,7 @@ angular.module("common/directives/suggest/suggest.tpl.html", []).run(["$template
     "            <div ng-repeat=\"subject in person.subjects\">\n" +
     "                <div ng-repeat=\"keyword in subject.keywords | limitTo:10 track by $index\">\n" +
     "                    <div ng-if=\"$index == 0\">\n" +
-    "                        <a href=\"{{subject.link}}\">\n" +
+    "                        <a href=\"{{subject.link}}\" ng-mousedown=\"go(subject.link)\">\n" +
     "                            {{subject.subject}}\n" +
     "                        </a>\n" +
     "                    </div>\n" +
