@@ -334,6 +334,10 @@ angular.module('oneSearch.common', [
                 $scope.dataRequested = false;
                 $scope.isOpen = false;
                 $scope.model = "";
+                $scope.current = 0;
+
+                // hides the list initially
+                $scope.selected = true;
 
                 $scope.onItemSelected = function() { // this gets executed when an item is selected
                     console.log('selected=' + $scope.model);
@@ -342,21 +346,32 @@ angular.module('oneSearch.common', [
                 $scope.onChange = function(){
                     $scope.selected = false;
                     $scope.isOpen = true;
-                    if ($scope.model.length > 2 && !$scope.dataRequested){
+                    if ($scope.model.length > 2){
                         dataFactory.get('//wwwdev2.lib.ua.edu/oneSearch/api/suggest/' + $scope.model).then(function(data) {
                             $scope.items.suggest = data;
-                            console.dir(data);
                         });
                         dataFactory.get('//wwwdev2.lib.ua.edu/staffDir/api/subject/' + $scope.model + '/match/startwith').then(function(data) {
                             $scope.items.subjects = data;
-                            console.dir(data);
                         });
                         $scope.dataRequested = true;
                     } else
-                    if ($scope.model.length <= 2){
-                        $scope.items = {};
-                        $scope.dataRequested = false;
-                    }
+                        if ($scope.model.length <= 2){
+                            $scope.items = {};
+                            $scope.dataRequested = false;
+                        }
+                };
+                $scope.onFocus = function(){
+                    if ($scope.model.length > 2)
+                        $scope.selected = false;
+                };
+                $scope.onBlur = function(){
+                    $scope.selected = true;
+                };
+                $scope.isCurrent = function(index) {
+                    return $scope.current == index;
+                };
+                $scope.setCurrent = function(index) {
+                    $scope.current = index;
                 };
             },
             link: function(scope, elem, attrs) {
@@ -369,16 +384,8 @@ angular.module('oneSearch.common', [
                         scope.onItemSelected();
                     }, 200);
                 };
-                scope.current = 0;
-                scope.selected = true; // hides the list initially
-                scope.isCurrent = function(index) {
-                    return scope.current == index;
-                };
-                scope.setCurrent = function(index) {
-                    scope.current = index;
-                };
             },
-            templateUrl: '//wwwdev2.lib.ua.edu/oneSearch/templates/suggest.tpl.html'
+            templateUrl: 'common/directives/suggest/suggest.tpl.html'
         };
     })
 

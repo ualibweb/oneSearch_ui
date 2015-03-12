@@ -60,23 +60,23 @@ angular.module("common/directives/suggest/suggest.tpl.html", []).run(["$template
   $templateCache.put("common/directives/suggest/suggest.tpl.html",
     "<div class=\"input-group input-group-lg\">\n" +
     "    <input type=\"text\" name=\"search\" class=\"form-control onesearch-text\" placeholder=\"{{prompt}}\"\n" +
-    "           ng-model=\"model\" ng-change=\"onChange()\" autocomplete=\"off\" />\n" +
+    "           ng-model=\"model\" ng-change=\"onChange()\" autocomplete=\"off\" ng-blur=\"onBlur()\" ng-focus=\"onFocus()\" />\n" +
     "    <div class=\"input-group-btn\">\n" +
     "        <button type=\"submit\" class=\"btn btn-onesearch btn-primary\"><span class=\"fa fa-search\"></span></button>\n" +
     "    </div>\n" +
     "</div>\n" +
-    "<div class=\"suggest\">\n" +
-    "    <div ng-hide=\"model.length < 3 || items.suggest.searches.length == 0 || selected\">\n" +
-    "        <div class=\"item\" ng-repeat=\"item in items.suggest.searches | filter:model | limitTo:5 track by $index\"\n" +
+    "<div class=\"suggest\" ng-hide=\"model.length < 3 || selected\">\n" +
+    "    <div ng-hide=\"items.suggest.searches.length == 0\">\n" +
+    "        <div class=\"item\" ng-repeat=\"item in items.suggest.searches | limitTo:5 track by $index\"\n" +
     "             ng-click=\"handleSelection(item.search)\" style=\"cursor:pointer\" ng-class=\"{active:isCurrent($index)}\"\n" +
     "             ng-mouseenter=\"setCurrent($index)\">\n" +
     "            <p class=\"title\">{{item.search}}</p>\n" +
     "        </div>\n" +
     "    </div>\n" +
-    "    <div ng-hide=\"model.length < 3 || items.suggest.recommend.length == 0 || selected\">\n" +
+    "    <div ng-hide=\"items.suggest.recommend.length == 0\">\n" +
     "        <h4>Recommendations</h4>\n" +
     "        <div ng-repeat=\"recommendation in items.suggest.recommend\">\n" +
-    "            <div ng-repeat=\"keyword in recommendation.keywords | filter:model | limitTo:10\">\n" +
+    "            <div ng-repeat=\"keyword in recommendation.keywords | limitTo:10 track by $index\">\n" +
     "                <div ng-if=\"$index == 0\">\n" +
     "                    <a href=\"{{recommendation.link}}\">\n" +
     "                        {{recommendation.description}}\n" +
@@ -85,11 +85,11 @@ angular.module("common/directives/suggest/suggest.tpl.html", []).run(["$template
     "            </div>\n" +
     "        </div>\n" +
     "    </div>\n" +
-    "    <div ng-hide=\"model.length < 3 || items.subjects.length == 0 || selected\">\n" +
+    "    <div ng-hide=\"items.subjects.length == 0\">\n" +
     "        <h4>LibGuides Subjects</h4>\n" +
     "        <div ng-repeat=\"person in items.subjects\">\n" +
     "            <div ng-repeat=\"subject in person.subjects\">\n" +
-    "                <div ng-repeat=\"keyword in subject.keywords | filter:model | limitTo:10\">\n" +
+    "                <div ng-repeat=\"keyword in subject.keywords | limitTo:10 track by $index\">\n" +
     "                    <div ng-if=\"$index == 0\">\n" +
     "                        <a href=\"{{subject.link}}\">\n" +
     "                            {{subject.subject}}\n" +
