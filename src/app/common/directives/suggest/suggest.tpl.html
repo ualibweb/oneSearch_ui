@@ -6,13 +6,13 @@
     </div>
 </div>
 <div class="suggest" ng-hide="model.length < 3 || selected">
-    <div ng-hide="items.suggest.searches.length == 0">
-        <div class="item" ng-repeat="item in items.suggest.searches | limitTo:5 track by $index"
-             ng-mousedown="handleSelection(item.search)" style="cursor:pointer" ng-class="{active:isCurrent($index)}"
-             ng-mouseenter="setCurrent($index)">
-            <p class="title">{{item.search}}</p>
-        </div>
-    </div>
+    <ul class="nav nav-pills nav-stacked" ng-hide="items.suggest.searches.length == 0">
+        <li role="presentation" ng-repeat="item in items.suggest.searches | limitTo:5 track by $index"
+             ng-mousedown="handleSelection(item.search)" ng-class="item.class"
+             ng-mouseenter="setCurrent($index, false)">
+            <a href="#">{{item.search}}</a>
+        </li>
+    </ul>
     <div ng-hide="items.suggest.recommend.length == 0">
         <h4>Recommendations</h4>
         <div ng-repeat="recommendation in items.suggest.recommend">
@@ -31,8 +31,12 @@
             <div ng-repeat="subject in person.subjects">
                 <div ng-repeat="keyword in subject.keywords | limitTo:10 track by $index">
                     <div ng-if="$index == 0">
-                        <a href="{{subject.link}}" ng-mousedown="go(subject.link)">
+                        <a ng-if="subject.link.length > 7" href="{{subject.link}}" ng-mousedown="go(subject.link)">
                             {{subject.subject}}
+                        </a>
+                        <a ng-if="subject.link.length <= 7" href="#"
+                           ng-mousedown="go('mailto:' + person.email + '?subject=Question')">
+                            Ask {{person.name}}, {{person.title}} at {{person.department}}
                         </a>
                     </div>
                 </div>

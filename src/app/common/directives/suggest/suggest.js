@@ -12,67 +12,107 @@
             restrict: 'AEC',
             scope: {
                 prompt: '@',
-                model: '='
+                model: '=',
+                search: '='
             },
             controller: function($scope, $window, dataFactory){
                 $scope.items = {};
-                $scope.dataRequested = false;
                 $scope.model = "";
+                $scope.current = -1;
+                $scope.originalValue = $scope.model;
 
-                $scope.onItemSelected = function() { // this gets executed when an item is selected
-                    console.log('selected=' + $scope.model);
-                };
+                // hides the list initially
+                $scope.selected = true;
 
                 $scope.onChange = function(){
                     $scope.selected = false;
-                    $scope.isOpen = true;
                     if ($scope.model.length > 2){
-                        dataFactory.get('//wwwdev2.lib.ua.edu/oneSearch/api/suggest/' + $scope.model).then(function(data) {
-                            $scope.items.suggest = data;
-                        });
-                        dataFactory.get('//wwwdev2.lib.ua.edu/staffDir/api/subject/' + $scope.model + '/match/startwith').then(function(data) {
-                            $scope.items.subjects = data;
-                        });
-                        $scope.dataRequested = true;
+                        dataFactory.get('//wwwdev2.lib.ua.edu/oneSearch/api/suggest/' + $scope.model)
+                            .then(function(data) {
+                                $scope.items.suggest = data;
+                                $scope.setCurrent(-1, false);
+                            });
+                        dataFactory.get('//wwwdev2.lib.ua.edu/staffDir/api/subject/' + $scope.model + '/match/startwith')
+                            .then(function(data) {
+                                $scope.items.subjects = data;
+                            });
                     } else
                         if ($scope.model.length <= 2){
                             $scope.items = {};
-                            $scope.dataRequested = false;
+                            $scope.setCurrent(-1, false);
                         }
+                    $scope.originalValue = $scope.model;
                 };
                 $scope.go = function ( path ) {
                     $scope.model = "";
+                    $scope.originalValue = $scope.model;
                     $window.location.href = path;
+                };
+                $scope.setCurrent = function(index, forceModel) {
+                    $scope.current = index;
+                    if (typeof $scope.items.suggest != 'undefined')
+                        for (var i = 0; i < $scope.items.suggest.searches.length; i++)
+                            $scope.items.suggest.searches[i].class = '';
+                    if (index >= 0)
+                        if ($scope.items.suggest.searches.length > 0){
+                            if (index > $scope.items.suggest.searches.length - 1)
+                                index = $scope.items.suggest.searches.length - 1;
+                            if (forceModel)
+                                $scope.model = $scope.items.suggest.searches[index].search;
+                            $scope.items.suggest.searches[index].class = 'active';
+                            $scope.current = index;
+                        }
+                };
+                $scope.onFocus = function(){
+                    if ($scope.model.length > 2){
+                        $scope.selected = false;
+                    }
+                };
+                $scope.onBlur = function($event){
+                    $scope.selected = true;
                 };
             },
             link: function(scope, elem, attrs) {
-                scope.handleSelection = function(selectedItem) {
-                    scope.model = selectedItem;
-                    scope.current = 0;
-                    scope.selected = true;
-                    $timeout(function() {
-                        scope.onItemSelected();
-                    }, 200);
-                };
-                scope.current = 0;
+                elem.bind("keydown", function (event) {
+                    switch(event.keyCode){
+                        //ArrowUp
+                        case 38:
+                            if (scope.current > 0){
+                                scope.setCurrent(scope.current - 1, true);
+                                event.preventDefault();
+                            } else {
+                                scope.setCurrent(-1, false);
+                                scope.model = scope.originalValue;
+                                event.preventDefault();
+                            }
+                            break;
 
-                // hides the list initially
-                scope.selected = true;
+                        //ArrowDown
+                        case 40:
+                            if (scope.model.length > 2)
+                                if (scope.current < scope.items.suggest.searches.length - 1){
+                                    scope.setCurrent(scope.current + 1, true);
+                                    event.preventDefault();
+                                }
+                            break;
 
-                scope.isCurrent = function(index) {
-                    return scope.current == index;
-                };
-                scope.setCurrent = function(index) {
-                    scope.current = index;
-                };
-                scope.onFocus = function(){
-                    if (scope.model.length > 2){
-                        scope.selected = false;
-                        console.log(scope.model);
+                        //Enter
+                        case 13:
+                            scope.selected = true;
+                            break;
+
+                        default:
+                            break;
                     }
-                };
-                scope.onBlur = function($event){
-                    scope.selected = true;
+                    scope.$apply();
+                });
+                scope.handleSelection = function(selectedItem) {
+                    $timeout(function() {
+                        scope.model = selectedItem;
+                        scope.selected = true;
+                        scope.$apply();
+                        scope.search();
+                    }, 0);
                 };
             },
             templateUrl: 'common/directives/suggest/suggest.tpl.html'
