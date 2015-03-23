@@ -102,9 +102,8 @@ a[href^="http"]:after, a[href^="https"]:after{
     z-index:10;
     background-color: rgba(248, 248, 248, 1);
     box-shadow: 1px 1px 5px 0px rgba(20, 16, 14, 0.5);
-    padding: 0px 15px;
+    padding: 5px 3px 5px 3px;
     border: 1px solid #E3E3E3;
-    border-radius: 4px;
 }
 
 /* Make clicks pass-through */
