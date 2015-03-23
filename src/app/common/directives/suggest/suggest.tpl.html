@@ -14,7 +14,7 @@
         </li>
     </ul>
     <div ng-hide="items.suggest.recommend.length == 0">
-        <h4>Recommendations</h4>
+        <h4>Web site pages</h4>
         <div ng-repeat="recommendation in items.suggest.recommend">
             <div ng-repeat="keyword in recommendation.keywords | limitTo:10 track by $index">
                 <div ng-if="$index == 0">

@@ -74,7 +74,7 @@ angular.module("common/directives/suggest/suggest.tpl.html", []).run(["$template
     "        </li>\n" +
     "    </ul>\n" +
     "    <div ng-hide=\"items.suggest.recommend.length == 0\">\n" +
-    "        <h4>Recommendations</h4>\n" +
+    "        <h4>Web site pages</h4>\n" +
     "        <div ng-repeat=\"recommendation in items.suggest.recommend\">\n" +
     "            <div ng-repeat=\"keyword in recommendation.keywords | limitTo:10 track by $index\">\n" +
     "                <div ng-if=\"$index == 0\">\n" +
