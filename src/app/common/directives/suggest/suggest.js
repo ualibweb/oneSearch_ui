@@ -17,30 +17,43 @@
             },
             controller: function($scope, $window, dataFactory){
                 $scope.items = {};
+                $scope.filteredItems = [];
                 $scope.model = "";
                 $scope.current = -1;
                 $scope.originalValue = $scope.model;
+                $scope.dataRequested = false;
+                $scope.numShow = 5;
 
                 // hides the list initially
                 $scope.selected = true;
 
                 $scope.onChange = function(){
+                    var lastSpace = $scope.model.lastIndexOf(" ");
                     $scope.selected = false;
-                    if ($scope.model.length > 2){
+
+                    if ($scope.model.length - lastSpace <= 3 || $scope.model.indexOf($scope.originalValue) < 0){
+                        $scope.items = {};
+                        $scope.setCurrent(-1, false);
+                        $scope.dataRequested = false;
+                    }
+                    if ($scope.model.length - lastSpace > 3 && !$scope.dataRequested){
                         dataFactory.get('//wwwdev2.lib.ua.edu/oneSearch/api/suggest/' + $scope.model)
                             .then(function(data) {
                                 $scope.items.suggest = data;
                                 $scope.setCurrent(-1, false);
                             });
+                        $scope.dataRequested = true;
+                    }
+                    if ($scope.model.length > 2){
+                        dataFactory.get('//wwwdev2.lib.ua.edu/oneSearch/api/recommend/' + $scope.model)
+                            .then(function(data) {
+                                $scope.items.recommend = data;
+                            });
                         dataFactory.get('//wwwdev2.lib.ua.edu/staffDir/api/subject/' + $scope.model + '/match/startwith')
                             .then(function(data) {
                                 $scope.items.subjects = data;
                             });
-                    } else
-                        if ($scope.model.length <= 2){
-                            $scope.items = {};
-                            $scope.setCurrent(-1, false);
-                        }
+                    }
                     $scope.originalValue = $scope.model;
                 };
                 $scope.go = function ( path ) {
@@ -51,15 +64,15 @@
                 $scope.setCurrent = function(index, forceModel) {
                     $scope.current = index;
                     if (typeof $scope.items.suggest != 'undefined')
-                        for (var i = 0; i < $scope.items.suggest.searches.length; i++)
-                            $scope.items.suggest.searches[i].class = '';
+                        for (var i = 0; i < $scope.items.suggest.length; i++)
+                            $scope.items.suggest[i].class = '';
                     if (index >= 0)
-                        if ($scope.items.suggest.searches.length > 0){
-                            if (index > $scope.items.suggest.searches.length - 1)
-                                index = $scope.items.suggest.searches.length - 1;
+                        if ($scope.filteredItems.length > 0){
+                            if (index > $scope.filteredItems.length - 1)
+                                index = $scope.filteredItems.length - 1;
                             if (forceModel)
-                                $scope.model = $scope.items.suggest.searches[index].search;
-                            $scope.items.suggest.searches[index].class = 'active';
+                                $scope.model = $scope.filteredItems[index].search;
+                            $scope.filteredItems[index].class = 'active';
                             $scope.current = index;
                         }
                 };
@@ -70,6 +83,14 @@
                 };
                 $scope.onBlur = function($event){
                     $scope.selected = true;
+                };
+                $scope.compare = function(query){
+                    return function(item){
+                        if (item.search.indexOf(query) == 0 &&
+                            !angular.equals(item.search.toLowerCase(), query.toLowerCase()))
+                            return true;
+                        return false;
+                    };
                 };
             },
             link: function(scope, elem, attrs) {
@@ -89,8 +110,8 @@
 
                         //ArrowDown
                         case 40:
-                            if (scope.model.length > 2)
-                                if (scope.current < scope.items.suggest.searches.length - 1){
+                            if (scope.model.length > 2 && scope.current < scope.numShow - 1)
+                                if (scope.current < scope.items.suggest.length - 1){
                                     scope.setCurrent(scope.current + 1, true);
                                     event.preventDefault();
                                 }
