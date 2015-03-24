@@ -66,40 +66,33 @@ angular.module("common/directives/suggest/suggest.tpl.html", []).run(["$template
     "    </div>\n" +
     "</div>\n" +
     "<div class=\"suggest\" ng-hide=\"model.length < 3 || selected\">\n" +
-    "    <ul class=\"nav nav-pills nav-stacked\" ng-hide=\"items.suggest.searches.length == 0\">\n" +
-    "        <li role=\"presentation\" ng-repeat=\"item in items.suggest.searches | limitTo:5 track by $index\"\n" +
+    "    <ul class=\"nav nav-pills nav-stacked\" ng-hide=\"items.suggest.length == 0\">\n" +
+    "        <li role=\"presentation\"\n" +
+    "            ng-repeat=\"item in filteredItems = (items.suggest | filter:compare(originalValue)) | limitTo:numShow track by $index\"\n" +
     "             ng-mousedown=\"handleSelection(item.search)\" ng-class=\"item.class\"\n" +
     "             ng-mouseenter=\"setCurrent($index, false)\">\n" +
     "            <a href=\"#\">{{item.search}}</a>\n" +
     "        </li>\n" +
     "    </ul>\n" +
-    "    <div ng-hide=\"items.suggest.recommend.length == 0\">\n" +
+    "    <div ng-hide=\"items.recommend.length == 0\">\n" +
     "        <h4>Web site pages</h4>\n" +
-    "        <div ng-repeat=\"recommendation in items.suggest.recommend\">\n" +
-    "            <div ng-repeat=\"keyword in recommendation.keywords | limitTo:10 track by $index\">\n" +
-    "                <div ng-if=\"$index == 0\">\n" +
-    "                    <a href=\"{{recommendation.link}}\" ng-mousedown=\"go(recommendation.link)\">\n" +
-    "                        {{recommendation.description}}\n" +
-    "                    </a>\n" +
-    "                </div>\n" +
-    "            </div>\n" +
+    "        <div ng-repeat=\"recommendation in items.recommend | limitTo:10\">\n" +
+    "            <a href=\"{{recommendation.link}}\" ng-mousedown=\"go(recommendation.link)\">\n" +
+    "                {{recommendation.description}}\n" +
+    "            </a>\n" +
     "        </div>\n" +
     "    </div>\n" +
     "    <div ng-hide=\"items.subjects.length == 0\">\n" +
-    "        <h4>LibGuides Subjects</h4>\n" +
-    "        <div ng-repeat=\"person in items.subjects\">\n" +
-    "            <div ng-repeat=\"subject in person.subjects\">\n" +
-    "                <div ng-repeat=\"keyword in subject.keywords | limitTo:10 track by $index\">\n" +
-    "                    <div ng-if=\"$index == 0\">\n" +
-    "                        <a ng-if=\"subject.link.length > 7\" href=\"{{subject.link}}\" ng-mousedown=\"go(subject.link)\">\n" +
-    "                            {{subject.subject}}\n" +
-    "                        </a>\n" +
-    "                        <a ng-if=\"subject.link.length <= 7\" href=\"#\"\n" +
-    "                           ng-mousedown=\"go('mailto:' + person.email + '?subject=Question')\">\n" +
-    "                            Ask {{person.name}}, {{person.title}} at {{person.department}}\n" +
-    "                        </a>\n" +
-    "                    </div>\n" +
-    "                </div>\n" +
+    "        <h4><a href=\"http://guides.lib.ua.edu/\">LibGuides Subjects</a></h4>\n" +
+    "        <div ng-repeat=\"person in items.subjects | limitTo:10\">\n" +
+    "            <div ng-repeat=\"subject in person.subjects | limitTo:10\">\n" +
+    "                <a ng-if=\"subject.link.length > 7\" href=\"{{subject.link}}\" ng-mousedown=\"go(subject.link)\">\n" +
+    "                    {{subject.subject}}\n" +
+    "                </a>\n" +
+    "                <a ng-if=\"subject.link.length <= 7\" href=\"#\"\n" +
+    "                   ng-mousedown=\"go('mailto:' + person.email + '?subject=Question')\">\n" +
+    "                    Ask {{person.name}}, {{person.title}} at {{person.department}}\n" +
+    "                </a>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "    </div>\n" +
