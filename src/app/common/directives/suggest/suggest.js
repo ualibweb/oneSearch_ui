@@ -15,7 +15,7 @@
                 model: '=',
                 search: '='
             },
-            controller: function($scope, $window, dataFactory){
+            controller: function($scope, $window, $timeout, dataFactory){
                 $scope.items = {};
                 $scope.filteredItems = [];
                 $scope.model = "";
@@ -45,14 +45,21 @@
                         $scope.dataRequested = true;
                     }
                     if ($scope.model.length > 2){
-                        dataFactory.get('//wwwdev2.lib.ua.edu/oneSearch/api/recommend/' + $scope.model)
-                            .then(function(data) {
-                                $scope.items.recommend = data;
-                            });
-                        dataFactory.get('//wwwdev2.lib.ua.edu/staffDir/api/subject/' + $scope.model + '/match/startwith')
-                            .then(function(data) {
-                                $scope.items.subjects = data;
-                            });
+                        $timeout(function() {
+                            dataFactory.get('//wwwdev2.lib.ua.edu/oneSearch/api/recommend/' + $scope.model)
+                                .then(function(data) {
+                                    $scope.items.recommend = data;
+                                });
+                            dataFactory.get('//wwwdev2.lib.ua.edu/staffDir/api/subject/' + $scope.model + '/match/startwith')
+                                .then(function(data) {
+                                    $scope.items.subjects = data;
+                                });
+                            dataFactory.get('//www.googleapis.com/customsearch/v1?key=AIzaSyCMGfdDaSfjqv5zYoS0mTJnOT3e9MURWkU&cx=003453353330912650815:lfyr_-azrxe&q=' +
+                                $scope.model + '&siteSearch=ask.lib.ua.edu')
+                                .then(function(data) {
+                                    $scope.items.faq = data;
+                                });
+                        }, 200);
                     }
                     $scope.originalValue = $scope.model;
                 };

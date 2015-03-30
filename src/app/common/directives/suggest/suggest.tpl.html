@@ -36,6 +36,14 @@
             </div>
         </div>
     </div>
+    <div ng-show="items.faq.searchInformation.totalResults > 0">
+        <h4>FAQ</h4>
+        <div ng-repeat="faq in items.faq.items | limitTo:5">
+            <a href="{{faq.link}}" ng-mousedown="go(faq.link)">
+                {{faq.title}}
+            </a>
+        </div>
+    </div>
 </div>
 
 
