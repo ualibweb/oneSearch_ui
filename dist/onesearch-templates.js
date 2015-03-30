@@ -83,7 +83,7 @@ angular.module("common/directives/suggest/suggest.tpl.html", []).run(["$template
     "        </div>\n" +
     "    </div>\n" +
     "    <div ng-hide=\"items.subjects.length == 0\">\n" +
-    "        <h4><a href=\"http://guides.lib.ua.edu/\">LibGuides Subjects</a></h4>\n" +
+    "        <h4><a href=\"http://guides.lib.ua.edu/\" ng-mousedown=\"go('http://guides.lib.ua.edu/')\">LibGuides Subjects</a></h4>\n" +
     "        <div ng-repeat=\"person in items.subjects | limitTo:10\">\n" +
     "            <div ng-repeat=\"subject in person.subjects | limitTo:10\">\n" +
     "                <a ng-if=\"subject.link.length > 7\" href=\"{{subject.link}}\" ng-mousedown=\"go(subject.link)\">\n" +
@@ -97,7 +97,7 @@ angular.module("common/directives/suggest/suggest.tpl.html", []).run(["$template
     "        </div>\n" +
     "    </div>\n" +
     "    <div ng-show=\"items.faq.searchInformation.totalResults > 0\">\n" +
-    "        <h4>FAQ</h4>\n" +
+    "        <h4><a href=\"http://ask.lib.ua.edu/\" ng-mousedown=\"go('http://ask.lib.ua.edu/')\">FAQ</a></h4>\n" +
     "        <div ng-repeat=\"faq in items.faq.items | limitTo:5\">\n" +
     "            <a href=\"{{faq.link}}\" ng-mousedown=\"go(faq.link)\">\n" +
     "                {{faq.title}}\n" +
