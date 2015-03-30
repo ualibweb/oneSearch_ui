@@ -96,6 +96,14 @@ angular.module("common/directives/suggest/suggest.tpl.html", []).run(["$template
     "            </div>\n" +
     "        </div>\n" +
     "    </div>\n" +
+    "    <div ng-show=\"items.faq.searchInformation.totalResults > 0\">\n" +
+    "        <h4>FAQ</h4>\n" +
+    "        <div ng-repeat=\"faq in items.faq.items | limitTo:5\">\n" +
+    "            <a href=\"{{faq.link}}\" ng-mousedown=\"go(faq.link)\">\n" +
+    "                {{faq.title}}\n" +
+    "            </a>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
     "</div>\n" +
     "\n" +
     "\n" +
