@@ -7,5 +7,6 @@
 angular.module('oneSearch.common', [
     'common.mediaTypes',
     'common.oneSearch',
-    'common.engines'
+    'common.engines',
+    'filters.nameFilter'
 ])

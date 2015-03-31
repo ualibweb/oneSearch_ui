@@ -1,23 +1,29 @@
 
-.bento-box-container > .row:not(:first-child){
+.bento-box-container {
+
+  h2{
+    font-size: 25px;
+    color: #555;
+    margin-bottom: 15px;
+
+    > #loading-bar-spinner{
+      margin-left: 10px;
+    }
+  }
+
+  h4{
+    font-size: 17px;
+    font-family: 'Open Sans', sans-serif;
+  }
+
+  > .row:not(:first-child){
     margin-bottom: 15px;
     border-top: 1px solid #eee;
-}
-
-.bento-box-container h4{
-    font-size: 17px;
-}
-
-.bento-box-container h2{
-    margin-bottom: 15px;
-}
-
-.bento-box-container h2 > #loading-bar-spinner{
-    margin-left: 10px;
+  }
 }
 
 .bento-box{
-    height: 350px;
+    min-height: 350px;
     overflow: hidden;
     -webkit-transition: 200ms cubic-bezier(0.420, 0.000, 0.580, 1.000) all;
     -moz-transition: 200ms cubic-bezier(0.420, 0.000, 0.580, 1.000) all;

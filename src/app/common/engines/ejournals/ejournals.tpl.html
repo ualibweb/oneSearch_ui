@@ -1,17 +1,32 @@
-<ul class="source-list">
-    <li class="source-link">
-        <h4>
-            <a ng-href="{{item.links[0].href}}" title="{{item.title}}">{{item.title | ltrim | truncate: 40: '...': true}}</a>
-            <div class="small source-info"><span class="fa fa-level-up fa-rotate-90"></span> Available through {{item.links[0].name}}</div>
-
+<div class="media">
+    <div class="media-body">
+        <h4 class="media-heading">
+            <a ng-href="{{item.links[0].href}}" title="{{item.title}}">{{item.title | ltrim | truncate: 50: '...': true}}</a>
         </h4>
-    </li>
-    <li ng-if="item.links[1]">
-        <ul class="source-link-more" collapse="isCollapsed">
-            <li class="source-links" ng-repeat="link in item.links | after:1">
-                <span class="fa fa-level-up fa-rotate-90 text-muted"></span>  <a ng-href="{{link.href}}" title="{{link.name}}" class="source-link">{{link.name | ltrim | truncate: 25: '...': true}}</a>
-            </li>
-        </ul>
-        <button ng-show="item.links[1]" type="button" class="btn btn-collapser btn-link btn-sm btn-block" ng-click="isCollapsed = !isCollapsed">{{isCollapsed ? 'more' : 'less'}} sources</button>
-    </li>
-</ul>
+
+        <div class="details-context">
+            <span ng-if="item.date" ng-bind-html="item.date"></span>
+            <span ng-if="item.links[0]">
+                Source: <span title="{{item.links[0].name}}">{{item.links[0].name | ltrim | truncate: 35: '...'}}</span>
+            </span>
+        </div>
+
+        <div class="details-container" ng-if="item.authors">
+            <span class="text-muted">Author(s)</span>
+            <span class="details" ng-bind-html="item.authors"></span>
+        </div>
+
+        <div class="details-container" ng-if="item.links[1]">
+            <span class="text-muted">Other Sources: </span>
+            <span class="details" ng-repeat="link in item.links | after:1 | limitTo : (sourceLimit ? 10 : 2)">
+                <a ng-href="{{link.href}}"
+                   title="{{link.name}}"
+                   class="source-link"
+                   ng-bind-html="link.name | ltrim | truncate: 35: '...': true"></a>
+            </span>
+            <div ng-show="item.links[3]">
+                <button type="button" class="btn btn-default btn-collapser" ng-click="sourceLimit = !sourceLimit">{{sourceLimit? 'more' : 'less'}}</button>
+            </div>
+        </div>
+    </div>
+</div>

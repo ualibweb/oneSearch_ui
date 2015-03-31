@@ -23,10 +23,6 @@ module.exports = function(grunt){
                 options: {
                     process: true
                 }
-            },
-            css: {
-                src: ['src/**/*.css'],
-                dest: 'dist/onesearch.css'
             }
         },
         uglify: {
@@ -43,6 +39,13 @@ module.exports = function(grunt){
                 }]
             }
         },
+        less:   {
+            all: {
+                files: {
+                    'dist/onesearch.css': 'src/**/*.less'
+                }
+            }
+        },
         cssmin: {
             minify: {
                 expand: true,
@@ -54,6 +57,24 @@ module.exports = function(grunt){
         },
         clean: {
             js: ['dist']
+        },
+        bump: {
+            options: {
+                files: ['package.json', 'bower.json'],
+                updateConfigs: ['pkg'],
+                commit: false,
+                commitMessage: 'Release v%VERSION%',
+                commitFiles: ['package.json', 'bower.json'],
+                createTag: true,
+                tagName: 'v%VERSION%',
+                tagMessage: 'Version %VERSION%',
+                push: false,
+                pushTo: 'origin',
+                gitDescribeOptions: '--tags --always --abbrev=1 --dirty=-d',
+                globalReplace: false,
+                prereleaseName: false,
+                regExp: false
+            }
         }
     });
 
@@ -62,6 +83,8 @@ module.exports = function(grunt){
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-clean');
+    grunt.loadNpmTasks('grunt-contrib-less');
+    grunt.loadNpmTasks('grunt-bump');
 
-    grunt.registerTask('default', ['clean', 'html2js', 'concat','cssmin', 'uglify',]);
+    grunt.registerTask('default', ['clean', 'html2js', 'concat', 'less','cssmin', 'uglify']);
 };

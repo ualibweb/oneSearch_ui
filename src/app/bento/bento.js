@@ -87,10 +87,12 @@ angular.module('oneSearch.bento', [])
             // Deep copy media types defined by registered engines to the this.boxes object.
             angular.copy(mediaTypes.types, self.boxes);
 
-            // Pre-define the "results" object for each media type
-            // I only do this here so I don't have to check if it's defined later
+            // Pre-define the "results" object for each media type - I only do this here so I don't have to check if it's defined later
             angular.forEach(self.boxes, function(box, type){
+                var limit = self.boxes[type]['engines'].length > 1 ? 1 : 3;
+
                 self.boxes[type].results = {};
+                self.boxes[type].resultLimit = limit;
             });
 
             //  Iterate over the Promises for each engine returned by the oneSearch.searchAll() function
@@ -142,7 +144,6 @@ angular.module('oneSearch.bento', [])
             });
 
         }
-
     }])
 
 /**

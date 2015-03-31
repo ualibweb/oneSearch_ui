@@ -1,5 +1,20 @@
 <div class="media">
     <div class="media-body">
-        <h4 class="media-heading"><a ng-href="{{item.href}}" title="{{item.title}}">{{item.title | truncate: 40: '...': true}}</a></h4>
+        <h4 class="media-heading">
+            <a ng-href="{{item.href}}"
+               title="{{item.title}}"
+               ng-bind-html="item.title | truncate: 50: '...': true"></a>
+        </h4>
+        <div class="details-context">
+            <span ng-if="item.year && item.year | number" ng-bind-html="item.year"></span>
+            <span ng-if="item.mediaType" ng-bind-html="item.mediaType"></span>
+            <span ng-if="item.issn">ISSN: {{item.issn}}</span>
+        </div>
+        <div class="details-container">
+            <span class="text-muted">Author(s)</span>
+            <span class="detail">
+                <span ng-if="item.author" ng-bind-html="item.author | lowercase | ucfirst"></span>
+            </span>
+        </div>
     </div>
 </div>
