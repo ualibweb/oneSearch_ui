@@ -17,7 +17,7 @@ angular.module('oneSearch', [
     'oneSearch.bento'
 ])
     // The URL to the backend JSON resource handler
-    .constant('JSON_URL', 'https://wwwdev2.lib.ua.edu/oneSearch/getJSON.php')
+    .constant('ONE_SEARCH_URL', 'https://wwwdev2.lib.ua.edu/oneSearch/getJSON.php')
 
     // Default search parameters
     .value('SearchParams', {

@@ -67,7 +67,7 @@ angular.module('common.oneSearch', [])
             }
         };
 
-        this.$get = ['$http', '$parse', 'enginesTemplateFactory', 'SearchParams', 'JSON_URL', function($http, $parse, enginesTemplateFactory, SearchParams, url){
+        this.$get = ['$http', '$parse', 'enginesTemplateFactory', 'SearchParams', 'ONE_SEARCH_URL', function($http, $parse, enginesTemplateFactory, SearchParams, url){
 
             return {
                 engines: _engines, // Expose engines at Service level
