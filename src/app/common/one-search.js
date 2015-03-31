@@ -43,8 +43,9 @@ angular.module('common.oneSearch', [])
         this.engine = function(name, engine){
             if (angular.isString(name)){
                 var defaults = {
-                    id: null, resultsPath: null, totalsPath: null, mediaTypes: null, templateUrl: null, controller: null
+                    id: null, resultsPath: null, totalsPath: null, mediaTypes: null, templateUrl: null, filterQuery: null, controller: null
                 };
+
 
                 var e = angular.extend(defaults, engine);
                 if (e.id){
@@ -82,6 +83,17 @@ angular.module('common.oneSearch', [])
 
                         //Extend local parameters by global params.
                         angular.extend(p, params);
+
+                        //if filterQuery present, add it to query
+                        // TODO: add proper REST support by accepting filter queries as objects and not just strings
+                        if (engine.filterQuery !== null){
+                            p.s += ' ' + engine.filterQuery;
+                        }
+
+                        /*console.log({
+                            engine: engine,
+                            params: p
+                        });*/
 
                         // Store the $http response promise in the engine's object with key 'response
                         engine.response = $http({method: 'GET', url: url, params: p});

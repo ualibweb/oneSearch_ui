@@ -9,9 +9,11 @@ angular.module('common.engines', [
     'engines.acumen',
     'engines.catalog',
     'engines.databases',
-    'engines.ejournals',
     'engines.scout',
     'engines.googleCS',
+    'engines.faq',
+    'engines.libguides',
+    'engines.ejournals',
     'engines.recommend'
 ])
 /**

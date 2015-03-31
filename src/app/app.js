@@ -9,6 +9,7 @@
 angular.module('oneSearch', [
     'ngRoute',
     'ngAnimate',
+    'ngSanitize',
     'ui.bootstrap',
     'angular.filter',
     'oneSearch.common',

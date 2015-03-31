@@ -1,3 +1,4 @@
+angular.module('oneSearch.common')
     .factory('dataFactory', function($http) {
         return {
             get: function(url) {
@@ -55,7 +56,7 @@
                                     $scope.items.subjects = data;
                                 });
                             dataFactory.get('//www.googleapis.com/customsearch/v1?key=AIzaSyCMGfdDaSfjqv5zYoS0mTJnOT3e9MURWkU&cx=003453353330912650815:lfyr_-azrxe&q=' +
-                                $scope.model + '&siteSearch=ask.lib.ua.edu')
+                            $scope.model + '&siteSearch=ask.lib.ua.edu')
                                 .then(function(data) {
                                     $scope.items.faq = data;
                                 });
