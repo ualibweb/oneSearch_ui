@@ -17,7 +17,7 @@ angular.module('oneSearch', [
     'oneSearch.bento'
 ])
     // The URL to the backend JSON resource handler
-    .constant('JSON_URL', 'https://wwwdev2.lib.ua.edu/oneSearch/getJSON.php')
+    .constant('ONE_SEARCH_URL', 'https://wwwdev2.lib.ua.edu/oneSearch/getJSON.php')
 
     // Default search parameters
     .value('SearchParams', {
@@ -995,7 +995,7 @@ angular.module('common.oneSearch', [])
             }
         };
 
-        this.$get = ['$http', '$parse', 'enginesTemplateFactory', 'SearchParams', 'JSON_URL', function($http, $parse, enginesTemplateFactory, SearchParams, url){
+        this.$get = ['$http', '$parse', 'enginesTemplateFactory', 'SearchParams', 'ONE_SEARCH_URL', function($http, $parse, enginesTemplateFactory, SearchParams, url){
 
             return {
                 engines: _engines, // Expose engines at Service level
