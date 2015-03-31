@@ -598,7 +598,7 @@ angular.module('engines.scout', [])
                 path: 'Header.PubTypeId',
                 types: {
                     books: ['book', 'ebook'],
-                    journals: 'serialPeriodical',
+//                    journals: 'serialPeriodical',
                     articles: 'academicJournal',
                     media: ['audio', 'videoRecording']
                 }
