@@ -90,10 +90,10 @@ angular.module('common.oneSearch', [])
                             p.s += ' ' + engine.filterQuery;
                         }
 
-                        console.log({
+                        /*console.log({
                             engine: engine,
                             params: p
-                        });
+                        });*/
 
                         // Store the $http response promise in the engine's object with key 'response
                         engine.response = $http({method: 'GET', url: url, params: p});

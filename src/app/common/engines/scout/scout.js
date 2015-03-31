@@ -29,7 +29,7 @@ angular.module('engines.scout', [])
 
                     for (var x = 0; x < items[i].Items.length; x++){
                         if (items[i].Items[x].Group == 'Src'){
-                            console.log(items[i].Items[x].Group);
+                            //console.log(items[i].Items[x].Group);
                             items[i].source = items[i].Items[x].Data;
                         }
                     }

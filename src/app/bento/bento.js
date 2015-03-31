@@ -257,7 +257,7 @@ angular.module('oneSearch.bento', [])
 
                 // Loaded and cleanup function
                 function done(b){
-                    console.log({b: b, box: box});
+                    //console.log({b: b, box: box});
                     // If there are no results, print generated message
                     if (isEmpty(Bento.boxes[b]['results'])){
 

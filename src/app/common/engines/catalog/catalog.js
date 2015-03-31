@@ -37,7 +37,6 @@ angular.module('engines.catalog', [])
                     //Check for authors field. If not there, check the title for author names.
                     if (!items[i].author){
                         var split = $filter('catalogSplitTitleAuthor')(items[i].title);
-                        console.log(split);
                         if (angular.isArray(split)){
                             items[i].title = split[0];
                             items[i].author = split[2];
