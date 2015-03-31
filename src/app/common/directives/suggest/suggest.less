@@ -1,0 +1,89 @@
+.onesearch-container, .onesearch-form{
+  position: relative;
+}
+
+.suggest{
+  width: 100%;
+  position: absolute;
+  z-index: 999;
+  margin: 2px 0 0;
+  list-style: none;
+  font-size: 14px;
+  text-align: left;
+  background-color: #f9f9f9;
+  border: 1px solid #cccccc;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 4px;
+  -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+  background-clip: padding-box;
+
+  opacity: 1;
+  visibility: visible;
+  -webkit-transition: opacity  .2s .1s, visibility 0s  .2s, height .2s .3s;
+  -moz-transition: opacity  .2s .1s, visibility 0s  .2s, height .2s .3s;
+  transition: opacity  .2s .1s, visibility 0s  .2s, height .2s .3s;
+
+  &.ng-hide{
+    opacity: 0;
+    display: block;
+    visibility: hidden;
+    -webkit-transition: opacity  .2s 0s, visibility 0s 0s, height .2s 0s;
+    -moz-transition: opacity  .2s 0s, visibility 0s 0s, height .2s 0s;
+    transition: opacity  .2s 0s, visibility 0s 0s, height .2s 0s;
+  }
+
+  > .suggest-row{
+    padding-top: 15px;
+    padding-bottom: 15px;
+    background-color: #f9f9f9;
+    -webkit-box-shadow: inset 0 6px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: inset 0 6px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  > .row:not(.suggest-row) {
+    > .nav-pills:not(.ng-hide) {
+      padding-left: 30px;
+      padding-right: 30px;
+
+      > li.active > a{
+        &,
+        &:hover,
+        &:focus {
+          color: #333;
+          background-color: #eee;
+        }
+      }
+    }
+  }
+
+  ul, .suggest-col {
+    opacity: 1;
+    visibility: visible;
+    -webkit-transition: opacity  .2s 0s, visibility 0s 0s, height .2s 0s;
+    -moz-transition: opacity  .2s 0s, visibility 0s 0s, height .2s 0s;
+    transition: opacity  .2s 0s, visibility 0s 0s, height .2s 0s;
+  }
+
+  .suggest-col{
+    padding-left: 15px;
+    padding-right: 15px;
+    &:first-child{
+      padding-left: 30px;
+    }
+    &:last-child{
+      padding-right: 30px;
+    }
+  }
+
+  ul.ng-hide, .suggest-col.ng-hide {
+    opacity: 0;
+    display: block;
+    visibility: hidden;
+    max-height: 0;
+    -webkit-transition: opacity  .2s 0s, visibility 0s 0s, height .2s 0s;
+    -moz-transition: opacity  .2s 0s, visibility 0s 0s, height .2s 0s;
+    transition: opacity  .2s 0s, visibility 0s 0s, height .2s 0s;
+
+  }
+}
