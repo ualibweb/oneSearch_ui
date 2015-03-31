@@ -1,4 +1,4 @@
-angular.module('oneSearch.templates', ['bento/bento.tpl.html', 'common/engines/acumen/acumen.tpl.html', 'common/engines/catalog/catalog.tpl.html', 'common/engines/databases/databases.tpl.html', 'common/engines/ejournals/ejournals.tpl.html', 'common/engines/google-cs/google-cs.tpl.html', 'common/engines/recommend/recommend.tpl.html', 'common/engines/scout/scout.tpl.html']);
+angular.module('oneSearch.templates', ['bento/bento.tpl.html', 'common/directives/suggest/suggest.tpl.html', 'common/engines/acumen/acumen.tpl.html', 'common/engines/catalog/catalog.tpl.html', 'common/engines/databases/databases.tpl.html', 'common/engines/ejournals/ejournals.tpl.html', 'common/engines/google-cs/google-cs.tpl.html', 'common/engines/recommend/recommend.tpl.html', 'common/engines/scout/scout.tpl.html']);
 
 angular.module("bento/bento.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("bento/bento.tpl.html",
@@ -54,6 +54,60 @@ angular.module("bento/bento.tpl.html", []).run(["$templateCache", function($temp
     "        </div>\n" +
     "    </div>\n" +
     "</div>");
+}]);
+
+angular.module("common/directives/suggest/suggest.tpl.html", []).run(["$templateCache", function($templateCache) {
+  $templateCache.put("common/directives/suggest/suggest.tpl.html",
+    "<div class=\"input-group input-group-lg\">\n" +
+    "    <input type=\"text\" name=\"search\" class=\"form-control onesearch-text\" placeholder=\"{{prompt}}\"\n" +
+    "           ng-model=\"model\" ng-change=\"onChange()\" autocomplete=\"off\" ng-blur=\"onBlur()\" ng-focus=\"onFocus()\" />\n" +
+    "    <div class=\"input-group-btn\">\n" +
+    "        <button type=\"submit\" class=\"btn btn-onesearch btn-primary\"><span class=\"fa fa-search\"></span></button>\n" +
+    "    </div>\n" +
+    "</div>\n" +
+    "<div class=\"suggest\" ng-hide=\"model.length < 3 || selected\">\n" +
+    "    <ul class=\"nav nav-pills nav-stacked\" ng-hide=\"items.suggest.length == 0\">\n" +
+    "        <li role=\"presentation\"\n" +
+    "            ng-repeat=\"item in filteredItems = (items.suggest | filter:compare(originalValue)) | limitTo:numShow track by $index\"\n" +
+    "             ng-mousedown=\"handleSelection(item.search)\" ng-class=\"item.class\"\n" +
+    "             ng-mouseenter=\"setCurrent($index, false)\">\n" +
+    "            <a href=\"#\">{{item.search}}</a>\n" +
+    "        </li>\n" +
+    "    </ul>\n" +
+    "    <div ng-hide=\"items.recommend.length == 0\">\n" +
+    "        <h4>Web site pages</h4>\n" +
+    "        <div ng-repeat=\"recommendation in items.recommend | limitTo:10\">\n" +
+    "            <a href=\"{{recommendation.link}}\" ng-mousedown=\"go(recommendation.link)\">\n" +
+    "                {{recommendation.description}}\n" +
+    "            </a>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "    <div ng-hide=\"items.subjects.length == 0\">\n" +
+    "        <h4><a href=\"http://guides.lib.ua.edu/\" ng-mousedown=\"go('http://guides.lib.ua.edu/')\">LibGuides Subjects</a></h4>\n" +
+    "        <div ng-repeat=\"person in items.subjects | limitTo:10\">\n" +
+    "            <div ng-repeat=\"subject in person.subjects | limitTo:10\">\n" +
+    "                <a ng-if=\"subject.link.length > 7\" href=\"{{subject.link}}\" ng-mousedown=\"go(subject.link)\">\n" +
+    "                    {{subject.subject}}\n" +
+    "                </a>\n" +
+    "                <a ng-if=\"subject.link.length <= 7\" href=\"#\"\n" +
+    "                   ng-mousedown=\"go('mailto:' + person.email + '?subject=Question')\">\n" +
+    "                    Ask {{person.name}}, {{person.title}} at {{person.department}}\n" +
+    "                </a>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "    <div ng-show=\"items.faq.searchInformation.totalResults > 0\">\n" +
+    "        <h4><a href=\"http://ask.lib.ua.edu/\" ng-mousedown=\"go('http://ask.lib.ua.edu/')\">FAQ</a></h4>\n" +
+    "        <div ng-repeat=\"faq in items.faq.items | limitTo:5\">\n" +
+    "            <a href=\"{{faq.link}}\" ng-mousedown=\"go(faq.link)\">\n" +
+    "                {{faq.title}}\n" +
+    "            </a>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "</div>\n" +
+    "\n" +
+    "\n" +
+    "");
 }]);
 
 angular.module("common/engines/acumen/acumen.tpl.html", []).run(["$templateCache", function($templateCache) {
