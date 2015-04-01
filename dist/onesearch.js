@@ -374,7 +374,7 @@ angular.module('oneSearch.common')
                                     $scope.items.subjects = data;
                                 });
                             dataFactory.get('//www.googleapis.com/customsearch/v1?key=AIzaSyCMGfdDaSfjqv5zYoS0mTJnOT3e9MURWkU&cx=003453353330912650815:lfyr_-azrxe&q=' +
-                                $scope.model + '&siteSearch=ask.lib.ua.edu')
+                            $scope.model + '&siteSearch=ask.lib.ua.edu')
                                 .then(function(data) {
                                     $scope.items.faq = data;
                                 });
@@ -546,6 +546,7 @@ angular.module('engines.catalog', [])
             return title;
         }
     }]);
+
 angular.module('engines.databases', [])
 
     .config(['oneSearchProvider', function(oneSearchProvider){
@@ -772,52 +773,6 @@ function isEmpty(obj) {
 
     return true;
 }
-/**
- * @description
- * Checks an object's type given an options object
- *
- * @param opt Object   An object who's keys represent the type and the value is the object to be tested
- *                      Multiple object types act as a OR condition
- *
- * @returns Boolean
- */
-var toString = Object.prototype.toString;
-
-function isType(opt){
-    if (!isType({object: opt})) return null;
-
-    var result = false;
-
-    for (var key in opt){
-        var obj = opt[key];
-        var type = getType(obj);
-
-        if (type === key) result = true;
-    }
-
-    return result;
-}
-
-function getType(obj){
-    var type;
-    var t = toString.call(obj);
-
-    switch (type){
-        case "[object Object]":
-            type = 'object';
-            break;
-        case "[object String]":
-            type = 'string';
-            break;
-        case "[object Array]":
-            type = 'array';
-            break;
-        default:
-            type = null;
-    }
-
-    return type;
-}
 // adopted from https://github.com/a8m/angular-filter/blob/master/src/_common.js
 function toArray(object) {
     return Array.isArray(object) ? object :
@@ -972,6 +927,7 @@ angular.module('common.oneSearch', [])
                 var defaults = {
                     id: null, resultsPath: null, totalsPath: null, mediaTypes: null, templateUrl: null, filterQuery: null, controller: null
                 };
+
 
                 var e = angular.extend(defaults, engine);
                 if (e.id){
