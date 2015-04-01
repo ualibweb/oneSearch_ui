@@ -1,4 +1,4 @@
-a[href^="http"]:after, a[href^="https"]:after{
+a[href^="http"]:not(.source-link):after, a[href^="https"]:not(.source-link):after{
     content: none;
 }
 
@@ -10,7 +10,7 @@ a[href^="http"]:after, a[href^="https"]:after{
 }
 
 .btn-collapser{
-    padding: 2px;
+    padding: 0px;
 }
 
 .source-list, .source-list li, .source-list ul{
@@ -61,10 +61,10 @@ a[href^="http"]:after, a[href^="https"]:after{
     background-color: transparent;
 }
 .btn-onesearch{
-    font-size: 30px !important;
+    /*font-size: 30px !important;
     height: 60px !important;
     background-color: #428bca;
-    border-color: #357ebd;
+    border-color: #357ebd;*/
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.35);
 }
 

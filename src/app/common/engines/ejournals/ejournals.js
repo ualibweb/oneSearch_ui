@@ -15,7 +15,7 @@ angular.module('engines.ejournals', [])
             templateUrl: 'common/engines/ejournals/ejournals.tpl.html',
             controller: ['$scope', function($scope){
                 for (var i = 0, len = $scope.items.length; i < len; i++){
-                    $scope.items[i]['ctrltest'] = 'wut';
+                    //console.log($scope.items);
                 }
             }]
 

@@ -1,9 +1,15 @@
 <div class="media">
-    <a class="pull-left" ng-href="http://acumen.lib.ua.edu/{{item.link}}" title="{{item.title}}">
-        <img ng-src="{{item.thumb_path}}" style="max-height: 64px; max-width: 64px;">
+    <a class="pull-left" ng-href="http://acumen.lib.ua.edu/{{item.link}}" title="{{item.title}}" style="width: 64px; height: 64%;">
+        <img ng-src="{{item.thumb_path}}" style="max-height: 64px; max-width: 64px; margin: 0 auto;">
     </a>
     <div class="media-body">
-        <h4 class="media-heading"><a ng-href="http://acumen.lib.ua.edu/{{item.link}}" title="item.title">{{item.title | truncate: 40: '...': true}}</a></h4>
-        <p>{{item.description}}</p>
+        <h4 class="media-heading">
+            <a ng-href="http://acumen.lib.ua.edu/{{item.link}}" title="item.title">{{item.title | truncate: 40: '...': true}}</a>
+        </h4>
+        <div class="details-context">
+            <span ng-if="item.date" ng-bind-html="item.date"></span>
+            <span ng-if="item.type" ng-bind-html="item.type | ucfirst"></span>
+        </div>
+        <p>{{item.description | truncate: 125: '...': true}}</p>
     </div>
 </div>

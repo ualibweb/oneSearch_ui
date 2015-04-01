@@ -9,6 +9,7 @@
 angular.module('oneSearch', [
     'ngRoute',
     'ngAnimate',
+    'ngSanitize',
     'ui.bootstrap',
     'angular.filter',
     'oneSearch.common',
@@ -111,10 +112,12 @@ angular.module('oneSearch.bento', [])
             // Deep copy media types defined by registered engines to the this.boxes object.
             angular.copy(mediaTypes.types, self.boxes);
 
-            // Pre-define the "results" object for each media type
-            // I only do this here so I don't have to check if it's defined later
+            // Pre-define the "results" object for each media type - I only do this here so I don't have to check if it's defined later
             angular.forEach(self.boxes, function(box, type){
+                var limit = self.boxes[type]['engines'].length > 1 ? 1 : 3;
+
                 self.boxes[type].results = {};
+                self.boxes[type].resultLimit = limit;
             });
 
             //  Iterate over the Promises for each engine returned by the oneSearch.searchAll() function
@@ -129,9 +132,9 @@ angular.module('oneSearch.bento', [])
 
                         // Double check that the data is defined, in case the search API returned a '200' status with empty results.
                         if (isEmpty(res)){
-                            console.log(self.boxes);
+                            //console.log(self.boxes);
                             removeFromBoxes(name);
-                            console.log(self.boxes);
+                            //console.log(self.boxes);
                         }
                         else {
                             // Group the results by defined media types
@@ -166,7 +169,6 @@ angular.module('oneSearch.bento', [])
             });
 
         }
-
     }])
 
 /**
@@ -280,7 +282,7 @@ angular.module('oneSearch.bento', [])
 
                 // Loaded and cleanup function
                 function done(b){
-                    console.log({b: b, box: box});
+                    //console.log({b: b, box: box});
                     // If there are no results, print generated message
                     if (isEmpty(Bento.boxes[b]['results'])){
 
@@ -311,8 +313,10 @@ angular.module('oneSearch.bento', [])
 angular.module('oneSearch.common', [
     'common.mediaTypes',
     'common.oneSearch',
-    'common.engines'
+    'common.engines',
+    'filters.nameFilter'
 ])
+angular.module('oneSearch.common')
     .factory('dataFactory', function($http) {
         return {
             get: function(url) {
@@ -469,7 +473,18 @@ angular.module('engines.acumen', [])
             id: 8,
             resultsPath: 'Acumen.data',
             totalsPath: 'Acumen.metadata.numFound',
-            templateUrl: 'common/engines/acumen/acumen.tpl.html'
+            templateUrl: 'common/engines/acumen/acumen.tpl.html',
+            controller: function($scope, $filter){
+                var items = $scope.items;
+
+                for (var i = 0, len = items.length; i < len; i++) {
+                    if (items[i].type) {
+                        //console.log(items[i].type);
+                        if (items[i].type[0] == 'text' && items[i].details.genre) items[i].type = items[i].details.genre.sort().shift();
+                        else items[i].type = items[i].type.sort().shift();
+                    }
+                }
+            }
         })
     }])
 angular.module('engines.catalog', [])
@@ -487,9 +502,50 @@ angular.module('engines.catalog', [])
                     media: ['ga','gc','gd','gm','ia','ic','id','im','ja','jc','jd','jm']
                 }
             },
-            templateUrl: 'common/engines/catalog/catalog.tpl.html'
+            templateUrl: 'common/engines/catalog/catalog.tpl.html',
+            controller: function($scope, $filter){
+                var types = {
+                    bc: "Archive/Manuscript",
+                    cm: "Music Score",
+                    em: "Map",
+                    im: "Nonmusical Recording",
+                    jm: "Musical Recording",
+                    mm: "Computer File/Software",
+                    om: "Kit",
+                    pc: "Mixed Material/Collection",
+                    pm: "Mixed Material",
+                    rm: "Visual Material"
+                };
+                var items = $scope.items;
+
+                for (var i = 0; i < items.length; i++){
+                    var t = items[i]['bibFormat'];
+                    items[i].mediaType = types[t];
+
+                    //Check for authors field. If not there, check the title for author names.
+                    if (!items[i].author){
+                        var split = $filter('catalogSplitTitleAuthor')(items[i].title);
+                        if (angular.isArray(split)){
+                            items[i].title = split[0];
+                            items[i].author = split[2];
+                        }
+                    }
+                }
+
+                $scope.items = items;
+            }
         })
     }])
+
+    .filter('catalogSplitTitleAuthor', [function(){
+        return function(title){
+            if (title.indexOf('/') > -1){
+                var titleParts = title.split(/\s\/\sedited\sby\s([^.+]+)\./);
+                title = titleParts
+            }
+            return title;
+        }
+    }]);
 angular.module('engines.databases', [])
 
     .config(['oneSearchProvider', function(oneSearchProvider){
@@ -517,7 +573,7 @@ angular.module('engines.ejournals', [])
             templateUrl: 'common/engines/ejournals/ejournals.tpl.html',
             controller: ['$scope', function($scope){
                 for (var i = 0, len = $scope.items.length; i < len; i++){
-                    $scope.items[i]['ctrltest'] = 'wut';
+                    //console.log($scope.items);
                 }
             }]
 
@@ -534,9 +590,11 @@ angular.module('common.engines', [
     'engines.acumen',
     'engines.catalog',
     'engines.databases',
-    'engines.ejournals',
     'engines.scout',
     'engines.googleCS',
+    'engines.faq',
+    'engines.libguides',
+    'engines.ejournals',
     'engines.recommend'
 ])
 /**
@@ -567,6 +625,17 @@ angular.module('common.engines', [
         };
 
     }])
+angular.module('engines.faq', [])
+
+    .config(['oneSearchProvider', function(oneSearchProvider){
+        oneSearchProvider.engine('faq', {
+            id: 16,
+            resultsPath: 'GoogleCS.items',
+            totalsPath: 'GoogleCS.searchInformation.totalResults',
+            filterQuery: 'site:ask.lib.ua.edu',
+            templateUrl: 'common/engines/google-cs/google-cs.tpl.html'
+        })
+    }])
 angular.module('engines.googleCS', [])
 
     .config(['oneSearchProvider', function(oneSearchProvider){
@@ -574,7 +643,19 @@ angular.module('engines.googleCS', [])
             id: 16,
             resultsPath: 'GoogleCS.items',
             totalsPath: 'GoogleCS.searchInformation.totalResults',
+            filterQuery: '-side:guides.lib.ua.edu -site:ask.lib.ua.edu',
             templateUrl: 'common/engines/google-cs/google-cs.tpl.html'
+        })
+    }])
+angular.module('engines.libguides', [])
+
+    .config(['oneSearchProvider', function(oneSearchProvider){
+        oneSearchProvider.engine('libguides', {
+            id: 16,
+            resultsPath: 'GoogleCS.items',
+            totalsPath: 'GoogleCS.searchInformation.totalResults',
+            filterQuery: 'site:guides.lib.ua.edu',
+            templateUrl: 'common/engines/libguides/libguides.tpl.html'
         })
     }])
 angular.module('engines.recommend', [])
@@ -597,14 +678,48 @@ angular.module('engines.scout', [])
                 path: 'Header.PubTypeId',
                 types: {
                     books: ['book', 'ebook'],
-//                    journals: 'serialPeriodical',
+                    //journals: 'serialPeriodical',
                     articles: 'academicJournal',
                     media: ['audio', 'videoRecording']
                 }
             },
-            templateUrl: 'common/engines/scout/scout.tpl.html'
+            templateUrl: 'common/engines/scout/scout.tpl.html',
+            controller: function($scope){
+                var items = $scope.items;
+                for (var i = 0; i < items.length; i++){
+                    if (items[i].Header.PubTypeId == 'audio'){
+                        items[i].mediaType = 'Audio';
+                    }
+                    if (items[i].Header.PubTypeId == 'videoRecording'){
+                        items[i].mediaType = 'Video Recording';
+                    }
+
+                    //Search for "source"
+
+                    for (var x = 0; x < items[i].Items.length; x++){
+                        if (items[i].Items[x].Group == 'Src'){
+                            //console.log(items[i].Items[x].Group);
+                            items[i].source = items[i].Items[x].Data;
+                        }
+                    }
+                }
+                $scope.items = items;
+            }
         })
     }])
+angular.module('filters.nameFilter', [])
+
+    .filter('nameFilter', ['$filter', function($filter){
+        return function(name){
+            if (name.indexOf(',') > -1) {
+                var nameParts = name.split(',');
+                name = nameParts.map(function (obj) {
+                    return obj.trim();
+                }).reverse().join(' ');
+            }
+            return name;
+        }
+    }]);
 function inArray(val, arr){
     return arr.indexOf(val) > -1;
 }
@@ -656,6 +771,52 @@ function isEmpty(obj) {
     }
 
     return true;
+}
+/**
+ * @description
+ * Checks an object's type given an options object
+ *
+ * @param opt Object   An object who's keys represent the type and the value is the object to be tested
+ *                      Multiple object types act as a OR condition
+ *
+ * @returns Boolean
+ */
+var toString = Object.prototype.toString;
+
+function isType(opt){
+    if (!isType({object: opt})) return null;
+
+    var result = false;
+
+    for (var key in opt){
+        var obj = opt[key];
+        var type = getType(obj);
+
+        if (type === key) result = true;
+    }
+
+    return result;
+}
+
+function getType(obj){
+    var type;
+    var t = toString.call(obj);
+
+    switch (type){
+        case "[object Object]":
+            type = 'object';
+            break;
+        case "[object String]":
+            type = 'string';
+            break;
+        case "[object Array]":
+            type = 'array';
+            break;
+        default:
+            type = null;
+    }
+
+    return type;
 }
 // adopted from https://github.com/a8m/angular-filter/blob/master/src/_common.js
 function toArray(object) {
@@ -809,7 +970,7 @@ angular.module('common.oneSearch', [])
         this.engine = function(name, engine){
             if (angular.isString(name)){
                 var defaults = {
-                    id: null, resultsPath: null, totalsPath: null, mediaTypes: null, templateUrl: null, controller: null
+                    id: null, resultsPath: null, totalsPath: null, mediaTypes: null, templateUrl: null, filterQuery: null, controller: null
                 };
 
                 var e = angular.extend(defaults, engine);
@@ -848,6 +1009,17 @@ angular.module('common.oneSearch', [])
 
                         //Extend local parameters by global params.
                         angular.extend(p, params);
+
+                        //if filterQuery present, add it to query
+                        // TODO: add proper REST support by accepting filter queries as objects and not just strings
+                        if (engine.filterQuery !== null){
+                            p.s += ' ' + engine.filterQuery;
+                        }
+
+                        /*console.log({
+                            engine: engine,
+                            params: p
+                        });*/
 
                         // Store the $http response promise in the engine's object with key 'response
                         engine.response = $http({method: 'GET', url: url, params: p});
