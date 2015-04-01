@@ -497,10 +497,9 @@ angular.module('engines.catalog', [])
             mediaTypes: {
                 path: 'bibFormat',
                 types: {
-                    books: 'am',
-                    journals: 'as',
-                    articles: 'tm',
-                    media: ['jm', 'gm']
+                    books: ['aa','ac', 'ad', 'am'],
+                    journals: ['ab','as','bb','bs','cb','cs','db','ds','eb','es','fb','fs','gb','gs','ib','is','jb','js','kb','ks','mb','ms','ob','os','pb','ps','rb','rs','tb','ts'],
+                    media: ['ga','gc','gd','gm','ia','ic','id','im','ja','jc','jd','jm']
                 }
             },
             templateUrl: 'common/engines/catalog/catalog.tpl.html',
@@ -547,6 +546,7 @@ angular.module('engines.catalog', [])
             return title;
         }
     }]);
+
 angular.module('engines.databases', [])
 
     .config(['oneSearchProvider', function(oneSearchProvider){
@@ -772,52 +772,6 @@ function isEmpty(obj) {
     }
 
     return true;
-}
-/**
- * @description
- * Checks an object's type given an options object
- *
- * @param opt Object   An object who's keys represent the type and the value is the object to be tested
- *                      Multiple object types act as a OR condition
- *
- * @returns Boolean
- */
-var toString = Object.prototype.toString;
-
-function isType(opt){
-    if (!isType({object: opt})) return null;
-
-    var result = false;
-
-    for (var key in opt){
-        var obj = opt[key];
-        var type = getType(obj);
-
-        if (type === key) result = true;
-    }
-
-    return result;
-}
-
-function getType(obj){
-    var type;
-    var t = toString.call(obj);
-
-    switch (type){
-        case "[object Object]":
-            type = 'object';
-            break;
-        case "[object String]":
-            type = 'string';
-            break;
-        case "[object Array]":
-            type = 'array';
-            break;
-        default:
-            type = null;
-    }
-
-    return type;
 }
 // adopted from https://github.com/a8m/angular-filter/blob/master/src/_common.js
 function toArray(object) {

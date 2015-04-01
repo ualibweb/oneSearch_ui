@@ -8,10 +8,9 @@ angular.module('engines.catalog', [])
             mediaTypes: {
                 path: 'bibFormat',
                 types: {
-                    books: 'am',
-                    journals: 'as',
-                    articles: 'tm',
-                    media: ['jm', 'gm']
+                    books: ['aa','ac', 'ad', 'am'],
+                    journals: ['ab','as','bb','bs','cb','cs','db','ds','eb','es','fb','fs','gb','gs','ib','is','jb','js','kb','ks','mb','ms','ob','os','pb','ps','rb','rs','tb','ts'],
+                    media: ['ga','gc','gd','gm','ia','ic','id','im','ja','jc','jd','jm']
                 }
             },
             templateUrl: 'common/engines/catalog/catalog.tpl.html',
