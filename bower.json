@@ -1,6 +1,6 @@
 {
   "name": "oneSearch_ui",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "homepage": "https://github.com/8bitsquid/oneSearch_ui",
   "authors": [
     "Will Jones"
@@ -10,9 +10,9 @@
     "node"
   ],
   "main": [
-    "dist/onsearch-templates.js",
-    "dist/onsearch.js",
-    "dist/onsearch.css"
+    "dist/onesearch-templates.js",
+    "dist/onesearch.js",
+    "dist/onesearch.css"
   ],
   "license": "ECL-2.0",
   "private": true,
