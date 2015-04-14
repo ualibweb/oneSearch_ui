@@ -8,6 +8,7 @@
  */
 angular.module('oneSearch', [
     'ngRoute',
+    'ngResource',
     'ngAnimate',
     'ngSanitize',
     'ui.bootstrap',
@@ -17,7 +18,7 @@ angular.module('oneSearch', [
     'oneSearch.bento'
 ])
     // The URL to the backend JSON resource handler
-    .constant('ONE_SEARCH_URL', 'https://wwwdev2.lib.ua.edu/oneSearch/getJSON.php')
+    .constant('ONE_SEARCH_URL', '//wwwdev2.lib.ua.edu/oneSearch/getJSON.php')
 
     // Default search parameters
     .value('SearchParams', {

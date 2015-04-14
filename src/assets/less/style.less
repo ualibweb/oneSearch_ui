@@ -2,6 +2,69 @@ a[href^="http"]:not(.source-link):after, a[href^="https"]:not(.source-link):afte
     content: none;
 }
 
+.dl-horizontal > dt {
+  width: auto;
+}
+.dl-horizontal > dd {
+  margin-left: 75px;
+}
+.details-context {
+  color: #61a661;
+  font-size: .9em;
+}
+.details-context > span:after {
+  content: ' - ';
+}
+.details-context > span:last-child:after {
+  content: '';
+}
+.details-container {
+  padding-bottom: 2px;
+}
+.details-container > .text-muted {
+  font-weight: bold;
+}
+.details-container > .heading {
+  float: left;
+  clear: left;
+  color: #777;
+  font-size: .9em;
+  font-family: 'Open Sans', san-serif;
+}
+.details-container .details {
+  -webkit-transition: 200ms cubic-bezier(0.42, 0, 0.58, 1) all;
+  -moz-transition: 200ms cubic-bezier(0.42, 0, 0.58, 1) all;
+  -ms-transition: 200ms cubic-bezier(0.42, 0, 0.58, 1) all;
+  -o-transition: 200ms cubic-bezier(0.42, 0, 0.58, 1) all;
+  transition: 200ms cubic-bezier(0.42, 0, 0.58, 1) all;
+}
+.details-container .details.ng-move,
+.details-container .details.ng-enter,
+.details-container .details.ng-leave {
+  -webkit-transition: 200ms cubic-bezier(0.42, 0, 0.58, 1) all;
+  -moz-transition: 200ms cubic-bezier(0.42, 0, 0.58, 1) all;
+  -ms-transition: 200ms cubic-bezier(0.42, 0, 0.58, 1) all;
+  -o-transition: 200ms cubic-bezier(0.42, 0, 0.58, 1) all;
+  transition: 200ms cubic-bezier(0.42, 0, 0.58, 1) all;
+  position: relative;
+  overflow: hidden;
+}
+.details-container .details.ng-leave.ng-leave-active,
+.details-container .details.ng-move,
+.details-container .details.ng-enter {
+  opacity: 0;
+}
+.details-container .details.ng-leave,
+.details-container .details.ng-move.ng-move-active,
+.details-container .details.ng-enter.ng-enter-active {
+  opacity: 1;
+}
+.details-container .details:after {
+  content: "; ";
+}
+.details-container .details:last-of-type:after {
+  content: "";
+}
 
 /* Engine results source list and collapse styles */
 

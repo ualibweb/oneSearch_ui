@@ -98,7 +98,7 @@ angular.module('oneSearch.bento', [])
             //  Iterate over the Promises for each engine returned by the oneSearch.searchAll() function
             angular.forEach(engines, function(engine, name){
                 engine.response
-                    .success(function(data){ // If $http call was a success
+                    .$promise.then(function(data){ // If $http call was a success
 
                         // User the engine's results getter to get the results object
                         // The results getter is defined by the JSON path defined by the
@@ -135,8 +135,7 @@ angular.module('oneSearch.bento', [])
                             self.engines[name].tpl = oneSearch.getEngineTemplate(engine);
                             self.engines[name].controller = oneSearch.getEngineController(engine);
                         }
-                    })
-                    .error(function(msg){
+                    }, function(msg){
                         // If error code return from $http, iterate through boxes object
                         // and remove any instance engine from a box's "engines" array
                         removeFromBoxes(name);
