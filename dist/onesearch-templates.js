@@ -178,13 +178,13 @@ angular.module("common/engines/databases/databases.tpl.html", []).run(["$templat
     "<div class=\"media\">\n" +
     "    <div class=\"media-body\">\n" +
     "        <h4 class=\"media-heading\">\n" +
-    "            <a ng-href=\"{{item[5]}}\" title=\"{{item[0]}}\">{{item[0] | truncate: 40: '...': true}}</a>\n" +
+    "            <a ng-href=\"{{item.url}}\" title=\"{{item.title}}\">{{item.title | truncate: 40: '...': true}}</a>\n" +
     "        </h4>\n" +
     "        <div class=\"details-context\">\n" +
-    "            <span ng-if=\"item[14]\" ng-bind-html=\"item[14]\"></span>\n" +
+    "            <span ng-if=\"item.coverage\" ng-bind-html=\"item.coverage\"></span>\n" +
     "        </div>\n" +
     "        <p>\n" +
-    "            {{item[15] | truncate: 125: '...'}}\n" +
+    "            {{item.description | truncate: 125: '...'}}\n" +
     "        </p>\n" +
     "    </div>\n" +
     "</div>");

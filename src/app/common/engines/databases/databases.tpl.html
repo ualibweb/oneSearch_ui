@@ -1,13 +1,13 @@
 <div class="media">
     <div class="media-body">
         <h4 class="media-heading">
-            <a ng-href="{{item[5]}}" title="{{item[0]}}">{{item[0] | truncate: 40: '...': true}}</a>
+            <a ng-href="{{item.url}}" title="{{item.title}}">{{item.title | truncate: 40: '...': true}}</a>
         </h4>
         <div class="details-context">
-            <span ng-if="item[14]" ng-bind-html="item[14]"></span>
+            <span ng-if="item.coverage" ng-bind-html="item.coverage"></span>
         </div>
         <p>
-            {{item[15] | truncate: 125: '...'}}
+            {{item.description | truncate: 125: '...'}}
         </p>
     </div>
 </div>
