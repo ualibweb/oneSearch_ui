@@ -403,7 +403,7 @@ angular.module('oneSearch.common')
                         }
                 };
                 $scope.onFocus = function(){
-                    if ($scope.model.length > 2){
+                    if (angular.isDefined($scope.model) && $scope.model.length > 2){
                         $scope.selected = false;
                     }
                 };
@@ -1049,7 +1049,16 @@ angular.module('common.oneSearch', [])
         $scope.searchText;
         $scope.search = function(){
             if ($scope.searchText){
-                $location.path('/bento/'+$scope.searchText);
+                // Compensate for when not on home page
+                // Since WP pages aren't loaded as angular routes, we must detect if there is no '#/PATH' present
+                // after the URI (or that it's not a 'bento' route), then send the browser to a pre-build URL.
+                if (!$location.path() || $location.path().indexOf('/bento') < 0){
+                    var url = '//' + $location.host() + '#/bento/'+$scope.searchText;
+                    window.location = url; //Angular 1.2.8 $location is too limited...
+                }
+                else{
+                    $location.path('/bento/'+$scope.searchText);
+                }
             }
         }
 

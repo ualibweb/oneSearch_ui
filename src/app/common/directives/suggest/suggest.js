@@ -85,7 +85,7 @@ angular.module('oneSearch.common')
                         }
                 };
                 $scope.onFocus = function(){
-                    if ($scope.model.length > 2){
+                    if (angular.isDefined($scope.model) && $scope.model.length > 2){
                         $scope.selected = false;
                     }
                 };
