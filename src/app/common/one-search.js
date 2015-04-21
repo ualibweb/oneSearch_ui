@@ -69,7 +69,7 @@ angular.module('common.oneSearch', [])
             }
         };
 
-        this.$get = ['$http', '$parse', 'enginesTemplateFactory', 'SearchParams', 'ONE_SEARCH_URL', 'Search', function($http, $parse, enginesTemplateFactory, SearchParams, url, Search){
+        this.$get = ['$http', '$parse', 'enginesTemplateFactory', 'SearchParams', 'Search', function($http, $parse, enginesTemplateFactory, SearchParams, Search){
 
             return {
                 engines: _engines, // Expose engines at Service level
@@ -118,7 +118,8 @@ angular.module('common.oneSearch', [])
                     return _engines;
                 },
                 search: function(engName, params, search_url){
-                    search_url = angular.isDefined(search_url) ? search_url : url;
+                    if (!angular.isDefined(search_url))
+                        console.log("Error: URL is not defined!");
                     var engine = _engines[engName];
                     var p = {engine: engine.id};
 

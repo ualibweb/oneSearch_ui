@@ -172,6 +172,11 @@ angular.module('oneSearch.bento', [])
  *  </div>
  */
 
+    .controller('bentoBoxCtrl', ['$scope', '$routeParams', 'UALIB_DOMAIN', function($scope, $routeParams, domain){
+        // Updates total results links
+        $scope.domain = domain;
+        $scope.s = $routeParams.s;
+    }])
     .directive('bentoBox', ['$rootScope', '$controller', '$compile', '$animate', 'Bento', function($rootScope, $controller, $compile, $animate, Bento){
         return {
             restrict: 'A', //The directive always requires and attribute, so disallow class use to avoid conflict
@@ -275,6 +280,7 @@ angular.module('oneSearch.bento', [])
                     // Destroy this box's watcher (no need to waste the cycles)
                     boxWatcher();
                 }
-            }
+            },
+            controller: 'bentoBoxCtrl'
         }
     }])

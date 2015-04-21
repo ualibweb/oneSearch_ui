@@ -17,8 +17,8 @@ angular.module('oneSearch', [
     'oneSearch.templates',
     'oneSearch.bento'
 ])
-    // The URL to the backend JSON resource handler
-    .constant('ONE_SEARCH_URL', '//wwwdev2.lib.ua.edu/oneSearch/getJSON.php')
+    // The URL to the main website
+    .constant('UALIB_DOMAIN', '//wwwdev2.lib.ua.edu/')
 
     // Default search parameters
     .value('SearchParams', {

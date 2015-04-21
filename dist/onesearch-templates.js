@@ -37,7 +37,11 @@ angular.module("bento/bento.tpl.html", []).run(["$templateCache", function($temp
     "    <div class=\"row\">\n" +
     "        <div class=\"col-sm-4\">\n" +
     "            <div class=\"bento-box\" bento-box=\"databases\">\n" +
-    "                <h2>Databases</h2>\n" +
+    "                <h2>Databases\n" +
+    "                    <small>\n" +
+    "                        [<a href=\"{{domain}}sample-page/databases/#/databases/ts/d/{{s}}/fs/ft/\">more</a>]\n" +
+    "                    </small>\n" +
+    "                </h2>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "        <div class=\"col-sm-4\">\n" +
