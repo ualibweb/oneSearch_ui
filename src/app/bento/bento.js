@@ -17,7 +17,7 @@ angular.module('oneSearch.bento', [])
  * This service uses the mediaTypes service to organize the engine results by media type
  * and preloaded an engine's template and controller (if defined) if there are results for that engine.
  */
-    .service('Bento', ['$routeParams', '$filter', 'oneSearch', 'mediaTypes', function($routeParams, $filter, oneSearch, mediaTypes){
+    .service('Bento', ['$routeParams', '$rootScope','$q', 'oneSearch', 'mediaTypes', function($routeParams, $rootScope, $q, oneSearch, mediaTypes){
         //variable representing 'this' for closure context
         //this ensures function closure reference variables in the right context
         var self = this;
@@ -44,6 +44,8 @@ angular.module('oneSearch.bento', [])
          */
         this.boxes = {};
 
+        this.boxMenu = [];
+
         /**
          * Object to hold pre-loaded engine templates and controllers.
          * Templates and controllers are only pre-loaded if the engine yields results.
@@ -67,6 +69,7 @@ angular.module('oneSearch.bento', [])
         function loadProgress(type, engine){
             var i = self.boxes[type].engines.indexOf(engine);
             if(i != -1) {
+                setResultLimit(type);
                 self.boxes[type].engines.splice(i, 1);
             }
         }
@@ -74,9 +77,30 @@ angular.module('oneSearch.bento', [])
         // Remove an engine from all boxes
         function removeFromBoxes(engine){
             angular.forEach(self.boxes, function(box, type){
+
                 loadProgress(type, engine);
             })
         }
+
+        function initResultLimit(box){
+            var numEngines = self.boxes[box]['engines'].length;
+            var limit = numEngines > 2 ? 1 : (numEngines < 2 ? 3 : 2);
+            self.boxes[box].resultLimit = limit;
+        }
+
+        function setResultLimit(box){
+            $q.when(self.boxes[box].results)
+                .then(function(results){
+                    var numResults = Object.keys(results).length;
+                    var numEngines = self.boxes[box]['engines'].length;
+
+                    if (self.boxes[box].resultLimit < 3 && numResults < 2 && numEngines < 2){
+                        self.boxes[box].resultLimit++;
+                    }
+                });
+        }
+
+
 
         // Gets all boxes
         this.getBoxes = function(){
@@ -89,10 +113,9 @@ angular.module('oneSearch.bento', [])
 
             // Pre-define the "results" object for each media type - I only do this here so I don't have to check if it's defined later
             angular.forEach(self.boxes, function(box, type){
-                var limit = self.boxes[type]['engines'].length > 1 ? 1 : 3;
-
+                initResultLimit(type);
                 self.boxes[type].results = {};
-                self.boxes[type].resultLimit = limit;
+
             });
 
             //  Iterate over the Promises for each engine returned by the oneSearch.searchAll() function
@@ -123,15 +146,14 @@ angular.module('oneSearch.bento', [])
                                     // Ex: self.boxes['books'].results['catalog'] = group_result;
                                     //
                                     // Also, limit the number of results per group by 3
-                                    // TODO: Re-investigate dynamic limiting based on number of engines per box. Solution must not break async loading of engine results
-                                    self.boxes[type].results[name] = $filter('limitTo')(grouped[type], 3);
+                                    self.boxes[type].results[name] = grouped[type];
                                 }
                                 // update loading progress, setting engine as loaded for current box
                                 loadProgress(type, name);
                             });
 
                             //preload the engine's template for easy access for directives
-                            self.engines[name] = {}
+                            self.engines[name] = {};
                             self.engines[name].tpl = oneSearch.getEngineTemplate(engine);
                             self.engines[name].controller = oneSearch.getEngineController(engine);
                         }
@@ -152,6 +174,7 @@ angular.module('oneSearch.bento', [])
     .controller('BentoCtrl', ['$scope', 'Bento', function($scope, Bento){
         // When the route has changed/updated generate box results
         $scope.$on('$routeChangeSuccess', function(){
+            Bento.boxMenu = [];
             Bento.getBoxes();
         })
     }])
@@ -177,24 +200,41 @@ angular.module('oneSearch.bento', [])
         $scope.domain = domain;
         $scope.s = $routeParams.s;
     }])
+
+    .directive('bentoBoxMenu', ['Bento', '$animate', function(Bento, $animate){
+        return {
+            restrict: 'AC',
+            link: function(scope, elm){
+
+                scope.boxMenu = Bento.boxMenu;
+
+            }
+        }
+    }])
+
     .directive('bentoBox', ['$rootScope', '$controller', '$compile', '$animate', 'Bento', function($rootScope, $controller, $compile, $animate, Bento){
         return {
             restrict: 'A', //The directive always requires and attribute, so disallow class use to avoid conflict
-            link: function(scope, elm, attrs){
+            scope: {},
+            link: function(scope, elm, attrs, Ctrl){
                 //Get the box name from the elements bentoBox attribute
                 var box = attrs.bentoBox;
-
+                elm.addClass(box);
+                scope.bento= Bento;
                 //Preload the spinner element
                 var spinner = angular.element('<div id="loading-bar-spinner"><div class="spinner-icon"></div></div>');
 
                 //Preload the location of the boxe's title element (needs to be more dynamic in the future)
                 var titleElm = elm.find('h2');
 
+                // Box menu/index scope variables
+                Bento.boxMenu.push({box: box, title: titleElm.text(), loaded: false});
+
                 //Enter the spinner animation, appending it to the title element
                 $animate.enter(spinner, titleElm, angular.element(titleElm[0].lastChild));
 
                 //Watch the boxes "engines" Array
-                var boxWatcher = scope.$watch(
+                var boxWatcher = scope.$watchCollection(
                     function(){
                         return Bento.boxes[box]['engines'];
                     },
@@ -215,32 +255,41 @@ angular.module('oneSearch.bento', [])
                                 }
                             }
 
-                            // Create a new isolated scope for the engine's results
+                            // Create a new scope for the engine's results
                             // See $rootScope docs: https://code.angularjs.org/1.3.0/docs/api/ng/type/$rootScope.Scope#$new
-                            // It's important to note this is an "isolated" scope (see: https://code.angularjs.org/1.3.0/docs/guide/directive#isolating-the-scope-of-a-directive)
-                            var engineScope = $rootScope.$new(true);
+                            var engineScope = $rootScope.$new();
 
                             // Place engine results for the current box under an "items" object in the new local scope
                             engineScope.items = Bento.boxes[box]['results'][engine];
 
+                            //console.log(Bento.boxes[box]['results']);
                             if (engineScope.items && engineScope.items.length > 0){
                                 // Set isCollapsed boolean to true
                                 // For engines that have collapsible results (see /common/engines/ejournals/ejournals.tpl.html for example)
                                 engineScope.isCollapsed = true;
 
-                                // When the engine's promise is ready, then load the engine's contorller/template data applying
+                                ///engineScope.limit = Bento.boxes[box].resultLimit;
+                                engineScope.engine = engine;
+
+                                // When the engine's promise is ready, then load the engine's controller/template data applying
                                 // the new isolated scope.
                                 Bento.engines[engine].tpl.then(function(data){
-                                    // manually inject controller if one is defined by the engine's config
-                                    if (Bento.engines[engine].controller){
-                                        var controller = $controller(Bento.engines[engine].controller, {$scope: engineScope});
 
-                                        elm.data('$ngControllerController', controller);
-                                        elm.children().data('$ngControllerController', controller);
-                                    }
+                                    var EngCtrl = ['$scope', 'Bento', function($scope, Bento){
+                                        // Extend any controller defined by an engine's config
+                                        if (Bento.engines[$scope.engine].controller){
+                                            angular.extend(this, $controller(Bento.engines[$scope.engine].controller, {$scope: $scope}));
+                                        }
+                                        $scope.box = Bento.boxes[box];
+                                    }];
+
+                                    var controller = $controller(EngCtrl, {$scope: engineScope, Bento: Bento});
+                                    elm.data('$ngControllerController', controller);
+                                    elm.children().data('$ngControllerController', controller);
+
                                     // Wrap the template in an element that specifies ng-repeat over the "items" object (i.e., the results),
                                     // gives the generic classes for items in a bento box.
-                                    var template = angular.element('<div class="animate-repeat bento-box-item" ng-repeat="item in items">'+data+'</div>');
+                                    var template = angular.element('<div class="animate-repeat bento-box-item" ng-repeat="item in items | limitTo: box.resultLimit">'+data+'</div>');
 
                                     // Compile wrapped template with the isolated scope's context
                                     var html = $compile(template)(engineScope);
@@ -248,6 +297,9 @@ angular.module('oneSearch.bento', [])
                                     // Append compiled HTML to box element
                                     elm.append(html);
                                 });
+                            }
+                            else {
+                                $rootScope.$broadcast('NoResultsForEngine', {engine: engine, box: box});
                             }
                             //if (box == "recommend") console.log(newVal.length);
                             // If new array is empty, the box is considered "loaded"
@@ -273,6 +325,14 @@ angular.module('oneSearch.bento', [])
                             elm.addClass('text-muted');
                         }
                     }
+
+                    // Tell bentoMenu item it's loaded
+                    Bento.boxMenu.map(function(obj){
+                        if (obj.box === b){
+                            obj.loaded = true;
+                        }
+                        return obj
+                    });
 
                     // Tell spinner to exit animation
                     $animate.leave(spinner);

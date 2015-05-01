@@ -15,7 +15,8 @@ angular.module('oneSearch', [
     'angular.filter',
     'oneSearch.common',
     'oneSearch.templates',
-    'oneSearch.bento'
+    'oneSearch.bento',
+    'oneSearch.videos'
 ])
     // The URL to the main website
     .constant('UALIB_DOMAIN', '//wwwdev2.lib.ua.edu/')

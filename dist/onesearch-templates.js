@@ -1,41 +1,41 @@
-angular.module('oneSearch.templates', ['bento/bento.tpl.html', 'common/directives/suggest/suggest.tpl.html', 'common/engines/acumen/acumen.tpl.html', 'common/engines/catalog/catalog.tpl.html', 'common/engines/databases/databases.tpl.html', 'common/engines/ejournals/ejournals.tpl.html', 'common/engines/google-cs/google-cs.tpl.html', 'common/engines/recommend/recommend.tpl.html', 'common/engines/scout/scout.tpl.html']);
+angular.module('oneSearch.templates', ['bento/bento.tpl.html', 'common/directives/suggest/suggest.tpl.html', 'common/engines/acumen/acumen.tpl.html', 'common/engines/catalog/catalog.tpl.html', 'common/engines/databases/databases.tpl.html', 'common/engines/ejournals/ejournals.tpl.html', 'common/engines/google-cs/google-cs.tpl.html', 'common/engines/recommend/recommend.tpl.html', 'common/engines/scout/scout.tpl.html', 'videos/videos.tpl.html']);
 
 angular.module("bento/bento.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("bento/bento.tpl.html",
     "<div class=\"bento-box-container\">\n" +
     "    <div class=\"row\">\n" +
-    "        <div class=\"col-sm-4\">\n" +
+    "        <div class=\"col-md-4\">\n" +
     "            <div class=\"bento-box\" bento-box=\"articles\">\n" +
     "                <h2>Articles</h2>\n" +
     "\n" +
     "            </div>\n" +
     "        </div>\n" +
-    "        <div class=\"col-sm-4\">\n" +
+    "        <div class=\"col-md-4\">\n" +
     "            <div class=\"bento-box\" bento-box=\"books\">\n" +
     "                <h2>Books</h2>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "\n" +
-    "        <div class=\"col-sm-4\">\n" +
+    "        <div class=\"col-sm-12 col-md-4\">\n" +
     "            <div class=\"bento-box\" bento-box=\"journals\">\n" +
     "                <h2>Journals</h2>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "    </div>\n" +
     "    <div class=\"row\">\n" +
-    "        <div class=\"col-sm-6\">\n" +
+    "        <div class=\"col-md-6\">\n" +
     "            <div class=\"bento-box\" bento-box=\"media\">\n" +
     "                <h2>Multimedia</h2>\n" +
     "            </div>\n" +
     "        </div>\n" +
-    "        <div class=\"col-sm-6\">\n" +
+    "        <div class=\"col-md-6\">\n" +
     "            <div class=\"bento-box\" bento-box=\"acumen\">\n" +
     "                <h2>Acumen</h2>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "    </div>\n" +
     "    <div class=\"row\">\n" +
-    "        <div class=\"col-sm-4\">\n" +
+    "        <div class=\"col-md-4\">\n" +
     "            <div class=\"bento-box\" bento-box=\"databases\">\n" +
     "                <h2>Databases\n" +
     "                    <small>\n" +
@@ -44,25 +44,25 @@ angular.module("bento/bento.tpl.html", []).run(["$templateCache", function($temp
     "                </h2>\n" +
     "            </div>\n" +
     "        </div>\n" +
-    "        <div class=\"col-sm-4\">\n" +
+    "        <div class=\"col-md-4\">\n" +
     "            <div class=\"bento-box\" bento-box=\"other\">\n" +
     "                <h2>Other Media</h2>\n" +
     "            </div>\n" +
     "        </div>\n" +
-    "        <div class=\"col-sm-4\">\n" +
+    "        <div class=\"col-sm-12 col-md-4\">\n" +
     "            <div class=\"bento-box\" bento-box=\"libguides\">\n" +
     "                <h2>LibGuides</h2>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "    </div>\n" +
     "    <div class=\"row\">\n" +
-    "        <div class=\"col-sm-6\">\n" +
+    "        <div class=\"col-md-6\">\n" +
     "            <div class=\"bento-box\" bento-box=\"googleCS\">\n" +
     "                <h2>Libraries' Website</h2>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "\n" +
-    "        <div class=\"col-sm-6\">\n" +
+    "        <div class=\"col-md-6\">\n" +
     "            <div class=\"bento-box\" bento-box=\"faq\">\n" +
     "                <h2>FAQ</h2>\n" +
     "            </div>\n" +
@@ -137,8 +137,8 @@ angular.module("common/directives/suggest/suggest.tpl.html", []).run(["$template
 angular.module("common/engines/acumen/acumen.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("common/engines/acumen/acumen.tpl.html",
     "<div class=\"media\">\n" +
-    "    <a class=\"pull-left\" ng-href=\"http://acumen.lib.ua.edu/{{item.link}}\" title=\"{{item.title}}\" style=\"width: 64px; height: 64%;\">\n" +
-    "        <img ng-src=\"{{item.thumb_path}}\" style=\"max-height: 64px; max-width: 64px; margin: 0 auto;\">\n" +
+    "    <a class=\"pull-left\" ng-href=\"http://acumen.lib.ua.edu/{{item.link}}\" title=\"{{item.title}}\">\n" +
+    "        <img ng-src=\"{{item.thumb_path}}\">\n" +
     "    </a>\n" +
     "    <div class=\"media-body\">\n" +
     "        <h4 class=\"media-heading\">\n" +
@@ -274,7 +274,7 @@ angular.module("common/engines/scout/scout.tpl.html", []).run(["$templateCache",
     "        <h4 class=\"media-heading\">\n" +
     "            <a ng-href=\"{{item.PLink}}\"\n" +
     "               title=\"{{item.Items[0].Data}}\"\n" +
-    "               ng-bind-html=\"item.Items[0].Data | lowercase | ucfirst\"></a>\n" +
+    "               ng-bind-html=\"item.RecordInfo.BibRecord.BibEntity.Titles[0].TitleFull | lowercase | ucfirst\"></a>\n" +
     "        </h4>\n" +
     "        <div class=\"details-context\">\n" +
     "            <span ng-if=\"item.RecordInfo.BibRecord.BibRelationships.IsPartOfRelationships[0].BibEntity.Dates[0]\">{{item.RecordInfo.BibRecord.BibRelationships.IsPartOfRelationships[0].BibEntity.Dates[0].Y}} </span>\n" +
@@ -303,6 +303,47 @@ angular.module("common/engines/scout/scout.tpl.html", []).run(["$templateCache",
     "        </div>\n" +
     "        <div>\n" +
     "            <button type=\"button\" class=\"btn btn-default btn-xs\" ng-click=\"isCollapsed = !isCollapsed\">{{!isCollapsed ? 'less' : 'more'}} detail</button>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "</div>");
+}]);
+
+angular.module("videos/videos.tpl.html", []).run(["$templateCache", function($templateCache) {
+  $templateCache.put("videos/videos.tpl.html",
+    "<div class=\"video-container\">\n" +
+    "    <div class=\"row\">\n" +
+    "        <div class=\"col-sm-9 video-results\">\n" +
+    "            <div class=\"media\" ng-repeat=\"item in videos.results | filter:facets\">\n" +
+    "                <div class=\"media-body\">\n" +
+    "                    <h4 class=\"media-heading\">\n" +
+    "                        {{item.title}}\n" +
+    "                    </h4>\n" +
+    "                    <div class=\"details-context\">\n" +
+    "                        <span ng-if=\"item.series_title\">{{item.series_title}}</span>\n" +
+    "                        <span ng-if=\"item.call_number\">{{item.call_number}} </span>\n" +
+    "                        <span ng-if=\"item.genre\">{{item.genre}} </span>\n" +
+    "                        <span ng-if=\"item.language\">{{item.language}} </span>\n" +
+    "                    </div>\n" +
+    "                    <p>{{item.notes}}</p>\n" +
+    "                    <span class=\"text-muted\">{{item.keywords}}</span>\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "        <div class=\"col-sm-3 facets-container video-facets\">\n" +
+    "            <form>\n" +
+    "                <div class=\"form-group\" ng-repeat=\"(label, type) in videos.facets\">\n" +
+    "                    <h4>{{label}}</h4>\n" +
+    "                    <div class=\"facet-group-container\">\n" +
+    "                        <div class=\"facet-group\">\n" +
+    "                            <div class=\"checkbox\" ng-repeat=\"facet in type\">\n" +
+    "                                <label>\n" +
+    "                                    <input type=\"checkbox\"> {{facet.label}}\n" +
+    "                                </label>\n" +
+    "                            </div>\n" +
+    "                        </div>\n" +
+    "                    </div>\n" +
+    "                </div>\n" +
+    "            </form>\n" +
     "        </div>\n" +
     "    </div>\n" +
     "</div>");

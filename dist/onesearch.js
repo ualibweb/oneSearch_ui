@@ -15,7 +15,8 @@ angular.module('oneSearch', [
     'angular.filter',
     'oneSearch.common',
     'oneSearch.templates',
-    'oneSearch.bento'
+    'oneSearch.bento',
+    'oneSearch.videos'
 ])
     // The URL to the main website
     .constant('UALIB_DOMAIN', '//wwwdev2.lib.ua.edu/')
@@ -43,7 +44,7 @@ angular.module('oneSearch.bento', [])
  * This service uses the mediaTypes service to organize the engine results by media type
  * and preloaded an engine's template and controller (if defined) if there are results for that engine.
  */
-    .service('Bento', ['$routeParams', '$filter', 'oneSearch', 'mediaTypes', function($routeParams, $filter, oneSearch, mediaTypes){
+    .service('Bento', ['$routeParams', '$rootScope','$q', 'oneSearch', 'mediaTypes', function($routeParams, $rootScope, $q, oneSearch, mediaTypes){
         //variable representing 'this' for closure context
         //this ensures function closure reference variables in the right context
         var self = this;
@@ -70,6 +71,8 @@ angular.module('oneSearch.bento', [])
          */
         this.boxes = {};
 
+        this.boxMenu = [];
+
         /**
          * Object to hold pre-loaded engine templates and controllers.
          * Templates and controllers are only pre-loaded if the engine yields results.
@@ -93,6 +96,7 @@ angular.module('oneSearch.bento', [])
         function loadProgress(type, engine){
             var i = self.boxes[type].engines.indexOf(engine);
             if(i != -1) {
+                setResultLimit(type);
                 self.boxes[type].engines.splice(i, 1);
             }
         }
@@ -100,9 +104,30 @@ angular.module('oneSearch.bento', [])
         // Remove an engine from all boxes
         function removeFromBoxes(engine){
             angular.forEach(self.boxes, function(box, type){
+
                 loadProgress(type, engine);
             })
         }
+
+        function initResultLimit(box){
+            var numEngines = self.boxes[box]['engines'].length;
+            var limit = numEngines > 2 ? 1 : (numEngines < 2 ? 3 : 2);
+            self.boxes[box].resultLimit = limit;
+        }
+
+        function setResultLimit(box){
+            $q.when(self.boxes[box].results)
+                .then(function(results){
+                    var numResults = Object.keys(results).length;
+                    var numEngines = self.boxes[box]['engines'].length;
+
+                    if (self.boxes[box].resultLimit < 3 && numResults < 2 && numEngines < 2){
+                        self.boxes[box].resultLimit++;
+                    }
+                });
+        }
+
+
 
         // Gets all boxes
         this.getBoxes = function(){
@@ -115,10 +140,9 @@ angular.module('oneSearch.bento', [])
 
             // Pre-define the "results" object for each media type - I only do this here so I don't have to check if it's defined later
             angular.forEach(self.boxes, function(box, type){
-                var limit = self.boxes[type]['engines'].length > 1 ? 1 : 3;
-
+                initResultLimit(type);
                 self.boxes[type].results = {};
-                self.boxes[type].resultLimit = limit;
+
             });
 
             //  Iterate over the Promises for each engine returned by the oneSearch.searchAll() function
@@ -149,15 +173,14 @@ angular.module('oneSearch.bento', [])
                                     // Ex: self.boxes['books'].results['catalog'] = group_result;
                                     //
                                     // Also, limit the number of results per group by 3
-                                    // TODO: Re-investigate dynamic limiting based on number of engines per box. Solution must not break async loading of engine results
-                                    self.boxes[type].results[name] = $filter('limitTo')(grouped[type], 3);
+                                    self.boxes[type].results[name] = grouped[type];
                                 }
                                 // update loading progress, setting engine as loaded for current box
                                 loadProgress(type, name);
                             });
 
                             //preload the engine's template for easy access for directives
-                            self.engines[name] = {}
+                            self.engines[name] = {};
                             self.engines[name].tpl = oneSearch.getEngineTemplate(engine);
                             self.engines[name].controller = oneSearch.getEngineController(engine);
                         }
@@ -178,6 +201,7 @@ angular.module('oneSearch.bento', [])
     .controller('BentoCtrl', ['$scope', 'Bento', function($scope, Bento){
         // When the route has changed/updated generate box results
         $scope.$on('$routeChangeSuccess', function(){
+            Bento.boxMenu = [];
             Bento.getBoxes();
         })
     }])
@@ -203,24 +227,41 @@ angular.module('oneSearch.bento', [])
         $scope.domain = domain;
         $scope.s = $routeParams.s;
     }])
+
+    .directive('bentoBoxMenu', ['Bento', '$animate', function(Bento, $animate){
+        return {
+            restrict: 'AC',
+            link: function(scope, elm){
+
+                scope.boxMenu = Bento.boxMenu;
+
+            }
+        }
+    }])
+
     .directive('bentoBox', ['$rootScope', '$controller', '$compile', '$animate', 'Bento', function($rootScope, $controller, $compile, $animate, Bento){
         return {
             restrict: 'A', //The directive always requires and attribute, so disallow class use to avoid conflict
-            link: function(scope, elm, attrs){
+            scope: {},
+            link: function(scope, elm, attrs, Ctrl){
                 //Get the box name from the elements bentoBox attribute
                 var box = attrs.bentoBox;
-
+                elm.addClass(box);
+                scope.bento= Bento;
                 //Preload the spinner element
                 var spinner = angular.element('<div id="loading-bar-spinner"><div class="spinner-icon"></div></div>');
 
                 //Preload the location of the boxe's title element (needs to be more dynamic in the future)
                 var titleElm = elm.find('h2');
 
+                // Box menu/index scope variables
+                Bento.boxMenu.push({box: box, title: titleElm.text(), loaded: false});
+
                 //Enter the spinner animation, appending it to the title element
                 $animate.enter(spinner, titleElm, angular.element(titleElm[0].lastChild));
 
                 //Watch the boxes "engines" Array
-                var boxWatcher = scope.$watch(
+                var boxWatcher = scope.$watchCollection(
                     function(){
                         return Bento.boxes[box]['engines'];
                     },
@@ -241,32 +282,41 @@ angular.module('oneSearch.bento', [])
                                 }
                             }
 
-                            // Create a new isolated scope for the engine's results
+                            // Create a new scope for the engine's results
                             // See $rootScope docs: https://code.angularjs.org/1.3.0/docs/api/ng/type/$rootScope.Scope#$new
-                            // It's important to note this is an "isolated" scope (see: https://code.angularjs.org/1.3.0/docs/guide/directive#isolating-the-scope-of-a-directive)
-                            var engineScope = $rootScope.$new(true);
+                            var engineScope = $rootScope.$new();
 
                             // Place engine results for the current box under an "items" object in the new local scope
                             engineScope.items = Bento.boxes[box]['results'][engine];
 
+                            //console.log(Bento.boxes[box]['results']);
                             if (engineScope.items && engineScope.items.length > 0){
                                 // Set isCollapsed boolean to true
                                 // For engines that have collapsible results (see /common/engines/ejournals/ejournals.tpl.html for example)
                                 engineScope.isCollapsed = true;
 
-                                // When the engine's promise is ready, then load the engine's contorller/template data applying
+                                ///engineScope.limit = Bento.boxes[box].resultLimit;
+                                engineScope.engine = engine;
+
+                                // When the engine's promise is ready, then load the engine's controller/template data applying
                                 // the new isolated scope.
                                 Bento.engines[engine].tpl.then(function(data){
-                                    // manually inject controller if one is defined by the engine's config
-                                    if (Bento.engines[engine].controller){
-                                        var controller = $controller(Bento.engines[engine].controller, {$scope: engineScope});
 
-                                        elm.data('$ngControllerController', controller);
-                                        elm.children().data('$ngControllerController', controller);
-                                    }
+                                    var EngCtrl = ['$scope', 'Bento', function($scope, Bento){
+                                        // Extend any controller defined by an engine's config
+                                        if (Bento.engines[$scope.engine].controller){
+                                            angular.extend(this, $controller(Bento.engines[$scope.engine].controller, {$scope: $scope}));
+                                        }
+                                        $scope.box = Bento.boxes[box];
+                                    }];
+
+                                    var controller = $controller(EngCtrl, {$scope: engineScope, Bento: Bento});
+                                    elm.data('$ngControllerController', controller);
+                                    elm.children().data('$ngControllerController', controller);
+
                                     // Wrap the template in an element that specifies ng-repeat over the "items" object (i.e., the results),
                                     // gives the generic classes for items in a bento box.
-                                    var template = angular.element('<div class="animate-repeat bento-box-item" ng-repeat="item in items">'+data+'</div>');
+                                    var template = angular.element('<div class="animate-repeat bento-box-item" ng-repeat="item in items | limitTo: box.resultLimit">'+data+'</div>');
 
                                     // Compile wrapped template with the isolated scope's context
                                     var html = $compile(template)(engineScope);
@@ -274,6 +324,9 @@ angular.module('oneSearch.bento', [])
                                     // Append compiled HTML to box element
                                     elm.append(html);
                                 });
+                            }
+                            else {
+                                $rootScope.$broadcast('NoResultsForEngine', {engine: engine, box: box});
                             }
                             //if (box == "recommend") console.log(newVal.length);
                             // If new array is empty, the box is considered "loaded"
@@ -299,6 +352,14 @@ angular.module('oneSearch.bento', [])
                             elm.addClass('text-muted');
                         }
                     }
+
+                    // Tell bentoMenu item it's loaded
+                    Bento.boxMenu.map(function(obj){
+                        if (obj.box === b){
+                            obj.loaded = true;
+                        }
+                        return obj
+                    });
 
                     // Tell spinner to exit animation
                     $animate.leave(spinner);
@@ -477,6 +538,7 @@ angular.module('engines.acumen', [])
     .config(['oneSearchProvider', function(oneSearchProvider){
         oneSearchProvider.engine('acumen', {
             id: 8,
+            priority: 3,
             resultsPath: 'Acumen.data',
             totalsPath: 'Acumen.metadata.numFound',
             templateUrl: 'common/engines/acumen/acumen.tpl.html',
@@ -498,6 +560,7 @@ angular.module('engines.catalog', [])
     .config(['oneSearchProvider', function(oneSearchProvider){
         oneSearchProvider.engine('catalog', {
             id: 64,
+            priority: 5,
             resultsPath: 'Catalog.list',
             totalsPath: 'Catalog.total',
             mediaTypes: {
@@ -558,6 +621,7 @@ angular.module('engines.databases', [])
     .config(['oneSearchProvider', function(oneSearchProvider){
         oneSearchProvider.engine('databases', {
             id: 2,
+            priority: 1,
             resultsPath: 'Databases.databases',
             totalsPath: 'Databases.totalResults',
             templateUrl: 'common/engines/databases/databases.tpl.html'
@@ -568,6 +632,7 @@ angular.module('engines.ejournals', [])
     .config(['oneSearchProvider', function(oneSearchProvider){
         oneSearchProvider.engine('ejournals', {
             id: 4,
+            priority: 6,
             resultsPath: 'eJournals.results',
             totalsPath: 'eJournals.total',
             mediaTypes: {
@@ -577,13 +642,7 @@ angular.module('engines.ejournals', [])
                     journals: 'periodical'
                 }
             },
-            templateUrl: 'common/engines/ejournals/ejournals.tpl.html',
-            controller: ['$scope', function($scope){
-                for (var i = 0, len = $scope.items.length; i < len; i++){
-                    //console.log($scope.items);
-                }
-            }]
-
+            templateUrl: 'common/engines/ejournals/ejournals.tpl.html'
         })
     }])
 /**
@@ -637,6 +696,7 @@ angular.module('engines.faq', [])
     .config(['oneSearchProvider', function(oneSearchProvider){
         oneSearchProvider.engine('faq', {
             id: 16,
+            priority: 2,
             resultsPath: 'GoogleCS.items',
             totalsPath: 'GoogleCS.searchInformation.totalResults',
             filterQuery: 'site:ask.lib.ua.edu',
@@ -648,6 +708,7 @@ angular.module('engines.googleCS', [])
     .config(['oneSearchProvider', function(oneSearchProvider){
         oneSearchProvider.engine('googleCS', {
             id: 16,
+            priority: 2,
             resultsPath: 'GoogleCS.items',
             totalsPath: 'GoogleCS.searchInformation.totalResults',
             filterQuery: '-side:guides.lib.ua.edu -site:ask.lib.ua.edu',
@@ -659,6 +720,7 @@ angular.module('engines.libguides', [])
     .config(['oneSearchProvider', function(oneSearchProvider){
         oneSearchProvider.engine('libguides', {
             id: 16,
+            priority: 2,
             resultsPath: 'GoogleCS.items',
             totalsPath: 'GoogleCS.searchInformation.totalResults',
             filterQuery: 'site:guides.lib.ua.edu',
@@ -670,6 +732,7 @@ angular.module('engines.recommend', [])
     .config(['oneSearchProvider', function(oneSearchProvider){
         oneSearchProvider.engine('recommend', {
             id: 512,
+            priority: 0,
             resultsPath: 'Recommendations',
             templateUrl: 'common/engines/recommend/recommend.tpl.html'
         })
@@ -679,6 +742,7 @@ angular.module('engines.scout', [])
     .config(['oneSearchProvider', function(oneSearchProvider){
         oneSearchProvider.engine('scout', {
             id: 1,
+            priority: 4,
             resultsPath: 'Scout.SearchResult.Data.Records',
             totalsPath: 'Scout.SearchResult.Statistics.TotalHits',
             mediaTypes: {
@@ -702,15 +766,35 @@ angular.module('engines.scout', [])
                     }
 
                     //Search for "source"
+                    var bibRelationships = [];
+                    if (bibRelationships = items[i].RecordInfo.BibRecord.BibRelationships.IsPartOfRelationships){
+                        for (var x = 0, len = bibRelationships.length; x < len; x++){
+                            if (angular.isDefined(bibRelationships[x].BibEntity.Identifiers) && bibRelationships[x].BibEntity.Identifiers[0].Type === 'issn-print'){
+                                // define source title
+                                items[i].source = bibRelationships[x].BibEntity.Titles[0].TitleFull;
 
-                    for (var x = 0; x < items[i].Items.length; x++){
-                        if (items[i].Items[x].Group == 'Src'){
-                            //console.log(items[i].Items[x].Group);
-                            items[i].source = items[i].Items[x].Data;
+                                // Append source volume, issue, etc.
+                                if (angular.isDefined(bibRelationships[x].BibEntity.Numbering)){
+                                    for (var y = 0, l = bibRelationships[x].BibEntity.Numbering.length; y < l; y++){
+                                        items[i].source += ' ' + bibRelationships[x].BibEntity.Numbering[y].Type.substring(0,3) + '.' + bibRelationships[x].BibEntity.Numbering[y].Value;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+
+                    if (angular.isDefined(items[i].Items)){
+                        for (var x = 0; x < items[i].Items.length; x++){
+                            if (items[i].Items[x].Group == 'Src'){
+                                //console.log(items[i].Items[x].Group);
+                                items[i].source = items[i].Items[x].Data;
+                            }
                         }
                     }
                 }
                 $scope.items = items;
+
             }
         })
     }])
@@ -778,6 +862,34 @@ function isEmpty(obj) {
     }
 
     return true;
+}
+/**
+ * Adopted from UI Router library
+ * https://github.com/angular-ui/ui-router/blob/master/src/common.js
+ */
+function merge(dst) {
+    forEach(arguments, function(obj) {
+        if (obj !== dst) {
+            forEach(obj, function(value, key) {
+                if (!dst.hasOwnProperty(key)) dst[key] = value;
+            });
+        }
+    });
+    return dst;
+}
+/**
+ * Adopted from UI Router library
+ * https://github.com/angular-ui/ui-router/blob/master/src/common.js
+ */
+// extracted from underscore.js
+// Return a copy of the object omitting the blacklisted properties.
+function omit(obj) {
+    var copy = {};
+    var keys = Array.prototype.concat.apply(Array.prototype, Array.prototype.slice.call(arguments, 1));
+    for (var key in obj) {
+        if (indexOf(keys, key) == -1) copy[key] = obj[key];
+    }
+    return copy;
 }
 // adopted from https://github.com/a8m/angular-filter/blob/master/src/_common.js
 function toArray(object) {
@@ -923,7 +1035,7 @@ angular.module('common.mediaTypes', [])
 angular.module('common.oneSearch', [])
 
     .factory('Search', ['$resource', function($resource){
-        return $resource("//wwwdev2.lib.ua.edu/oneSearch/api/search/:s/engine/:engine/limit/:pp");
+        return $resource("//wwwdev2.lib.ua.edu/oneSearch/api/search/:s/engine/:engine/limit/:pp", {}, {cache: true});
     }])
 
     .provider('oneSearch', ['mediaTypesProvider', function oneSearchProvider(mediaTypesProvider){
@@ -934,7 +1046,7 @@ angular.module('common.oneSearch', [])
         this.engine = function(name, engine){
             if (angular.isString(name)){
                 var defaults = {
-                    id: null, resultsPath: null, totalsPath: null, mediaTypes: null, templateUrl: null, filterQuery: null, controller: null
+                    id: null, priority: 10, resultsPath: null, totalsPath: null, mediaTypes: null, templateUrl: null, filterQuery: null, controller: null
                 };
 
                 var e = angular.extend(defaults, engine);
@@ -957,7 +1069,8 @@ angular.module('common.oneSearch', [])
             }
         };
 
-        this.$get = ['$http', '$parse', 'enginesTemplateFactory', 'SearchParams', 'Search', function($http, $parse, enginesTemplateFactory, SearchParams, Search){
+        this.$get = ['$http', '$parse', '$filter', 'enginesTemplateFactory', 'SearchParams', 'Search', function($http, $parse, $filter, enginesTemplateFactory, SearchParams, Search){
+
 
             return {
                 engines: _engines, // Expose engines at Service level
@@ -965,9 +1078,13 @@ angular.module('common.oneSearch', [])
                     //extend give params with default SearchParams
                     angular.extend(params, SearchParams);
 
+
+                    // Sort engines by 'priority'
+                    var prioritized = $filter('orderObjectBy')( _engines, 'priority');
+
                     // Cycle through each registered engine, send the GET request, then return $http's promise by default.
                     // Returning the promise, instead of the JSON data, allows for async loading of results.
-                    angular.forEach(_engines, function(engine, name){
+                    angular.forEach(prioritized, function(engine, name){
                         //Create a local parameters variable 'p' and specify the engine id.
                         var p = {engine: engine.id};
 
@@ -981,9 +1098,9 @@ angular.module('common.oneSearch', [])
                         }
 
                         /*console.log({
-                            engine: engine,
-                            params: p
-                        });*/
+                         engine: engine,
+                         params: p
+                         });*/
 
                         // Store the $http response promise in the engine's object with key 'response
                         engine.response = Search.get(p); //$http({method: 'GET', url: url, params: p});
@@ -1076,3 +1193,94 @@ angular.module('common.oneSearch', [])
             }
         });
     }])
+
+    // Borrowed from https://github.com/fmquaglia/ngOrderObjectBy
+    .filter('orderObjectBy', function() {
+        return function (items, field, reverse) {
+            var filtered = [];
+            var newObj = {};
+            angular.forEach(items, function(item) {
+                filtered.push(item);
+            });
+            function index(obj, i) {
+                return obj[i];
+            }
+            filtered.sort(function (a, b) {
+                var comparator;
+                var reducedA = field.split('.').reduce(index, a);
+                var reducedB = field.split('.').reduce(index, b);
+                if (reducedA === reducedB) {
+                    comparator = 0;
+                } else {
+                    comparator = (reducedA > reducedB ? 1 : -1);
+                }
+                return comparator;
+            });
+            if (reverse) {
+                filtered.reverse();
+            }
+            for (var i= 0, len = filtered.length; i < len; i++){
+                var eng = filtered[i].name;
+                newObj[eng] = filtered[i]
+            }
+
+            return newObj;
+        };
+    });
+angular.module('oneSearch.videos', [])
+
+    .config(['$routeProvider', function($routeProvider) {
+        /**
+         * Register Videos videos display route with ngRoute's $routeProvider
+         */
+        $routeProvider
+            .when('/videos/:search', {
+                templateUrl: 'videos/videos.tpl.html',
+                resolve: {
+                    'Videos': ['$resource', '$location', '$routeParams', function($resource, $location, $routeParams){
+                        var url = 'https://wwwdev.lib.ua.edu/musicsearch/api';
+                        var params = {};
+
+                        return {
+                            results: function(){
+                                var path = url;
+                                angular.copy($routeParams, params);
+                                angular.extend(params, $location.search());
+
+                                angular.forEach(params, function(value, param){
+                                    path += '/' + param + '/' + value;
+                                })
+                                return $resource(path);
+                            },
+                            facets: function(){
+                                var path = url;
+                                return $resource(path + '/genres');
+                            }
+                        }
+                    }]
+                },
+                controller: ['$scope', 'Videos', function($scope, Videos){
+                    $scope.videos = {
+                        results: {},
+                        facets: {}
+                    };
+                    $scope.currentPage = 1;
+
+                    Videos.facets().get()
+                        .$promise.then(function(data){
+                            $scope.videos.facets = data;
+                        },function(){
+                            console.log('Error retrieving facets');
+                        });
+
+                    $scope.$on('$routeChangeSuccess', function(){
+                        Videos.results().get()
+                            .$promise.then(function(data){
+                                $scope.videos.total = data.totalResults;
+                                $scope.currentPage = 1;
+                                $scope.videos.results = data.results;
+                            });
+                    });
+                }]
+            })
+    }]);

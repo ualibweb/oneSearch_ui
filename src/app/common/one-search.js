@@ -35,7 +35,7 @@
 angular.module('common.oneSearch', [])
 
     .factory('Search', ['$resource', function($resource){
-        return $resource("//wwwdev2.lib.ua.edu/oneSearch/api/search/:s/engine/:engine/limit/:pp");
+        return $resource("//wwwdev2.lib.ua.edu/oneSearch/api/search/:s/engine/:engine/limit/:pp", {}, {cache: true});
     }])
 
     .provider('oneSearch', ['mediaTypesProvider', function oneSearchProvider(mediaTypesProvider){
@@ -46,7 +46,7 @@ angular.module('common.oneSearch', [])
         this.engine = function(name, engine){
             if (angular.isString(name)){
                 var defaults = {
-                    id: null, resultsPath: null, totalsPath: null, mediaTypes: null, templateUrl: null, filterQuery: null, controller: null
+                    id: null, priority: 10, resultsPath: null, totalsPath: null, mediaTypes: null, templateUrl: null, filterQuery: null, controller: null
                 };
 
                 var e = angular.extend(defaults, engine);
@@ -69,7 +69,8 @@ angular.module('common.oneSearch', [])
             }
         };
 
-        this.$get = ['$http', '$parse', 'enginesTemplateFactory', 'SearchParams', 'Search', function($http, $parse, enginesTemplateFactory, SearchParams, Search){
+        this.$get = ['$http', '$parse', '$filter', 'enginesTemplateFactory', 'SearchParams', 'Search', function($http, $parse, $filter, enginesTemplateFactory, SearchParams, Search){
+
 
             return {
                 engines: _engines, // Expose engines at Service level
@@ -77,9 +78,13 @@ angular.module('common.oneSearch', [])
                     //extend give params with default SearchParams
                     angular.extend(params, SearchParams);
 
+
+                    // Sort engines by 'priority'
+                    var prioritized = $filter('orderObjectBy')( _engines, 'priority');
+
                     // Cycle through each registered engine, send the GET request, then return $http's promise by default.
                     // Returning the promise, instead of the JSON data, allows for async loading of results.
-                    angular.forEach(_engines, function(engine, name){
+                    angular.forEach(prioritized, function(engine, name){
                         //Create a local parameters variable 'p' and specify the engine id.
                         var p = {engine: engine.id};
 
@@ -93,9 +98,9 @@ angular.module('common.oneSearch', [])
                         }
 
                         /*console.log({
-                            engine: engine,
-                            params: p
-                        });*/
+                         engine: engine,
+                         params: p
+                         });*/
 
                         // Store the $http response promise in the engine's object with key 'response
                         engine.response = Search.get(p); //$http({method: 'GET', url: url, params: p});
@@ -188,3 +193,37 @@ angular.module('common.oneSearch', [])
             }
         });
     }])
+
+    // Borrowed from https://github.com/fmquaglia/ngOrderObjectBy
+    .filter('orderObjectBy', function() {
+        return function (items, field, reverse) {
+            var filtered = [];
+            var newObj = {};
+            angular.forEach(items, function(item) {
+                filtered.push(item);
+            });
+            function index(obj, i) {
+                return obj[i];
+            }
+            filtered.sort(function (a, b) {
+                var comparator;
+                var reducedA = field.split('.').reduce(index, a);
+                var reducedB = field.split('.').reduce(index, b);
+                if (reducedA === reducedB) {
+                    comparator = 0;
+                } else {
+                    comparator = (reducedA > reducedB ? 1 : -1);
+                }
+                return comparator;
+            });
+            if (reverse) {
+                filtered.reverse();
+            }
+            for (var i= 0, len = filtered.length; i < len; i++){
+                var eng = filtered[i].name;
+                newObj[eng] = filtered[i]
+            }
+
+            return newObj;
+        };
+    });

@@ -112,9 +112,26 @@
   transition: opacity  .2s 0s, visibility 0s 0s, height .2s 0s;
 }
 
+.acumen .media > a {
+  width: 96px;
+  height: auto;
+  max-height: 96px;
+}
+.acumen .media > a > img {
+  margin: 0 auto;
+}
+
 a[href^="http"]:not(.source-link):after,
 a[href^="https"]:not(.source-link):after {
   content: none;
+}
+.facet-group-container {
+  max-height: 300px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.facet-group {
+  height: 100%;
 }
 .dl-horizontal > dt {
   width: auto;

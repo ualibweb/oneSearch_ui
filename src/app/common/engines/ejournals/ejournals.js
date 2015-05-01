@@ -3,6 +3,7 @@ angular.module('engines.ejournals', [])
     .config(['oneSearchProvider', function(oneSearchProvider){
         oneSearchProvider.engine('ejournals', {
             id: 4,
+            priority: 6,
             resultsPath: 'eJournals.results',
             totalsPath: 'eJournals.total',
             mediaTypes: {
@@ -12,12 +13,6 @@ angular.module('engines.ejournals', [])
                     journals: 'periodical'
                 }
             },
-            templateUrl: 'common/engines/ejournals/ejournals.tpl.html',
-            controller: ['$scope', function($scope){
-                for (var i = 0, len = $scope.items.length; i < len; i++){
-                    //console.log($scope.items);
-                }
-            }]
-
+            templateUrl: 'common/engines/ejournals/ejournals.tpl.html'
         })
     }])

@@ -3,6 +3,7 @@ angular.module('engines.catalog', [])
     .config(['oneSearchProvider', function(oneSearchProvider){
         oneSearchProvider.engine('catalog', {
             id: 64,
+            priority: 5,
             resultsPath: 'Catalog.list',
             totalsPath: 'Catalog.total',
             mediaTypes: {

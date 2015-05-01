@@ -3,6 +3,7 @@ angular.module('engines.acumen', [])
     .config(['oneSearchProvider', function(oneSearchProvider){
         oneSearchProvider.engine('acumen', {
             id: 8,
+            priority: 3,
             resultsPath: 'Acumen.data',
             totalsPath: 'Acumen.metadata.numFound',
             templateUrl: 'common/engines/acumen/acumen.tpl.html',
