@@ -26,16 +26,17 @@ angular.module('oneSearch.common')
                 $scope.numShow = 5;
 
                 // hides the list initially
-                $scope.selected = true;
+                $scope.selected = false;
 
                 $scope.onChange = function(){
                     var lastSpace = $scope.model.lastIndexOf(" ");
-                    $scope.selected = false;
+                    $scope.selected = true;
 
                     if ($scope.model.length - lastSpace <= 3 || $scope.model.indexOf($scope.originalValue) < 0){
                         $scope.items = {};
                         $scope.setCurrent(-1, false);
                         $scope.dataRequested = false;
+                        $scope.selected = false;
                     }
                     if ($scope.model.length - lastSpace > 3 && !$scope.dataRequested){
                         dataFactory.get('//wwwdev2.lib.ua.edu/oneSearch/api/suggest/' + $scope.model)
@@ -55,10 +56,11 @@ angular.module('oneSearch.common')
                                 .then(function(data) {
                                     $scope.items.subjects = data;
                                 });
-                            dataFactory.get('//www.googleapis.com/customsearch/v1?key=AIzaSyCMGfdDaSfjqv5zYoS0mTJnOT3e9MURWkU&cx=003453353330912650815:lfyr_-azrxe&q=' +
+                            dataFactory.get('https://www.googleapis.com/customsearch/v1?key=AIzaSyCMGfdDaSfjqv5zYoS0mTJnOT3e9MURWkU&cx=003453353330912650815:lfyr_-azrxe&q=' +
                             $scope.model + '&siteSearch=ask.lib.ua.edu')
                                 .then(function(data) {
-                                    $scope.items.faq = data;
+                                    // pluck out the items array for easier 'suggestWatcher' processing
+                                    $scope.items.faq = data.items;
                                 });
                         }, 200);
                     }
@@ -86,11 +88,11 @@ angular.module('oneSearch.common')
                 };
                 $scope.onFocus = function(){
                     if (angular.isDefined($scope.model) && $scope.model.length > 2){
-                        $scope.selected = false;
+                        $scope.selected = true;
                     }
                 };
                 $scope.onBlur = function($event){
-                    $scope.selected = true;
+                    $scope.selected = false;
                 };
                 $scope.compare = function(query){
                     return function(item){
@@ -102,6 +104,20 @@ angular.module('oneSearch.common')
                 };
             },
             link: function(scope, elem, attrs) {
+                scope.showSuggestions = false;
+                var suggestWatcher = scope.$watch('items', function(newVal, oldVal){
+                    var show = false;
+
+                    for (var item in newVal){
+                        if (item.length > 0){
+                            show = true;
+                            break;
+                        }
+                    }
+
+                    scope.showSuggestions = (scope.model.length > 3 && show);
+                }, true);
+
                 elem.bind("keydown", function (event) {
                     switch(event.keyCode){
                         //ArrowUp
@@ -127,7 +143,7 @@ angular.module('oneSearch.common')
 
                         //Enter
                         case 13:
-                            scope.selected = true;
+                            scope.selected = false;
                             break;
 
                         default:
@@ -135,6 +151,13 @@ angular.module('oneSearch.common')
                     }
                     scope.$apply();
                 });
+
+                // Unbind key event when scope is destroyed
+                scope.$on('$destroy', function(){
+                    elem.unbind("keydown");
+                    suggestWatcher();
+                });
+
                 scope.handleSelection = function(selectedItem) {
                     $timeout(function() {
                         scope.model = selectedItem;
@@ -143,6 +166,8 @@ angular.module('oneSearch.common')
                         scope.search();
                     }, 0);
                 };
+
+
             },
             templateUrl: 'common/directives/suggest/suggest.tpl.html'
         };

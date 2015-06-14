@@ -9,6 +9,10 @@ angular.module('oneSearch.bento', [])
                 templateUrl: 'bento/bento.tpl.html',
                 controller: 'BentoCtrl'
             })
+            .when('/bento-test/:s', {
+                templateUrl: 'bento/bento-test.tpl.html',
+                controller: 'BentoCtrl'
+            })
     }])
 
 /**
@@ -201,17 +205,6 @@ angular.module('oneSearch.bento', [])
         $scope.s = $routeParams.s;
     }])
 
-    .directive('bentoBoxMenu', ['Bento', '$animate', function(Bento, $animate){
-        return {
-            restrict: 'AC',
-            link: function(scope, elm){
-
-                scope.boxMenu = Bento.boxMenu;
-
-            }
-        }
-    }])
-
     .directive('bentoBox', ['$rootScope', '$controller', '$compile', '$animate', 'Bento', function($rootScope, $controller, $compile, $animate, Bento){
         return {
             restrict: 'A', //The directive always requires and attribute, so disallow class use to avoid conflict
@@ -220,15 +213,21 @@ angular.module('oneSearch.bento', [])
                 //Get the box name from the elements bentoBox attribute
                 var box = attrs.bentoBox;
                 elm.addClass(box);
+                elm.parent().attr('id', box + '-parent');
+
                 scope.bento= Bento;
                 //Preload the spinner element
                 var spinner = angular.element('<div id="loading-bar-spinner"><div class="spinner-icon"></div></div>');
 
                 //Preload the location of the boxe's title element (needs to be more dynamic in the future)
                 var titleElm = elm.find('h2');
+                titleElm.attr('id', box);
+
 
                 // Box menu/index scope variables
-                Bento.boxMenu.push({box: box, title: titleElm.text(), loaded: false});
+                if (!attrs.omitFromMenu){
+                    Bento.boxMenu.push({box: box, title: titleElm.text(), loaded: false, noResults: false});
+                }
 
                 //Enter the spinner animation, appending it to the title element
                 $animate.enter(spinner, titleElm, angular.element(titleElm[0].lastChild));
@@ -327,9 +326,13 @@ angular.module('oneSearch.bento', [])
                     }
 
                     // Tell bentoMenu item it's loaded
-                    Bento.boxMenu.map(function(obj){
+                    Bento.boxMenu = Bento.boxMenu.map(function(obj){
                         if (obj.box === b){
                             obj.loaded = true;
+
+                            if (isEmpty(Bento.boxes[b]['results'])){
+                                obj.noResults = true;
+                            }
                         }
                         return obj
                     });
@@ -342,5 +345,28 @@ angular.module('oneSearch.bento', [])
                 }
             },
             controller: 'bentoBoxCtrl'
+        }
+    }])
+
+    .directive('bentoBoxMenu', ['Bento', '$animate', '$document', function(Bento, $animate, $document){
+        return {
+            restrict: 'AC',
+            link: function(scope, elm){
+                var selected = null;
+                var boxes = $document.find('h2');
+                scope.boxMenu = Bento.boxMenu;
+
+
+                scope.selectBox = function(box){
+                    var selected = angular.element(document.getElementById(box));
+
+                    angular.forEach(boxes, function(val, key){
+                        val.removeClass('box-selected');
+                    });
+                    selected.addClass('box-selected');
+                }
+
+
+            }
         }
     }])

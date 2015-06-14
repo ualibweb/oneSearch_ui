@@ -13,6 +13,8 @@ angular.module('oneSearch', [
     'ngSanitize',
     'ui.bootstrap',
     'angular.filter',
+    'duScroll',
+    'ualib.ui',
     'oneSearch.common',
     'oneSearch.templates',
     'oneSearch.bento',
@@ -23,5 +25,8 @@ angular.module('oneSearch', [
 
     // Default search parameters
     .value('SearchParams', {
-        pp: 100
+        limit: 100
     })
+
+    .value('duScrollOffset', 60)
+    .value('duScrollGreedy', true);

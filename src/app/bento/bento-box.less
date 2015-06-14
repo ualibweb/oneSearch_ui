@@ -1,6 +1,18 @@
 
 .bento-box-container {
 
+  .scrollfix{
+    top: 0;
+    z-index: 3000;
+  }
+
+  > .row > div {
+    -webkit-transition: all 1s ease-in-out;
+    -moz-transition: all 1s ease-in-out;
+    -o-transition: all 1s ease-in-out;
+    transition: all 1s ease-in-out;
+  }
+
   h2{
     font-size: 25px;
     color: #555;
@@ -22,7 +34,46 @@
   }
 }
 
-.bento-box{
+.bento-box-menu-container{
+  min-height: 71px;
+
+}
+
+.bento-box-menu {
+
+  -webkit-transition: all .2s ease-in-out;
+  -moz-transition: all .2s ease-in-out;
+  -o-transition: all .2s ease-in-out;
+  transition: all .2s ease-in-out;
+
+  &.scrollfix {
+    background-color: #f6f6f6;
+  }
+
+  &.scrollfix {
+    .nav > li > a {
+      &:hover,
+      &:focus {
+        background-color: #993333;
+        color: #f6f6f6;
+      }
+
+    }
+  }
+  .nav {
+    > li > a {
+      padding: 15px;
+      white-space: nowrap;
+
+    }
+  }
+}
+
+.box-selected {
+  border: 1px solid #993333;
+}
+
+.bento-box:not(.recommend){
     min-height: 350px;
     overflow: hidden;
     -webkit-transition: 200ms cubic-bezier(0.420, 0.000, 0.580, 1.000) all;
@@ -36,8 +87,19 @@
     margin-bottom: 15px;
 }
 
-.recommended{
-    min-height: 100px;
+.recommend{
+    min-height: 30px;
+
+  h2 {
+    margin: 0 30px 0 0;
+    font-size: 1.2em;
+    float: left;
+  }
+
+  .bento-box-item {
+    display: inline-block;
+    margin-right: 15px;
+  }
 }
 
 .recommended > h2{

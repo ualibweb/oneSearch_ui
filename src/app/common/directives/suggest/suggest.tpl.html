@@ -5,7 +5,7 @@
         <button type="submit" class="btn btn-onesearch btn-primary"><span class="fa fa-search"></span></button>
     </div>
 </div>
-<div class="suggest" ng-hide="model.length < 3 || selected">
+<div class="suggest" ng-show="showSuggestions && selected">
     <div class="row" ng-hide="items.suggest.length == 0">
         <ul class="nav nav-pills nav-stacked">
             <li role="presentation"
@@ -44,7 +44,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-4" ng-show="items.faq.searchInformation.totalResults > 0">
+            <div class="col-sm-4" ng-show="items.faq.length">
                 <div class="suggest-col">
                     <h4>FAQ <a href="http://ask.lib.ua.edu/" class="small" ng-mousedown="go('http://ask.lib.ua.edu/')">more</a></h4>
                     <div ng-repeat="faq in items.faq.items | limitTo:5">

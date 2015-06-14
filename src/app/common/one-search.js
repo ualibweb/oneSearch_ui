@@ -35,7 +35,7 @@
 angular.module('common.oneSearch', [])
 
     .factory('Search', ['$resource', function($resource){
-        return $resource("//wwwdev2.lib.ua.edu/oneSearch/api/search/:s/engine/:engine/limit/:pp", {}, {cache: true});
+        return $resource("//wwwdev2.lib.ua.edu/oneSearch/api/search/:s/engine/:engine/limit/:limit", {}, {cache: true});
     }])
 
     .provider('oneSearch', ['mediaTypesProvider', function oneSearchProvider(mediaTypesProvider){
@@ -122,42 +122,6 @@ angular.module('common.oneSearch', [])
                     // Return all engines with response promises, and getter functions
                     return _engines;
                 },
-                search: function(engName, params, search_url){
-                    if (!angular.isDefined(search_url))
-                        console.log("Error: URL is not defined!");
-                    var engine = _engines[engName];
-                    var p = {engine: engine.id};
-
-                    //Extend local parameters by global params.
-                    angular.extend(p, params);
-
-                    //if filterQuery present, add it to query
-                    // TODO: add proper REST support by accepting filter queries as objects and not just strings
-                    if (engine.filterQuery !== null){
-                        p.s += ' ' + engine.filterQuery;
-                    }
-
-                    /*console.log({
-                     engine: engine,
-                     params: p
-                     });*/
-
-                    // Store the $http response promise in the engine's object with key 'response
-                    engine.response = $http({method: 'GET', url: search_url, params: p});
-
-                    // Create results getter function from given results JSON path
-                    if (angular.isDefined(engine.resultsPath)){
-                        engine.getResults = $parse(engine.resultsPath);
-                    }
-
-                    // Create results getter function from given results JSON path
-                    if (angular.isDefined(engine.totalsPath)){
-                        engine.getTotal = $parse(engine.totalsPath);
-                    }
-
-                    // Put engine's object in private _engines object
-                    return engine;
-                },
                 getEngineTemplate: function(engine){
                     return enginesTemplateFactory.get(engine);
                 },
@@ -169,7 +133,7 @@ angular.module('common.oneSearch', [])
         }]
     }])
 
-    .controller('OneSearchCtrl', ['$scope', '$location', '$rootScope', function($scope, $location, $rootScope){
+    .controller('OneSearchCtrl', ['$scope', '$location', '$rootScope', '$resource', function($scope, $location, $rootScope, $resource){
         $scope.searchText;
         $scope.search = function(){
             if ($scope.searchText){
@@ -184,7 +148,18 @@ angular.module('common.oneSearch', [])
                     $location.path('/bento/'+$scope.searchText);
                 }
             }
+        };
+
+        $scope.getRecommend = function(val){
+            return $resource('//wwwdev2.lib.ua.edu/oneSearch/api/recommend/:search')
+                .query({search: val})
+                .$promise.then(function(rec) {
+                    console.log(rec);
+
+                    return rec;
+                });
         }
+
 
         $rootScope.$on('$routeChangeSuccess', function(event,currentRoute){
             var s = currentRoute.params.s;
@@ -192,6 +167,8 @@ angular.module('common.oneSearch', [])
                 $scope.searchText = s;
             }
         });
+
+
     }])
 
     // Borrowed from https://github.com/fmquaglia/ngOrderObjectBy

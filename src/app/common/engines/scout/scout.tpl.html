@@ -12,25 +12,25 @@
         </div>
         <div collapse="isCollapsed">
             <div class="details-container" ng-if="item.RecordInfo.BibRecord.BibRelationships.HasContributorRelationships">
-                <span class="text-muted">Author(s): </span>
+                <span class="text-muted">Authors </span>
             <span class="details"
                   ng-repeat="author in item.RecordInfo.BibRecord.BibRelationships.HasContributorRelationships | unique: 'PersonEntity.Name.NameFull'"
                   ng-bind-html="author.PersonEntity.Name.NameFull | lowercase | ucfirst"></span>
             </div>
 
             <div class="details-container" ng-if="item.source">
-                <span class="text-muted">Source(s): </span>
+                <span class="text-muted">Sources </span>
                 <span class="details" ng-bind-html="item.source"></span>
             </div>
 
             <div class="details-container" ng-if="item.RecordInfo.BibRecord.BibEntity.Subjects">
-                <span class="text-muted">Subejct(s): </span>
+                <span class="text-muted">Subejcts </span>
             <span class="details"
                   ng-repeat="subject in item.RecordInfo.BibRecord.BibEntity.Subjects"
                   ng-bind-html="subject.SubjectFull"></span>
             </div>
         </div>
-        <div>
+        <div ng-show="item.RecordInfo.BibRecord.BibRelationships.HasContributorRelationships || item.source || item.RecordInfo.BibRecord.BibEntity.Subjects">
             <button type="button" class="btn btn-default btn-xs" ng-click="isCollapsed = !isCollapsed">{{!isCollapsed ? 'less' : 'more'}} detail</button>
         </div>
     </div>

@@ -1,4 +1,13 @@
 <div class="bento-box-container">
+    <div class="bento-box-menu-container">
+        <div class="bento-box-menu" ui-scrollfix="+0">
+            <ul class="nav nav-justified">
+                <li ng-repeat="item in boxMenu">
+                    <a href="" du-smooth-scroll="{{item.box}}" ng-click="selectBox(item.box)">{{item.title}}</a>
+                </li>
+            </ul>
+        </div>
+    </div>
     <div class="row">
         <div class="col-md-4">
             <div class="bento-box" bento-box="articles">
@@ -26,18 +35,14 @@
         </div>
         <div class="col-md-6">
             <div class="bento-box" bento-box="acumen">
-                <h2>Acumen</h2>
+                <h2 id="acumen">Acumen</h2>
             </div>
         </div>
     </div>
     <div class="row">
         <div class="col-md-4">
             <div class="bento-box" bento-box="databases">
-                <h2>Databases
-                    <small>
-                        [<a href="{{domain}}sample-page/databases/#/databases/ts/d/{{s}}/fs/ft/">more</a>]
-                    </small>
-                </h2>
+                <h2>Databases </h2>
             </div>
         </div>
         <div class="col-md-4">
@@ -54,13 +59,21 @@
     <div class="row">
         <div class="col-md-6">
             <div class="bento-box" bento-box="googleCS">
-                <h2>Libraries' Website</h2>
+                <h2 id="site-search">Libraries' Website</h2>
             </div>
         </div>
 
         <div class="col-md-6">
             <div class="bento-box" bento-box="faq">
                 <h2>FAQ</h2>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="bento-box well" bento-box="recommend" hide-if-empty="true" omit-from-menu="true">
+                <h2>Other results</h2>
+
             </div>
         </div>
     </div>

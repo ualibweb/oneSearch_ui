@@ -13,6 +13,8 @@ angular.module('oneSearch', [
     'ngSanitize',
     'ui.bootstrap',
     'angular.filter',
+    'duScroll',
+    'ualib.ui',
     'oneSearch.common',
     'oneSearch.templates',
     'oneSearch.bento',
@@ -23,8 +25,11 @@ angular.module('oneSearch', [
 
     // Default search parameters
     .value('SearchParams', {
-        pp: 100
+        limit: 100
     })
+
+    .value('duScrollOffset', 60)
+    .value('duScrollGreedy', true);
 angular.module('oneSearch.bento', [])
 
     .config(['$routeProvider', function($routeProvider) {
@@ -34,6 +39,10 @@ angular.module('oneSearch.bento', [])
         $routeProvider
             .when('/bento/:s', {
                 templateUrl: 'bento/bento.tpl.html',
+                controller: 'BentoCtrl'
+            })
+            .when('/bento-test/:s', {
+                templateUrl: 'bento/bento-test.tpl.html',
                 controller: 'BentoCtrl'
             })
     }])
@@ -228,17 +237,6 @@ angular.module('oneSearch.bento', [])
         $scope.s = $routeParams.s;
     }])
 
-    .directive('bentoBoxMenu', ['Bento', '$animate', function(Bento, $animate){
-        return {
-            restrict: 'AC',
-            link: function(scope, elm){
-
-                scope.boxMenu = Bento.boxMenu;
-
-            }
-        }
-    }])
-
     .directive('bentoBox', ['$rootScope', '$controller', '$compile', '$animate', 'Bento', function($rootScope, $controller, $compile, $animate, Bento){
         return {
             restrict: 'A', //The directive always requires and attribute, so disallow class use to avoid conflict
@@ -247,15 +245,21 @@ angular.module('oneSearch.bento', [])
                 //Get the box name from the elements bentoBox attribute
                 var box = attrs.bentoBox;
                 elm.addClass(box);
+                elm.parent().attr('id', box + '-parent');
+
                 scope.bento= Bento;
                 //Preload the spinner element
                 var spinner = angular.element('<div id="loading-bar-spinner"><div class="spinner-icon"></div></div>');
 
                 //Preload the location of the boxe's title element (needs to be more dynamic in the future)
                 var titleElm = elm.find('h2');
+                titleElm.attr('id', box);
+
 
                 // Box menu/index scope variables
-                Bento.boxMenu.push({box: box, title: titleElm.text(), loaded: false});
+                if (!attrs.omitFromMenu){
+                    Bento.boxMenu.push({box: box, title: titleElm.text(), loaded: false, noResults: false});
+                }
 
                 //Enter the spinner animation, appending it to the title element
                 $animate.enter(spinner, titleElm, angular.element(titleElm[0].lastChild));
@@ -354,9 +358,13 @@ angular.module('oneSearch.bento', [])
                     }
 
                     // Tell bentoMenu item it's loaded
-                    Bento.boxMenu.map(function(obj){
+                    Bento.boxMenu = Bento.boxMenu.map(function(obj){
                         if (obj.box === b){
                             obj.loaded = true;
+
+                            if (isEmpty(Bento.boxes[b]['results'])){
+                                obj.noResults = true;
+                            }
                         }
                         return obj
                     });
@@ -369,6 +377,29 @@ angular.module('oneSearch.bento', [])
                 }
             },
             controller: 'bentoBoxCtrl'
+        }
+    }])
+
+    .directive('bentoBoxMenu', ['Bento', '$animate', '$document', function(Bento, $animate, $document){
+        return {
+            restrict: 'AC',
+            link: function(scope, elm){
+                var selected = null;
+                var boxes = $document.find('h2');
+                scope.boxMenu = Bento.boxMenu;
+
+
+                scope.selectBox = function(box){
+                    var selected = angular.element(document.getElementById(box));
+
+                    angular.forEach(boxes, function(val, key){
+                        val.removeClass('box-selected');
+                    });
+                    selected.addClass('box-selected');
+                }
+
+
+            }
         }
     }])
 /**
@@ -411,16 +442,17 @@ angular.module('oneSearch.common')
                 $scope.numShow = 5;
 
                 // hides the list initially
-                $scope.selected = true;
+                $scope.selected = false;
 
                 $scope.onChange = function(){
                     var lastSpace = $scope.model.lastIndexOf(" ");
-                    $scope.selected = false;
+                    $scope.selected = true;
 
                     if ($scope.model.length - lastSpace <= 3 || $scope.model.indexOf($scope.originalValue) < 0){
                         $scope.items = {};
                         $scope.setCurrent(-1, false);
                         $scope.dataRequested = false;
+                        $scope.selected = false;
                     }
                     if ($scope.model.length - lastSpace > 3 && !$scope.dataRequested){
                         dataFactory.get('//wwwdev2.lib.ua.edu/oneSearch/api/suggest/' + $scope.model)
@@ -440,10 +472,11 @@ angular.module('oneSearch.common')
                                 .then(function(data) {
                                     $scope.items.subjects = data;
                                 });
-                            dataFactory.get('//www.googleapis.com/customsearch/v1?key=AIzaSyCMGfdDaSfjqv5zYoS0mTJnOT3e9MURWkU&cx=003453353330912650815:lfyr_-azrxe&q=' +
+                            dataFactory.get('https://www.googleapis.com/customsearch/v1?key=AIzaSyCMGfdDaSfjqv5zYoS0mTJnOT3e9MURWkU&cx=003453353330912650815:lfyr_-azrxe&q=' +
                             $scope.model + '&siteSearch=ask.lib.ua.edu')
                                 .then(function(data) {
-                                    $scope.items.faq = data;
+                                    // pluck out the items array for easier 'suggestWatcher' processing
+                                    $scope.items.faq = data.items;
                                 });
                         }, 200);
                     }
@@ -471,11 +504,11 @@ angular.module('oneSearch.common')
                 };
                 $scope.onFocus = function(){
                     if (angular.isDefined($scope.model) && $scope.model.length > 2){
-                        $scope.selected = false;
+                        $scope.selected = true;
                     }
                 };
                 $scope.onBlur = function($event){
-                    $scope.selected = true;
+                    $scope.selected = false;
                 };
                 $scope.compare = function(query){
                     return function(item){
@@ -487,6 +520,20 @@ angular.module('oneSearch.common')
                 };
             },
             link: function(scope, elem, attrs) {
+                scope.showSuggestions = false;
+                var suggestWatcher = scope.$watch('items', function(newVal, oldVal){
+                    var show = false;
+
+                    for (var item in newVal){
+                        if (item.length > 0){
+                            show = true;
+                            break;
+                        }
+                    }
+
+                    scope.showSuggestions = (scope.model.length > 3 && show);
+                }, true);
+
                 elem.bind("keydown", function (event) {
                     switch(event.keyCode){
                         //ArrowUp
@@ -512,7 +559,7 @@ angular.module('oneSearch.common')
 
                         //Enter
                         case 13:
-                            scope.selected = true;
+                            scope.selected = false;
                             break;
 
                         default:
@@ -520,6 +567,13 @@ angular.module('oneSearch.common')
                     }
                     scope.$apply();
                 });
+
+                // Unbind key event when scope is destroyed
+                scope.$on('$destroy', function(){
+                    elem.unbind("keydown");
+                    suggestWatcher();
+                });
+
                 scope.handleSelection = function(selectedItem) {
                     $timeout(function() {
                         scope.model = selectedItem;
@@ -528,6 +582,8 @@ angular.module('oneSearch.common')
                         scope.search();
                     }, 0);
                 };
+
+
             },
             templateUrl: 'common/directives/suggest/suggest.tpl.html'
         };
@@ -711,7 +767,6 @@ angular.module('engines.googleCS', [])
             priority: 2,
             resultsPath: 'GoogleCS.items',
             totalsPath: 'GoogleCS.searchInformation.totalResults',
-            filterQuery: '-side:guides.lib.ua.edu -site:ask.lib.ua.edu',
             templateUrl: 'common/engines/google-cs/google-cs.tpl.html'
         })
     }])
@@ -796,6 +851,23 @@ angular.module('engines.scout', [])
                 $scope.items = items;
 
             }
+        })
+    }])
+angular.module('engines.subjectSpecialist', [])
+
+    .config(['oneSearchProvider', function(oneSearchProvider){
+        oneSearchProvider.engine('subjectSpecialist', {
+            id: 16,
+            priority: 2,
+            mediaTypes: {
+                path: 'displayLink',
+                types: {
+                    subjectSpecialist: ['www.lib.ua.edu', 'lib.ua.edu', 'apps.lib.ua.edu', 'brunolib.cba.ua.edu'],
+                    faq: 'ask.lib.ua.edu',
+                    libguides: 'guides.lib.ua.edu'
+                }
+            },
+            templateUrl: 'common/engines/google-cs/google-cs.tpl.html'
         })
     }])
 angular.module('filters.nameFilter', [])
@@ -1035,7 +1107,7 @@ angular.module('common.mediaTypes', [])
 angular.module('common.oneSearch', [])
 
     .factory('Search', ['$resource', function($resource){
-        return $resource("//wwwdev2.lib.ua.edu/oneSearch/api/search/:s/engine/:engine/limit/:pp", {}, {cache: true});
+        return $resource("//wwwdev2.lib.ua.edu/oneSearch/api/search/:s/engine/:engine/limit/:limit", {}, {cache: true});
     }])
 
     .provider('oneSearch', ['mediaTypesProvider', function oneSearchProvider(mediaTypesProvider){
@@ -1122,42 +1194,6 @@ angular.module('common.oneSearch', [])
                     // Return all engines with response promises, and getter functions
                     return _engines;
                 },
-                search: function(engName, params, search_url){
-                    if (!angular.isDefined(search_url))
-                        console.log("Error: URL is not defined!");
-                    var engine = _engines[engName];
-                    var p = {engine: engine.id};
-
-                    //Extend local parameters by global params.
-                    angular.extend(p, params);
-
-                    //if filterQuery present, add it to query
-                    // TODO: add proper REST support by accepting filter queries as objects and not just strings
-                    if (engine.filterQuery !== null){
-                        p.s += ' ' + engine.filterQuery;
-                    }
-
-                    /*console.log({
-                     engine: engine,
-                     params: p
-                     });*/
-
-                    // Store the $http response promise in the engine's object with key 'response
-                    engine.response = $http({method: 'GET', url: search_url, params: p});
-
-                    // Create results getter function from given results JSON path
-                    if (angular.isDefined(engine.resultsPath)){
-                        engine.getResults = $parse(engine.resultsPath);
-                    }
-
-                    // Create results getter function from given results JSON path
-                    if (angular.isDefined(engine.totalsPath)){
-                        engine.getTotal = $parse(engine.totalsPath);
-                    }
-
-                    // Put engine's object in private _engines object
-                    return engine;
-                },
                 getEngineTemplate: function(engine){
                     return enginesTemplateFactory.get(engine);
                 },
@@ -1169,7 +1205,7 @@ angular.module('common.oneSearch', [])
         }]
     }])
 
-    .controller('OneSearchCtrl', ['$scope', '$location', '$rootScope', function($scope, $location, $rootScope){
+    .controller('OneSearchCtrl', ['$scope', '$location', '$rootScope', '$resource', function($scope, $location, $rootScope, $resource){
         $scope.searchText;
         $scope.search = function(){
             if ($scope.searchText){
@@ -1184,7 +1220,18 @@ angular.module('common.oneSearch', [])
                     $location.path('/bento/'+$scope.searchText);
                 }
             }
+        };
+
+        $scope.getRecommend = function(val){
+            return $resource('//wwwdev2.lib.ua.edu/oneSearch/api/recommend/:search')
+                .query({search: val})
+                .$promise.then(function(rec) {
+                    console.log(rec);
+
+                    return rec;
+                });
         }
+
 
         $rootScope.$on('$routeChangeSuccess', function(event,currentRoute){
             var s = currentRoute.params.s;
@@ -1192,6 +1239,8 @@ angular.module('common.oneSearch', [])
                 $scope.searchText = s;
             }
         });
+
+
     }])
 
     // Borrowed from https://github.com/fmquaglia/ngOrderObjectBy
