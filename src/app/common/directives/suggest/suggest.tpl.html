@@ -16,7 +16,7 @@
             </li>
         </ul>
     </div>
-    <div class="suggest-row" ng-show="items.recommend.length || items.subjects.length || items.faq.searchInformation.totalResults > 0">
+    <div class="suggest-row" ng-show="items.recommend.length || items.subjects.length || items.faq.length > 0">
         <div class="row">
             <div class="col-sm-4" ng-show="items.recommend.length">
                 <div class="suggest-col">
@@ -47,7 +47,7 @@
             <div class="col-sm-4" ng-show="items.faq.length">
                 <div class="suggest-col">
                     <h4>FAQ <a href="http://ask.lib.ua.edu/" class="small" ng-mousedown="go('http://ask.lib.ua.edu/')">more</a></h4>
-                    <div ng-repeat="faq in items.faq.items | limitTo:5">
+                    <div ng-repeat="faq in items.faq | limitTo:5">
                         <a href="{{faq.link}}" ng-mousedown="go(faq.link)">
                             {{faq.title}}
                         </a>
