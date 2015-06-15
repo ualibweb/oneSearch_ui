@@ -450,16 +450,15 @@ angular.module('oneSearch.common')
                 $scope.selected = false;
 
                 $scope.onChange = function(){
-                    var lastSpace = $scope.model.lastIndexOf(" ");
                     $scope.selected = true;
 
-                    if ($scope.model.length - lastSpace <= 3 || $scope.model.indexOf($scope.originalValue) < 0){
+                    if ($scope.model.length < 3 || $scope.model.indexOf($scope.originalValue) < 0){
                         $scope.items = {};
                         $scope.setCurrent(-1, false);
                         $scope.dataRequested = false;
                         $scope.selected = false;
                     }
-                    if ($scope.model.length - lastSpace > 3 && !$scope.dataRequested){
+                    if ($scope.model.length > 2 && !$scope.dataRequested){
                         dataFactory.get('//wwwdev2.lib.ua.edu/oneSearch/api/suggest/' + $scope.model)
                             .then(function(data) {
                                 $scope.items.suggest = data;
@@ -483,7 +482,7 @@ angular.module('oneSearch.common')
                                     // pluck out the items array for easier 'suggestWatcher' processing
                                     $scope.items.faq = data.items;
                                 });
-                        }, 200);
+                        }, 0);
                     }
                     $scope.originalValue = $scope.model;
                 };
@@ -536,7 +535,7 @@ angular.module('oneSearch.common')
                         }
                     }
 
-                    scope.showSuggestions = (scope.model.length > 3 && show);
+                    scope.showSuggestions = (scope.model.length > 2 && show);
                 }, true);
 
                 elem.bind("keydown", function (event) {
