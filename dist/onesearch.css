@@ -3,10 +3,18 @@
   z-index: 3000;
 }
 .bento-box-container > .row > div {
+  border: 1px solid transparent;
   -webkit-transition: all 1s ease-in-out;
   -moz-transition: all 1s ease-in-out;
   -o-transition: all 1s ease-in-out;
   transition: all 1s ease-in-out;
+}
+.bento-box-container > .row > div.box-selected {
+  border: 1px solid #993333;
+  -webkit-transition: all 0s ease-in-out;
+  -moz-transition: all 0s ease-in-out;
+  -o-transition: all 0s ease-in-out;
+  transition: all 0s ease-in-out;
 }
 .bento-box-container h2 {
   font-size: 25px;
@@ -21,32 +29,22 @@
   font-family: 'Open Sans', sans-serif;
 }
 .bento-box-container > .row:not(:first-child) {
-  margin-bottom: 15px;
+  margin-bottom: 0;
   border-top: 1px solid #eee;
 }
 .bento-box-menu-container {
   min-height: 71px;
 }
 .bento-box-menu {
-  -webkit-transition: all 0.2s ease-in-out;
-  -moz-transition: all 0.2s ease-in-out;
-  -o-transition: all 0.2s ease-in-out;
-  transition: all 0.2s ease-in-out;
-}
-.bento-box-menu.scrollfix {
   background-color: #f6f6f6;
-}
-.bento-box-menu.scrollfix .nav > li > a:hover,
-.bento-box-menu.scrollfix .nav > li > a:focus {
-  background-color: #993333;
-  color: #f6f6f6;
 }
 .bento-box-menu .nav > li > a {
   padding: 15px;
   white-space: nowrap;
 }
-.box-selected {
-  border: 1px solid #993333;
+.bento-box-menu .nav > li > a:hover {
+  background-color: #993333;
+  color: #f6f6f6;
 }
 .bento-box:not(.recommend) {
   min-height: 350px;
@@ -59,6 +57,12 @@
 }
 .bento-box-item {
   margin-bottom: 15px;
+}
+.resource-link-container + .bento-box-item {
+  margin-bottom: 0;
+}
+.resource-link-container {
+  border-bottom: 1px solid #eee;
 }
 .recommend {
   min-height: 30px;

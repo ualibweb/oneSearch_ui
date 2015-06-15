@@ -1,4 +1,4 @@
-angular.module('oneSearch.templates', ['bento/bento.tpl.html', 'common/directives/suggest/suggest.tpl.html', 'common/engines/acumen/acumen.tpl.html', 'common/engines/catalog/catalog.tpl.html', 'common/engines/databases/databases.tpl.html', 'common/engines/ejournals/ejournals.tpl.html', 'common/engines/google-cs/google-cs.tpl.html', 'common/engines/recommend/recommend.tpl.html', 'common/engines/scout/scout.tpl.html', 'videos/videos.tpl.html']);
+angular.module('oneSearch.templates', ['bento/bento.tpl.html', 'common/directives/suggest/suggest.tpl.html', 'common/engines/acumen/acumen.tpl.html', 'common/engines/catalog/catalog.tpl.html', 'common/engines/databases/databases.tpl.html', 'common/engines/ejournals/ejournals.tpl.html', 'common/engines/google-cs/google-cs.tpl.html', 'common/engines/recommend/recommend.tpl.html', 'common/engines/scout/scout.tpl.html']);
 
 angular.module("bento/bento.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("bento/bento.tpl.html",
@@ -291,7 +291,7 @@ angular.module("common/engines/scout/scout.tpl.html", []).run(["$templateCache",
     "            <span ng-if=\"item.mediaType\">{{item.mediaType}} </span>\n" +
     "            <span ng-if=\"item.FullText.Text.Availability\">Full Text Online</span>\n" +
     "        </div>\n" +
-    "        <div collapse=\"isCollapsed\">\n" +
+    "        <div collapse=\"isCollapsed\" ng-show=\"(item.RecordInfo.BibRecord.BibRelationships.HasContributorRelationships || item.source || item.RecordInfo.BibRecord.BibEntity.Subjects)\">\n" +
     "            <div class=\"details-container\" ng-if=\"item.RecordInfo.BibRecord.BibRelationships.HasContributorRelationships\">\n" +
     "                <span class=\"text-muted\">Authors </span>\n" +
     "            <span class=\"details\"\n" +
@@ -313,47 +313,6 @@ angular.module("common/engines/scout/scout.tpl.html", []).run(["$templateCache",
     "        </div>\n" +
     "        <div ng-show=\"item.RecordInfo.BibRecord.BibRelationships.HasContributorRelationships || item.source || item.RecordInfo.BibRecord.BibEntity.Subjects\">\n" +
     "            <button type=\"button\" class=\"btn btn-default btn-xs\" ng-click=\"isCollapsed = !isCollapsed\">{{!isCollapsed ? 'less' : 'more'}} detail</button>\n" +
-    "        </div>\n" +
-    "    </div>\n" +
-    "</div>");
-}]);
-
-angular.module("videos/videos.tpl.html", []).run(["$templateCache", function($templateCache) {
-  $templateCache.put("videos/videos.tpl.html",
-    "<div class=\"video-container\">\n" +
-    "    <div class=\"row\">\n" +
-    "        <div class=\"col-sm-9 video-results\">\n" +
-    "            <div class=\"media\" ng-repeat=\"item in videos.results | filter:facets\">\n" +
-    "                <div class=\"media-body\">\n" +
-    "                    <h4 class=\"media-heading\">\n" +
-    "                        {{item.title}}\n" +
-    "                    </h4>\n" +
-    "                    <div class=\"details-context\">\n" +
-    "                        <span ng-if=\"item.series_title\">{{item.series_title}}</span>\n" +
-    "                        <span ng-if=\"item.call_number\">{{item.call_number}} </span>\n" +
-    "                        <span ng-if=\"item.genre\">{{item.genre}} </span>\n" +
-    "                        <span ng-if=\"item.language\">{{item.language}} </span>\n" +
-    "                    </div>\n" +
-    "                    <p>{{item.notes}}</p>\n" +
-    "                    <span class=\"text-muted\">{{item.keywords}}</span>\n" +
-    "                </div>\n" +
-    "            </div>\n" +
-    "        </div>\n" +
-    "        <div class=\"col-sm-3 facets-container video-facets\">\n" +
-    "            <form>\n" +
-    "                <div class=\"form-group\" ng-repeat=\"(label, type) in videos.facets\">\n" +
-    "                    <h4>{{label}}</h4>\n" +
-    "                    <div class=\"facet-group-container\">\n" +
-    "                        <div class=\"facet-group\">\n" +
-    "                            <div class=\"checkbox\" ng-repeat=\"facet in type\">\n" +
-    "                                <label>\n" +
-    "                                    <input type=\"checkbox\"> {{facet.label}}\n" +
-    "                                </label>\n" +
-    "                            </div>\n" +
-    "                        </div>\n" +
-    "                    </div>\n" +
-    "                </div>\n" +
-    "            </form>\n" +
     "        </div>\n" +
     "    </div>\n" +
     "</div>");

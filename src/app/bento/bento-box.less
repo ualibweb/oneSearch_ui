@@ -7,10 +7,19 @@
   }
 
   > .row > div {
+    border: 1px solid transparent;
     -webkit-transition: all 1s ease-in-out;
     -moz-transition: all 1s ease-in-out;
     -o-transition: all 1s ease-in-out;
     transition: all 1s ease-in-out;
+
+    &.box-selected {
+      border: 1px solid #993333;
+      -webkit-transition: all 0s ease-in-out;
+      -moz-transition: all 0s ease-in-out;
+      -o-transition: all 0s ease-in-out;
+      transition: all 0s ease-in-out;
+    }
   }
 
   h2{
@@ -29,7 +38,7 @@
   }
 
   > .row:not(:first-child){
-    margin-bottom: 15px;
+    margin-bottom: 0;
     border-top: 1px solid #eee;
   }
 }
@@ -41,36 +50,19 @@
 
 .bento-box-menu {
 
-  -webkit-transition: all .2s ease-in-out;
-  -moz-transition: all .2s ease-in-out;
-  -o-transition: all .2s ease-in-out;
-  transition: all .2s ease-in-out;
+  background-color: #f6f6f6;
 
-  &.scrollfix {
-    background-color: #f6f6f6;
-  }
-
-  &.scrollfix {
-    .nav > li > a {
-      &:hover,
-      &:focus {
-        background-color: #993333;
-        color: #f6f6f6;
-      }
-
-    }
-  }
   .nav {
     > li > a {
       padding: 15px;
       white-space: nowrap;
 
+      &:hover {
+        background-color: #993333;
+        color: #f6f6f6;
+      }
     }
   }
-}
-
-.box-selected {
-  border: 1px solid #993333;
 }
 
 .bento-box:not(.recommend){
@@ -84,7 +76,15 @@
 }
 
 .bento-box-item{
-    margin-bottom: 15px;
+  margin-bottom: 15px;
+}
+
+.resource-link-container + .bento-box-item{
+  margin-bottom: 0;
+}
+
+.resource-link-container{
+  border-bottom: 1px solid #eee;
 }
 
 .recommend{

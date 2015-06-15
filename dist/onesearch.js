@@ -17,8 +17,7 @@ angular.module('oneSearch', [
     'ualib.ui',
     'oneSearch.common',
     'oneSearch.templates',
-    'oneSearch.bento',
-    'oneSearch.videos'
+    'oneSearch.bento'
 ])
     // The URL to the main website
     .constant('UALIB_DOMAIN', '//wwwdev2.lib.ua.edu/')
@@ -28,7 +27,7 @@ angular.module('oneSearch', [
         limit: 100
     })
 
-    .value('duScrollOffset', 60)
+    .value('duScrollOffset', 100)
     .value('duScrollGreedy', true);
 angular.module('oneSearch.bento', [])
 
@@ -151,6 +150,7 @@ angular.module('oneSearch.bento', [])
             angular.forEach(self.boxes, function(box, type){
                 initResultLimit(type);
                 self.boxes[type].results = {};
+                self.boxes[type].resourceLinks = {};
 
             });
 
@@ -163,6 +163,7 @@ angular.module('oneSearch.bento', [])
                         // The results getter is defined by the JSON path defined by the
                         // "resultsPath" param in an engine's config
                         var res = engine.getResults(data);
+                        var link = engine.getResourceLink(data);
 
                         // Double check that the data is defined, in case the search API returned a '200' status with empty results.
                         if (isEmpty(res)){
@@ -183,6 +184,9 @@ angular.module('oneSearch.bento', [])
                                     //
                                     // Also, limit the number of results per group by 3
                                     self.boxes[type].results[name] = grouped[type];
+
+                                    // set resource "more" link
+                                    self.boxes[type].resourceLinks[name] = link;
                                 }
                                 // update loading progress, setting engine as loaded for current box
                                 loadProgress(type, name);
@@ -248,6 +252,7 @@ angular.module('oneSearch.bento', [])
                 elm.parent().attr('id', box + '-parent');
 
                 scope.bento= Bento;
+
                 //Preload the spinner element
                 var spinner = angular.element('<div id="loading-bar-spinner"><div class="spinner-icon"></div></div>');
 
@@ -292,6 +297,8 @@ angular.module('oneSearch.bento', [])
 
                             // Place engine results for the current box under an "items" object in the new local scope
                             engineScope.items = Bento.boxes[box]['results'][engine];
+                            engineScope.resourceLinks = Bento.boxes[box]['resourceLinks'][engine];
+                            engineScope.engineName = engine;
 
                             //console.log(Bento.boxes[box]['results']);
                             if (engineScope.items && engineScope.items.length > 0){
@@ -320,7 +327,7 @@ angular.module('oneSearch.bento', [])
 
                                     // Wrap the template in an element that specifies ng-repeat over the "items" object (i.e., the results),
                                     // gives the generic classes for items in a bento box.
-                                    var template = angular.element('<div class="animate-repeat bento-box-item" ng-repeat="item in items | limitTo: box.resultLimit">'+data+'</div>');
+                                    var template = angular.element('<div class="animate-repeat bento-box-item" ng-repeat="item in items | limitTo: box.resultLimit">'+data+'</div><div class="resource-link-container text-muted">Results from {{engineName | ucfirst}} [<a class="external-link" ng-href="{{link}}" ng-repeat="link in resourceLinks">more</a>] </div>');
 
                                     // Compile wrapped template with the isolated scope's context
                                     var html = $compile(template)(engineScope);
@@ -380,22 +387,19 @@ angular.module('oneSearch.bento', [])
         }
     }])
 
-    .directive('bentoBoxMenu', ['Bento', '$animate', '$document', function(Bento, $animate, $document){
+    .directive('bentoBoxMenu', ['Bento', '$timeout', function(Bento, $timeout){
         return {
             restrict: 'AC',
             link: function(scope, elm){
-                var selected = null;
-                var boxes = $document.find('h2');
                 scope.boxMenu = Bento.boxMenu;
 
-
                 scope.selectBox = function(box){
-                    var selected = angular.element(document.getElementById(box));
-
-                    angular.forEach(boxes, function(val, key){
-                        val.removeClass('box-selected');
-                    });
+                    var selected = angular.element(document.getElementById(box + '-parent'));
                     selected.addClass('box-selected');
+
+                    $timeout(function(){
+                        selected.removeClass('box-selected');
+                    }, 500);
                 }
 
 
@@ -714,8 +718,8 @@ angular.module('common.engines', [
     'engines.databases',
     'engines.scout',
     'engines.googleCS',
-    'engines.faq',
-    'engines.libguides',
+    //'engines.faq',
+    //'engines.libguides',
     'engines.ejournals',
     'engines.recommend'
 ])
@@ -822,7 +826,8 @@ angular.module('engines.scout', [])
 
                     //Search for "source"
                     var bibRelationships = [];
-                    if (bibRelationships = items[i].RecordInfo.BibRecord.BibRelationships.IsPartOfRelationships){
+                    if (angular.isDefined(items[i].RecordInfo.BibRecord.BibRelationships.IsPartOfRelationships)){
+                        bibRelationships = items[i].RecordInfo.BibRecord.BibRelationships.IsPartOfRelationships;
                         for (var x = 0, len = bibRelationships.length; x < len; x++){
                             if (angular.isDefined(bibRelationships[x].BibEntity.Identifiers) && bibRelationships[x].BibEntity.Identifiers[0].Type === 'issn-print'){
                                 // define source title
@@ -851,23 +856,6 @@ angular.module('engines.scout', [])
                 $scope.items = items;
 
             }
-        })
-    }])
-angular.module('engines.subjectSpecialist', [])
-
-    .config(['oneSearchProvider', function(oneSearchProvider){
-        oneSearchProvider.engine('subjectSpecialist', {
-            id: 16,
-            priority: 2,
-            mediaTypes: {
-                path: 'displayLink',
-                types: {
-                    subjectSpecialist: ['www.lib.ua.edu', 'lib.ua.edu', 'apps.lib.ua.edu', 'brunolib.cba.ua.edu'],
-                    faq: 'ask.lib.ua.edu',
-                    libguides: 'guides.lib.ua.edu'
-                }
-            },
-            templateUrl: 'common/engines/google-cs/google-cs.tpl.html'
         })
     }])
 angular.module('filters.nameFilter', [])
@@ -934,34 +922,6 @@ function isEmpty(obj) {
     }
 
     return true;
-}
-/**
- * Adopted from UI Router library
- * https://github.com/angular-ui/ui-router/blob/master/src/common.js
- */
-function merge(dst) {
-    forEach(arguments, function(obj) {
-        if (obj !== dst) {
-            forEach(obj, function(value, key) {
-                if (!dst.hasOwnProperty(key)) dst[key] = value;
-            });
-        }
-    });
-    return dst;
-}
-/**
- * Adopted from UI Router library
- * https://github.com/angular-ui/ui-router/blob/master/src/common.js
- */
-// extracted from underscore.js
-// Return a copy of the object omitting the blacklisted properties.
-function omit(obj) {
-    var copy = {};
-    var keys = Array.prototype.concat.apply(Array.prototype, Array.prototype.slice.call(arguments, 1));
-    for (var key in obj) {
-        if (indexOf(keys, key) == -1) copy[key] = obj[key];
-    }
-    return copy;
 }
 // adopted from https://github.com/a8m/angular-filter/blob/master/src/_common.js
 function toArray(object) {
@@ -1132,6 +1092,7 @@ angular.module('common.oneSearch', [])
                         mediaTypesProvider.type(name, name);
                         e.mediaTypes = name;
                     }
+
                     e.name = name;
                     _engines[name] = e;
                 }
@@ -1142,7 +1103,7 @@ angular.module('common.oneSearch', [])
         };
 
         this.$get = ['$http', '$parse', '$filter', 'enginesTemplateFactory', 'SearchParams', 'Search', function($http, $parse, $filter, enginesTemplateFactory, SearchParams, Search){
-
+            this.resourceLinks = {};
 
             return {
                 engines: _engines, // Expose engines at Service level
@@ -1186,6 +1147,9 @@ angular.module('common.oneSearch', [])
                         if (angular.isDefined(engine.totalsPath)){
                             engine.getTotal = $parse(engine.totalsPath);
                         }
+
+                        // Create resource link getter for "more" results link
+                        engine.getResourceLink = $parse("resourceLinks");
 
                         // Put engine's object in private _engines object
                         _engines[name] = engine;
@@ -1276,60 +1240,3 @@ angular.module('common.oneSearch', [])
             return newObj;
         };
     });
-angular.module('oneSearch.videos', [])
-
-    .config(['$routeProvider', function($routeProvider) {
-        /**
-         * Register Videos videos display route with ngRoute's $routeProvider
-         */
-        $routeProvider
-            .when('/videos/:search', {
-                templateUrl: 'videos/videos.tpl.html',
-                resolve: {
-                    'Videos': ['$resource', '$location', '$routeParams', function($resource, $location, $routeParams){
-                        var url = 'https://wwwdev.lib.ua.edu/musicsearch/api';
-                        var params = {};
-
-                        return {
-                            results: function(){
-                                var path = url;
-                                angular.copy($routeParams, params);
-                                angular.extend(params, $location.search());
-
-                                angular.forEach(params, function(value, param){
-                                    path += '/' + param + '/' + value;
-                                })
-                                return $resource(path);
-                            },
-                            facets: function(){
-                                var path = url;
-                                return $resource(path + '/genres');
-                            }
-                        }
-                    }]
-                },
-                controller: ['$scope', 'Videos', function($scope, Videos){
-                    $scope.videos = {
-                        results: {},
-                        facets: {}
-                    };
-                    $scope.currentPage = 1;
-
-                    Videos.facets().get()
-                        .$promise.then(function(data){
-                            $scope.videos.facets = data;
-                        },function(){
-                            console.log('Error retrieving facets');
-                        });
-
-                    $scope.$on('$routeChangeSuccess', function(){
-                        Videos.results().get()
-                            .$promise.then(function(data){
-                                $scope.videos.total = data.totalResults;
-                                $scope.currentPage = 1;
-                                $scope.videos.results = data.results;
-                            });
-                    });
-                }]
-            })
-    }]);

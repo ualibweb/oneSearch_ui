@@ -28,7 +28,8 @@ angular.module('engines.scout', [])
 
                     //Search for "source"
                     var bibRelationships = [];
-                    if (bibRelationships = items[i].RecordInfo.BibRecord.BibRelationships.IsPartOfRelationships){
+                    if (angular.isDefined(items[i].RecordInfo.BibRecord.BibRelationships.IsPartOfRelationships)){
+                        bibRelationships = items[i].RecordInfo.BibRecord.BibRelationships.IsPartOfRelationships;
                         for (var x = 0, len = bibRelationships.length; x < len; x++){
                             if (angular.isDefined(bibRelationships[x].BibEntity.Identifiers) && bibRelationships[x].BibEntity.Identifiers[0].Type === 'issn-print'){
                                 // define source title

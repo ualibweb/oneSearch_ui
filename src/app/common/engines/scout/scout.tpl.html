@@ -10,7 +10,7 @@
             <span ng-if="item.mediaType">{{item.mediaType}} </span>
             <span ng-if="item.FullText.Text.Availability">Full Text Online</span>
         </div>
-        <div collapse="isCollapsed">
+        <div collapse="isCollapsed" ng-show="(item.RecordInfo.BibRecord.BibRelationships.HasContributorRelationships || item.source || item.RecordInfo.BibRecord.BibEntity.Subjects)">
             <div class="details-container" ng-if="item.RecordInfo.BibRecord.BibRelationships.HasContributorRelationships">
                 <span class="text-muted">Authors </span>
             <span class="details"

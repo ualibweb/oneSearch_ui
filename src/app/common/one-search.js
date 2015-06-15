@@ -60,6 +60,7 @@ angular.module('common.oneSearch', [])
                         mediaTypesProvider.type(name, name);
                         e.mediaTypes = name;
                     }
+
                     e.name = name;
                     _engines[name] = e;
                 }
@@ -70,7 +71,7 @@ angular.module('common.oneSearch', [])
         };
 
         this.$get = ['$http', '$parse', '$filter', 'enginesTemplateFactory', 'SearchParams', 'Search', function($http, $parse, $filter, enginesTemplateFactory, SearchParams, Search){
-
+            this.resourceLinks = {};
 
             return {
                 engines: _engines, // Expose engines at Service level
@@ -114,6 +115,9 @@ angular.module('common.oneSearch', [])
                         if (angular.isDefined(engine.totalsPath)){
                             engine.getTotal = $parse(engine.totalsPath);
                         }
+
+                        // Create resource link getter for "more" results link
+                        engine.getResourceLink = $parse("resourceLinks");
 
                         // Put engine's object in private _engines object
                         _engines[name] = engine;

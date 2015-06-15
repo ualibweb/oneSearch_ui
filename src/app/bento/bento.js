@@ -119,6 +119,7 @@ angular.module('oneSearch.bento', [])
             angular.forEach(self.boxes, function(box, type){
                 initResultLimit(type);
                 self.boxes[type].results = {};
+                self.boxes[type].resourceLinks = {};
 
             });
 
@@ -131,6 +132,7 @@ angular.module('oneSearch.bento', [])
                         // The results getter is defined by the JSON path defined by the
                         // "resultsPath" param in an engine's config
                         var res = engine.getResults(data);
+                        var link = engine.getResourceLink(data);
 
                         // Double check that the data is defined, in case the search API returned a '200' status with empty results.
                         if (isEmpty(res)){
@@ -151,6 +153,9 @@ angular.module('oneSearch.bento', [])
                                     //
                                     // Also, limit the number of results per group by 3
                                     self.boxes[type].results[name] = grouped[type];
+
+                                    // set resource "more" link
+                                    self.boxes[type].resourceLinks[name] = link;
                                 }
                                 // update loading progress, setting engine as loaded for current box
                                 loadProgress(type, name);
@@ -216,6 +221,7 @@ angular.module('oneSearch.bento', [])
                 elm.parent().attr('id', box + '-parent');
 
                 scope.bento= Bento;
+
                 //Preload the spinner element
                 var spinner = angular.element('<div id="loading-bar-spinner"><div class="spinner-icon"></div></div>');
 
@@ -260,6 +266,8 @@ angular.module('oneSearch.bento', [])
 
                             // Place engine results for the current box under an "items" object in the new local scope
                             engineScope.items = Bento.boxes[box]['results'][engine];
+                            engineScope.resourceLinks = Bento.boxes[box]['resourceLinks'][engine];
+                            engineScope.engineName = engine;
 
                             //console.log(Bento.boxes[box]['results']);
                             if (engineScope.items && engineScope.items.length > 0){
@@ -288,7 +296,7 @@ angular.module('oneSearch.bento', [])
 
                                     // Wrap the template in an element that specifies ng-repeat over the "items" object (i.e., the results),
                                     // gives the generic classes for items in a bento box.
-                                    var template = angular.element('<div class="animate-repeat bento-box-item" ng-repeat="item in items | limitTo: box.resultLimit">'+data+'</div>');
+                                    var template = angular.element('<div class="animate-repeat bento-box-item" ng-repeat="item in items | limitTo: box.resultLimit">'+data+'</div><div class="resource-link-container text-muted">Results from {{engineName | ucfirst}} [<a class="external-link" ng-href="{{link}}" ng-repeat="link in resourceLinks">more</a>] </div>');
 
                                     // Compile wrapped template with the isolated scope's context
                                     var html = $compile(template)(engineScope);
@@ -348,22 +356,19 @@ angular.module('oneSearch.bento', [])
         }
     }])
 
-    .directive('bentoBoxMenu', ['Bento', '$animate', '$document', function(Bento, $animate, $document){
+    .directive('bentoBoxMenu', ['Bento', '$timeout', function(Bento, $timeout){
         return {
             restrict: 'AC',
             link: function(scope, elm){
-                var selected = null;
-                var boxes = $document.find('h2');
                 scope.boxMenu = Bento.boxMenu;
 
-
                 scope.selectBox = function(box){
-                    var selected = angular.element(document.getElementById(box));
-
-                    angular.forEach(boxes, function(val, key){
-                        val.removeClass('box-selected');
-                    });
+                    var selected = angular.element(document.getElementById(box + '-parent'));
                     selected.addClass('box-selected');
+
+                    $timeout(function(){
+                        selected.removeClass('box-selected');
+                    }, 500);
                 }
 
 

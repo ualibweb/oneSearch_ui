@@ -17,8 +17,7 @@ angular.module('oneSearch', [
     'ualib.ui',
     'oneSearch.common',
     'oneSearch.templates',
-    'oneSearch.bento',
-    'oneSearch.videos'
+    'oneSearch.bento'
 ])
     // The URL to the main website
     .constant('UALIB_DOMAIN', '//wwwdev2.lib.ua.edu/')
@@ -28,5 +27,5 @@ angular.module('oneSearch', [
         limit: 100
     })
 
-    .value('duScrollOffset', 60)
+    .value('duScrollOffset', 100)
     .value('duScrollGreedy', true);
