@@ -76,7 +76,7 @@ angular.module("bento/bento.tpl.html", []).run(["$templateCache", function($temp
     "    <div class=\"row\">\n" +
     "        <div class=\"col-md-12\">\n" +
     "            <div class=\"bento-box well\" bento-box=\"recommend\" hide-if-empty=\"true\" omit-from-menu=\"true\">\n" +
-    "                <h2>Other results</h2>\n" +
+    "                <h2>Recommended Links</h2>\n" +
     "\n" +
     "            </div>\n" +
     "        </div>\n" +
@@ -108,7 +108,7 @@ angular.module("common/directives/suggest/suggest.tpl.html", []).run(["$template
     "        <div class=\"row\">\n" +
     "            <div class=\"col-sm-4\" ng-show=\"items.recommend.length\">\n" +
     "                <div class=\"suggest-col\">\n" +
-    "                    <h4>Web site pages</h4>\n" +
+    "                    <h4>Recommended</h4>\n" +
     "                    <div ng-repeat=\"recommendation in items.recommend | limitTo:10\">\n" +
     "                        <a href=\"{{recommendation.link}}\" ng-mousedown=\"go(recommendation.link)\">\n" +
     "                            {{recommendation.description}}\n" +

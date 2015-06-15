@@ -241,6 +241,7 @@ angular.module('oneSearch.bento', [])
                 //Watch the boxes "engines" Array
                 var boxWatcher = scope.$watchCollection(
                     function(){
+
                         return Bento.boxes[box]['engines'];
                     },
                     function(newVal, oldVal) {

@@ -11,8 +11,8 @@ angular.module('common.engines', [
     'engines.databases',
     'engines.scout',
     'engines.googleCS',
-    //'engines.faq',
-    //'engines.libguides',
+    'engines.faq',
+    'engines.libguides',
     'engines.ejournals',
     'engines.recommend'
 ])

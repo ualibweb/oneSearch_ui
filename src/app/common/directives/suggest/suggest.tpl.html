@@ -20,7 +20,7 @@
         <div class="row">
             <div class="col-sm-4" ng-show="items.recommend.length">
                 <div class="suggest-col">
-                    <h4>Web site pages</h4>
+                    <h4>Recommended</h4>
                     <div ng-repeat="recommendation in items.recommend | limitTo:10">
                         <a href="{{recommendation.link}}" ng-mousedown="go(recommendation.link)">
                             {{recommendation.description}}
