@@ -169,8 +169,8 @@
   margin: 0 auto;
 }
 
-.dropdown-static .onsearch-box.dropdown-menu {
-  backgorund-color: transparent;
+.bento .onsearch-box.dropdown-menu {
+  background-color: transparent;
   border-color: transparent;
 }
 .facet-group-container {
