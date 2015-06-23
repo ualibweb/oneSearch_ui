@@ -50,6 +50,8 @@
   box-shadow: 0px 3px 5px 0px rgba(50, 50, 50, 0.21);
 }
 .bento-box-menu .nav > li > a {
+  padding-top: 15px;
+  padding-bottom: 15px;
   white-space: nowrap;
 }
 .bento-box-menu .nav > li > a:hover {
@@ -167,9 +169,9 @@
   margin: 0 auto;
 }
 
-a[href^="http"]:not(.source-link):after,
-a[href^="https"]:not(.source-link):after {
-  content: none;
+.dropdown-static .onsearch-box.dropdown-menu {
+  backgorund-color: transparent;
+  border-color: transparent;
 }
 .facet-group-container {
   max-height: 300px;

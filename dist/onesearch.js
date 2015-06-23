@@ -872,7 +872,7 @@ angular.module('engines.scout', [])
                 else {
                     link += '&facet=' + box;
                 }
-                
+
                 $scope.resourceLink = angular.copy(link);
             }
         })
