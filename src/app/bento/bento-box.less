@@ -44,17 +44,28 @@
 }
 
 .bento-box-menu-container{
-  min-height: 71px;
-
+  height: 73px;
 }
 
 .bento-box-menu {
+  background-color: #fff;
+  border-color: transparent;
 
-  background-color: #f6f6f6;
+  -webkit-transition: all 0.2s linear;
+  -moz-transition: all 0.2s linear;
+  -o-transition: all 0.2s linear;
+  transition: all 0.2s linear;
+
+  &.scrollfix {
+    border-color: #eee;
+    -webkit-box-shadow: 0px 3px 5px 0px rgba(50, 50, 50, 0.21);
+    -moz-box-shadow:    0px 3px 5px 0px rgba(50, 50, 50, 0.21);
+    box-shadow:         0px 3px 5px 0px rgba(50, 50, 50, 0.21);
+  }
 
   .nav {
     > li > a {
-      padding: 15px;
+
       white-space: nowrap;
 
       &:hover {
@@ -79,13 +90,9 @@
   margin-bottom: 15px;
 }
 
-.resource-link-container + .bento-box-item{
-  margin-bottom: 0;
-}
-
 .resource-link-container{
   text-align: right;
-  margin: 15px 0;
+  margin: 15px 15px 15px 0;
 }
 
 .recommend{

@@ -155,7 +155,7 @@ angular.module('oneSearch.bento', [])
                                     self.boxes[type].results[name] = grouped[type];
 
                                     // set resource "more" link
-                                    self.boxes[type].resourceLinks[name] = link;
+                                    self.boxes[type].resourceLinks[name] = link[engine.id];
                                 }
                                 // update loading progress, setting engine as loaded for current box
                                 loadProgress(type, name);
@@ -267,10 +267,9 @@ angular.module('oneSearch.bento', [])
 
                             // Place engine results for the current box under an "items" object in the new local scope
                             engineScope.items = Bento.boxes[box]['results'][engine];
-                            engineScope.resourceLinks = Bento.boxes[box]['resourceLinks'][engine];
-                            engineScope.engineName = engine;
 
-                            //console.log(Bento.boxes[box]['results']);
+
+
                             if (engineScope.items && engineScope.items.length > 0){
                                 // Set isCollapsed boolean to true
                                 // For engines that have collapsible results (see /common/engines/ejournals/ejournals.tpl.html for example)
@@ -278,7 +277,8 @@ angular.module('oneSearch.bento', [])
 
                                 ///engineScope.limit = Bento.boxes[box].resultLimit;
                                 engineScope.engine = engine;
-
+                                engineScope.resourceLink = Bento.boxes[box]['resourceLinks'][engine];
+                                engineScope.boxName = titleElm.text();
                                 // When the engine's promise is ready, then load the engine's controller/template data applying
                                 // the new isolated scope.
                                 Bento.engines[engine].tpl.then(function(data){
@@ -291,13 +291,13 @@ angular.module('oneSearch.bento', [])
                                         $scope.box = Bento.boxes[box];
                                     }];
 
-                                    var controller = $controller(EngCtrl, {$scope: engineScope, Bento: Bento});
+                                    var controller = $controller(EngCtrl, {$scope: engineScope});
                                     elm.data('$ngControllerController', controller);
                                     elm.children().data('$ngControllerController', controller);
 
                                     // Wrap the template in an element that specifies ng-repeat over the "items" object (i.e., the results),
                                     // gives the generic classes for items in a bento box.
-                                    var template = angular.element('<div class="animate-repeat bento-box-item" ng-repeat="item in items | limitTo: box.resultLimit">'+data+'</div><div class="resource-link-container"><a class="btn btn-default btn-xs" ng-href="{{link}}" ng-repeat="link in resourceLinks">More results from {{engineName | ucfirst}}  <span class="fa fa-fw fa-external-link"></span></a></div>');
+                                    var template = angular.element('<div class="animate-repeat bento-box-item" ng-repeat="item in items | limitTo: box.resultLimit">'+data+'</div><div class="resource-link-container"><a class="btn btn-link btn-xs" ng-href="{{resourceLink}}">More results from {{engine | ucfirst}}  <span class="fa fa-fw fa-external-link"></span></a></div>');
 
                                     // Compile wrapped template with the isolated scope's context
                                     var html = $compile(template)(engineScope);

@@ -27,8 +27,8 @@ angular.module('oneSearch', [
         limit: 100
     })
 
-    .value('duScrollOffset', 100)
-    .value('duScrollGreedy', true);
+    .value('duScrollOffset', 81)
+
 angular.module('oneSearch.bento', [])
 
     .config(['$routeProvider', function($routeProvider) {
@@ -186,7 +186,7 @@ angular.module('oneSearch.bento', [])
                                     self.boxes[type].results[name] = grouped[type];
 
                                     // set resource "more" link
-                                    self.boxes[type].resourceLinks[name] = link;
+                                    self.boxes[type].resourceLinks[name] = link[engine.id];
                                 }
                                 // update loading progress, setting engine as loaded for current box
                                 loadProgress(type, name);
@@ -298,10 +298,9 @@ angular.module('oneSearch.bento', [])
 
                             // Place engine results for the current box under an "items" object in the new local scope
                             engineScope.items = Bento.boxes[box]['results'][engine];
-                            engineScope.resourceLinks = Bento.boxes[box]['resourceLinks'][engine];
-                            engineScope.engineName = engine;
 
-                            //console.log(Bento.boxes[box]['results']);
+
+
                             if (engineScope.items && engineScope.items.length > 0){
                                 // Set isCollapsed boolean to true
                                 // For engines that have collapsible results (see /common/engines/ejournals/ejournals.tpl.html for example)
@@ -309,7 +308,8 @@ angular.module('oneSearch.bento', [])
 
                                 ///engineScope.limit = Bento.boxes[box].resultLimit;
                                 engineScope.engine = engine;
-
+                                engineScope.resourceLink = Bento.boxes[box]['resourceLinks'][engine];
+                                engineScope.boxName = titleElm.text();
                                 // When the engine's promise is ready, then load the engine's controller/template data applying
                                 // the new isolated scope.
                                 Bento.engines[engine].tpl.then(function(data){
@@ -322,13 +322,13 @@ angular.module('oneSearch.bento', [])
                                         $scope.box = Bento.boxes[box];
                                     }];
 
-                                    var controller = $controller(EngCtrl, {$scope: engineScope, Bento: Bento});
+                                    var controller = $controller(EngCtrl, {$scope: engineScope});
                                     elm.data('$ngControllerController', controller);
                                     elm.children().data('$ngControllerController', controller);
 
                                     // Wrap the template in an element that specifies ng-repeat over the "items" object (i.e., the results),
                                     // gives the generic classes for items in a bento box.
-                                    var template = angular.element('<div class="animate-repeat bento-box-item" ng-repeat="item in items | limitTo: box.resultLimit">'+data+'</div><div class="resource-link-container"><a class="btn btn-default btn-xs" ng-href="{{link}}" ng-repeat="link in resourceLinks">More results from {{engineName | ucfirst}}  <span class="fa fa-fw fa-external-link"></span></a></div>');
+                                    var template = angular.element('<div class="animate-repeat bento-box-item" ng-repeat="item in items | limitTo: box.resultLimit">'+data+'</div><div class="resource-link-container"><a class="btn btn-link btn-xs" ng-href="{{resourceLink}}">More results from {{engine | ucfirst}}  <span class="fa fa-fw fa-external-link"></span></a></div>');
 
                                     // Compile wrapped template with the isolated scope's context
                                     var html = $compile(template)(engineScope);
@@ -856,7 +856,42 @@ angular.module('engines.scout', [])
                 }
                 $scope.items = items;
 
+                //Preprocess resource link to include facet. This is injected in the EDS header to limit results to media type (this is not native to EDS API)
+                var box = angular.copy($scope.boxName);
+                var link = angular.copy($scope.resourceLink);
+
+                // Tokenize box name to camelCase for EDS inject script
+                box = box.replace(/(?:^\w|[A-Z]|\b\w|\s+)/g, function(match, index) {
+                    if (+match === 0) return ""; // or if (/\s+/.test(match)) for white spaces
+                    return index == 0 ? match.toLowerCase() : match.toUpperCase();
+                });
+
+                if (link.indexOf('facet=') > 0){
+                    link = link.replace(/&facet=(.+)&?/, box);
+                }
+                else {
+                    link += '&facet=' + box;
+                }
+                
+                $scope.resourceLink = angular.copy(link);
             }
+        })
+    }])
+angular.module('engines.subjectSpecialist', [])
+
+    .config(['oneSearchProvider', function(oneSearchProvider){
+        oneSearchProvider.engine('subjectSpecialist', {
+            id: 16,
+            priority: 2,
+            mediaTypes: {
+                path: 'displayLink',
+                types: {
+                    subjectSpecialist: ['www.lib.ua.edu', 'lib.ua.edu', 'apps.lib.ua.edu', 'brunolib.cba.ua.edu'],
+                    faq: 'ask.lib.ua.edu',
+                    libguides: 'guides.lib.ua.edu'
+                }
+            },
+            templateUrl: 'common/engines/google-cs/google-cs.tpl.html'
         })
     }])
 angular.module('filters.nameFilter', [])
@@ -923,6 +958,34 @@ function isEmpty(obj) {
     }
 
     return true;
+}
+/**
+ * Adopted from UI Router library
+ * https://github.com/angular-ui/ui-router/blob/master/src/common.js
+ */
+function merge(dst) {
+    forEach(arguments, function(obj) {
+        if (obj !== dst) {
+            forEach(obj, function(value, key) {
+                if (!dst.hasOwnProperty(key)) dst[key] = value;
+            });
+        }
+    });
+    return dst;
+}
+/**
+ * Adopted from UI Router library
+ * https://github.com/angular-ui/ui-router/blob/master/src/common.js
+ */
+// extracted from underscore.js
+// Return a copy of the object omitting the blacklisted properties.
+function omit(obj) {
+    var copy = {};
+    var keys = Array.prototype.concat.apply(Array.prototype, Array.prototype.slice.call(arguments, 1));
+    for (var key in obj) {
+        if (indexOf(keys, key) == -1) copy[key] = obj[key];
+    }
+    return copy;
 }
 // adopted from https://github.com/a8m/angular-filter/blob/master/src/_common.js
 function toArray(object) {

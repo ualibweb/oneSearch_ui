@@ -57,6 +57,24 @@ angular.module('engines.scout', [])
                 }
                 $scope.items = items;
 
+                //Preprocess resource link to include facet. This is injected in the EDS header to limit results to media type (this is not native to EDS API)
+                var box = angular.copy($scope.boxName);
+                var link = angular.copy($scope.resourceLink);
+
+                // Tokenize box name to camelCase for EDS inject script
+                box = box.replace(/(?:^\w|[A-Z]|\b\w|\s+)/g, function(match, index) {
+                    if (+match === 0) return ""; // or if (/\s+/.test(match)) for white spaces
+                    return index == 0 ? match.toLowerCase() : match.toUpperCase();
+                });
+
+                if (link.indexOf('facet=') > 0){
+                    link = link.replace(/&facet=(.+)&?/, box);
+                }
+                else {
+                    link += '&facet=' + box;
+                }
+
+                $scope.resourceLink = angular.copy(link);
             }
         })
     }])
