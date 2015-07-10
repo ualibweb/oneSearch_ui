@@ -151,6 +151,7 @@ angular.module('oneSearch.bento', [])
                 initResultLimit(type);
                 self.boxes[type].results = {};
                 self.boxes[type].resourceLinks = {};
+                self.boxes[type].resourceLinkParams = {};
 
             });
 
@@ -187,6 +188,11 @@ angular.module('oneSearch.bento', [])
 
                                     // set resource "more" link
                                     self.boxes[type].resourceLinks[name] = link[engine.id];
+
+                                    // set resource link parameters by media type specified by the engine config
+                                    if (angular.isObject(engine.mediaTypes)){
+                                        self.boxes[type].resourceLinkParams[name] = engine.mediaTypes.types[type];
+                                    }
                                 }
                                 // update loading progress, setting engine as loaded for current box
                                 loadProgress(type, name);
@@ -300,7 +306,6 @@ angular.module('oneSearch.bento', [])
                             engineScope.items = Bento.boxes[box]['results'][engine];
 
 
-
                             if (engineScope.items && engineScope.items.length > 0){
                                 // Set isCollapsed boolean to true
                                 // For engines that have collapsible results (see /common/engines/ejournals/ejournals.tpl.html for example)
@@ -309,7 +314,9 @@ angular.module('oneSearch.bento', [])
                                 ///engineScope.limit = Bento.boxes[box].resultLimit;
                                 engineScope.engine = engine;
                                 engineScope.resourceLink = Bento.boxes[box]['resourceLinks'][engine];
+                                engineScope.resourceLinkParams = Bento.boxes[box]['resourceLinkParams'][engine];
                                 engineScope.boxName = titleElm.text();
+                                engineScope.mediaType = box;
                                 // When the engine's promise is ready, then load the engine's controller/template data applying
                                 // the new isolated scope.
                                 Bento.engines[engine].tpl.then(function(data){
@@ -661,6 +668,12 @@ angular.module('engines.catalog', [])
                     }
                 }
 
+                if (angular.isArray($scope.resourceLinkParams)){
+                    var typeParam = '&type=';
+                    var params = typeParam + $scope.resourceLinkParams.join(typeParam);
+                    $scope.resourceLink += params;
+                }
+
                 $scope.items = items;
             }
         })
@@ -702,7 +715,25 @@ angular.module('engines.ejournals', [])
                     journals: 'periodical'
                 }
             },
-            templateUrl: 'common/engines/ejournals/ejournals.tpl.html'
+            templateUrl: 'common/engines/ejournals/ejournals.tpl.html',
+            controller: function($scope){
+
+                var param;
+                switch ($scope.mediaType){
+                    case 'books':
+                        param = 'SS_searchTypeBook=yes';
+                        break;
+                    case 'journals':
+                        param = 'SS_searchTypeJournal=yes';
+                        break;
+                    case 'other':
+                        param = 'SS_searchTypeOther=yes'
+                }
+
+                if (param){
+                    $scope.resourceLink = $scope.resourceLink.replace('SS_searchTypeAll=yes&SS_searchTypeBook=yes&SS_searchTypeJournal=yes&SS_searchTypeOther=yes', param);
+                }
+            }
         })
     }])
 /**
@@ -875,23 +906,6 @@ angular.module('engines.scout', [])
 
                 $scope.resourceLink = angular.copy(link);
             }
-        })
-    }])
-angular.module('engines.subjectSpecialist', [])
-
-    .config(['oneSearchProvider', function(oneSearchProvider){
-        oneSearchProvider.engine('subjectSpecialist', {
-            id: 16,
-            priority: 2,
-            mediaTypes: {
-                path: 'displayLink',
-                types: {
-                    subjectSpecialist: ['www.lib.ua.edu', 'lib.ua.edu', 'apps.lib.ua.edu', 'brunolib.cba.ua.edu'],
-                    faq: 'ask.lib.ua.edu',
-                    libguides: 'guides.lib.ua.edu'
-                }
-            },
-            templateUrl: 'common/engines/google-cs/google-cs.tpl.html'
         })
     }])
 angular.module('filters.nameFilter', [])

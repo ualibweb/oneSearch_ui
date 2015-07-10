@@ -1,10 +1,6 @@
 
 .bento-box-container {
 
-  .scrollfix{
-    top: 0;
-    z-index: 3000;
-  }
 
   > .row > div {
     border: 1px solid transparent;
@@ -50,6 +46,8 @@
 .bento-box-menu {
   background-color: #fff;
   border-color: transparent;
+  border-width: 0;
+  border-radius: 0;
 
   -webkit-transition: all 0.2s linear;
   -moz-transition: all 0.2s linear;
@@ -57,10 +55,9 @@
   transition: all 0.2s linear;
 
   &.scrollfix {
-    border-color: #eee;
-    -webkit-box-shadow: 0px 3px 5px 0px rgba(50, 50, 50, 0.21);
-    -moz-box-shadow:    0px 3px 5px 0px rgba(50, 50, 50, 0.21);
-    box-shadow:         0px 3px 5px 0px rgba(50, 50, 50, 0.21);
+    -webkit-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+    -moz-box-shadow:    0 2px 5px 0 rgba(0, 0, 0, 0.26);
+    box-shadow:         0 2px 5px 0 rgba(0, 0, 0, 0.26);
   }
 
   .nav {

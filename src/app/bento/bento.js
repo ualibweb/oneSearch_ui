@@ -120,6 +120,7 @@ angular.module('oneSearch.bento', [])
                 initResultLimit(type);
                 self.boxes[type].results = {};
                 self.boxes[type].resourceLinks = {};
+                self.boxes[type].resourceLinkParams = {};
 
             });
 
@@ -156,6 +157,11 @@ angular.module('oneSearch.bento', [])
 
                                     // set resource "more" link
                                     self.boxes[type].resourceLinks[name] = link[engine.id];
+
+                                    // set resource link parameters by media type specified by the engine config
+                                    if (angular.isObject(engine.mediaTypes)){
+                                        self.boxes[type].resourceLinkParams[name] = engine.mediaTypes.types[type];
+                                    }
                                 }
                                 // update loading progress, setting engine as loaded for current box
                                 loadProgress(type, name);
@@ -269,7 +275,6 @@ angular.module('oneSearch.bento', [])
                             engineScope.items = Bento.boxes[box]['results'][engine];
 
 
-
                             if (engineScope.items && engineScope.items.length > 0){
                                 // Set isCollapsed boolean to true
                                 // For engines that have collapsible results (see /common/engines/ejournals/ejournals.tpl.html for example)
@@ -278,7 +283,9 @@ angular.module('oneSearch.bento', [])
                                 ///engineScope.limit = Bento.boxes[box].resultLimit;
                                 engineScope.engine = engine;
                                 engineScope.resourceLink = Bento.boxes[box]['resourceLinks'][engine];
+                                engineScope.resourceLinkParams = Bento.boxes[box]['resourceLinkParams'][engine];
                                 engineScope.boxName = titleElm.text();
+                                engineScope.mediaType = box;
                                 // When the engine's promise is ready, then load the engine's controller/template data applying
                                 // the new isolated scope.
                                 Bento.engines[engine].tpl.then(function(data){
