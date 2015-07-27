@@ -187,7 +187,7 @@ angular.module('oneSearch.bento', [])
                                     self.boxes[type].results[name] = grouped[type];
 
                                     // set resource "more" link
-                                    self.boxes[type].resourceLinks[name] = link[engine.id];
+                                    self.boxes[type].resourceLinks[name] = decodeURIComponent(link[engine.id]);
 
                                     // set resource link parameters by media type specified by the engine config
                                     if (angular.isObject(engine.mediaTypes)){
@@ -395,22 +395,43 @@ angular.module('oneSearch.bento', [])
         }
     }])
 
-    .directive('bentoBoxMenu', ['Bento', '$timeout', function(Bento, $timeout){
+    .directive('bentoBoxMenu', ['Bento', '$document', '$rootScope', '$timeout', '$q', function(Bento, $document, $rootScope, $timeout, $q){
         return {
             restrict: 'AC',
             link: function(scope, elm){
+                var selected;
+                var timeout;
                 scope.boxMenu = Bento.boxMenu;
 
                 scope.selectBox = function(box){
-                    var selected = angular.element(document.getElementById(box + '-parent'));
-                    selected.addClass('box-selected');
+                    if (timeout){
+                        $timeout.cancel(timeout);
+                        $document.off('scroll', onScroll);
+                    }
 
-                    $timeout(function(){
-                        selected.removeClass('box-selected');
+                    deselect();
+                    select(box);
+
+                    timeout = $timeout(function(){
+                        $document.on('scroll', onScroll);
                     }, 500);
+                };
+
+                var select = function(box){
+                    selected = angular.element(document.getElementById(box + '-parent'));
+                    selected.addClass('box-selected');
+                };
+
+                var deselect = function(){
+                    if (selected){
+                        selected.removeClass('box-selected');
+                    }
+                };
+
+                var onScroll = function(){
+                    deselect();
+                    $document.off('scroll', onScroll);
                 }
-
-
             }
         }
     }])

@@ -1,20 +1,18 @@
-
 .bento-box-container {
 
 
   > .row > div {
     border: 1px solid transparent;
-    -webkit-transition: all 1s ease-in-out;
-    -moz-transition: all 1s ease-in-out;
-    -o-transition: all 1s ease-in-out;
-    transition: all 1s ease-in-out;
+    -webkit-transition: all 250ms;
+    -moz-transition: all 250ms;
+    transition: all 250ms;
 
     &.box-selected {
-      border: 1px solid #993333;
-      -webkit-transition: all 0s ease-in-out;
-      -moz-transition: all 0s ease-in-out;
-      -o-transition: all 0s ease-in-out;
-      transition: all 0s ease-in-out;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+               -webkit-transform: translateY(-5px);
+               -moz-transform: translateY(-5px);
+               transform: translateY(-5px);
+
     }
   }
 
@@ -55,6 +53,8 @@
   transition: all 0.2s linear;
 
   &.scrollfix {
+    top: 0;
+    z-index: 2000;
     -webkit-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
     -moz-box-shadow:    0 2px 5px 0 rgba(0, 0, 0, 0.26);
     box-shadow:         0 2px 5px 0 rgba(0, 0, 0, 0.26);
