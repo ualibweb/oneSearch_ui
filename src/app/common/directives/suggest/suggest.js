@@ -169,7 +169,11 @@ angular.module('oneSearch.common')
                 scope.handleSelection = function(selectedItem) {
                     $timeout(function() {
                         scope.model = selectedItem;
-                        scope.selected = false;
+                        scope.originalValue = "";
+                        $scope.items = {};
+                        $scope.setCurrent(-1, false);
+                        $scope.dataRequested = false;
+                        $scope.selected = false;
                         scope.$apply();
                         scope.search();
                     }, 0);
