@@ -599,6 +599,7 @@ angular.module('oneSearch.common')
                         //Delete
                         case 46:
                             scope.onChange();
+                            scope.onFocus();
                             break;
 
                         default:

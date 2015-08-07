@@ -28,7 +28,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-4" ng-show="items.subjects.length > 0">
+            <div class="col-sm-4" ng-show="items.subjects[0].subjects.length > 0">
                 <div class="suggest-col">
                     <h4>LibGuides Subjects <a href="http://guides.lib.ua.edu/" class="small" ng-mousedown="go('http://guides.lib.ua.edu/')">more</a></h4>
                     <div ng-repeat="person in items.subjects | limitTo:10">
