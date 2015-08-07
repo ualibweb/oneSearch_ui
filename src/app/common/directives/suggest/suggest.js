@@ -145,6 +145,13 @@ angular.module('oneSearch.common')
                             scope.selected = false;
                             break;
 
+                        //Backspace
+                        case 8:
+                        //Delete
+                        case 46:
+                            scope.onChange();
+                            break;
+
                         default:
                             break;
                     }

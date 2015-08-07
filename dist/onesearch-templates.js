@@ -104,9 +104,9 @@ angular.module("common/directives/suggest/suggest.tpl.html", []).run(["$template
     "            </li>\n" +
     "        </ul>\n" +
     "    </div>\n" +
-    "    <div class=\"suggest-row\" ng-show=\"items.recommend.length || items.subjects.length || items.faq.length > 0\">\n" +
+    "    <div class=\"suggest-row\" ng-show=\"items.recommend.length > 0 || items.subjects.length > 0 || items.faq.length > 0\">\n" +
     "        <div class=\"row\">\n" +
-    "            <div class=\"col-sm-4\" ng-show=\"items.recommend.length\">\n" +
+    "            <div class=\"col-sm-4\" ng-show=\"items.recommend.length > 0\">\n" +
     "                <div class=\"suggest-col\">\n" +
     "                    <h4>Recommended</h4>\n" +
     "                    <div ng-repeat=\"recommendation in items.recommend | limitTo:10\">\n" +
@@ -116,7 +116,7 @@ angular.module("common/directives/suggest/suggest.tpl.html", []).run(["$template
     "                    </div>\n" +
     "                </div>\n" +
     "            </div>\n" +
-    "            <div class=\"col-sm-4\" ng-show=\"items.subjects.length\">\n" +
+    "            <div class=\"col-sm-4\" ng-show=\"items.subjects.length > 0\">\n" +
     "                <div class=\"suggest-col\">\n" +
     "                    <h4>LibGuides Subjects <a href=\"http://guides.lib.ua.edu/\" class=\"small\" ng-mousedown=\"go('http://guides.lib.ua.edu/')\">more</a></h4>\n" +
     "                    <div ng-repeat=\"person in items.subjects | limitTo:10\">\n" +
@@ -132,7 +132,7 @@ angular.module("common/directives/suggest/suggest.tpl.html", []).run(["$template
     "                    </div>\n" +
     "                </div>\n" +
     "            </div>\n" +
-    "            <div class=\"col-sm-4\" ng-show=\"items.faq.length\">\n" +
+    "            <div class=\"col-sm-4\" ng-show=\"items.faq.length > 0\">\n" +
     "                <div class=\"suggest-col\">\n" +
     "                    <h4>FAQ <a href=\"http://ask.lib.ua.edu/\" class=\"small\" ng-mousedown=\"go('http://ask.lib.ua.edu/')\">more</a></h4>\n" +
     "                    <div ng-repeat=\"faq in items.faq | limitTo:5\">\n" +
