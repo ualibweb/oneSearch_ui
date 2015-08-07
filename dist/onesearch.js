@@ -619,15 +619,14 @@ angular.module('oneSearch.common')
                     $timeout(function() {
                         scope.model = selectedItem;
                         scope.originalValue = "";
-                        $scope.items = {};
-                        $scope.setCurrent(-1, false);
-                        $scope.dataRequested = false;
-                        $scope.selected = false;
+                        scope.items = {};
+                        scope.setCurrent(-1, false);
+                        scope.dataRequested = false;
+                        scope.selected = false;
                         scope.$apply();
                         scope.search();
                     }, 0);
                 };
-
 
             },
             templateUrl: 'common/directives/suggest/suggest.tpl.html'
