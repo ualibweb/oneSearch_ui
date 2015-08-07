@@ -93,8 +93,8 @@ angular.module("common/directives/suggest/suggest.tpl.html", []).run(["$template
     "        <button type=\"submit\" class=\"btn btn-onesearch btn-primary\"><span class=\"fa fa-search\"></span></button>\n" +
     "    </div>\n" +
     "</div>\n" +
-    "<div class=\"suggest\" ng-show=\"showSuggestions && selected\">\n" +
-    "    <div class=\"row\" ng-hide=\"items.suggest.length == 0\">\n" +
+    "<div class=\"suggest\" ng-show=\"showSuggestions && selected && (items.suggest.length > 0 || items.recommend.length > 0 || items.subjects[0].subjects.length > 0 || items.faq.length > 0)\">\n" +
+    "    <div class=\"row\" ng-show=\"items.suggest.length > 0\">\n" +
     "        <ul class=\"nav nav-pills nav-stacked\">\n" +
     "            <li role=\"presentation\"\n" +
     "                ng-repeat=\"item in filteredItems = (items.suggest | filter:compare(originalValue)) | limitTo:numShow track by $index\"\n" +

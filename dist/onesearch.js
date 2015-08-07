@@ -480,7 +480,9 @@ angular.module('oneSearch.common')
                 $scope.onChange = function(){
                     $scope.selected = true;
 
-                    if ($scope.model.length < 3 || $scope.model.indexOf($scope.originalValue) < 0){
+                    if ($scope.model.length < 3 ||
+                        ($scope.model.indexOf($scope.originalValue) < 0 && $scope.model.length >= $scope.originalValue.length) ||
+                        ($scope.originalValue.indexOf($scope.model) < 0 && $scope.model.length <= $scope.originalValue.length)){
                         $scope.items = {};
                         $scope.setCurrent(-1, false);
                         $scope.dataRequested = false;
@@ -598,7 +600,6 @@ angular.module('oneSearch.common')
                         case 8:
                         //Delete
                         case 46:
-                            scope.onChange();
                             scope.selected = true;
                             break;
 
