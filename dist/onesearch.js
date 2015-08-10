@@ -241,11 +241,7 @@ angular.module('oneSearch.bento', [])
  *  </div>
  */
 
-    .controller('bentoBoxCtrl', ['$scope', '$routeParams', 'UALIB_DOMAIN', function($scope, $routeParams, domain){
-        // Updates total results links
-        $scope.domain = domain;
-        $scope.s = $routeParams.s;
-    }])
+
 
     .directive('bentoBox', ['$rootScope', '$controller', '$compile', '$animate', 'Bento', function($rootScope, $controller, $compile, $animate, Bento){
         return {
@@ -390,8 +386,7 @@ angular.module('oneSearch.bento', [])
                     // Destroy this box's watcher (no need to waste the cycles)
                     boxWatcher();
                 }
-            },
-            controller: 'bentoBoxCtrl'
+            }
         }
     }])
 
@@ -465,7 +460,7 @@ angular.module('oneSearch.common')
                 model: '=',
                 search: '='
             },
-            controller: function($scope, $window, $timeout, dataFactory){
+            controller: ['$scope', '$window', '$timeout', 'dataFactory', function($scope, $window, $timeout, dataFactory){
                 $scope.items = {};
                 $scope.filteredItems = [];
                 $scope.model = "";
@@ -552,7 +547,7 @@ angular.module('oneSearch.common')
                         return false;
                     };
                 };
-            },
+            }],
             link: function(scope, elem, attrs) {
                 scope.showSuggestions = false;
                 var suggestWatcher = scope.$watch('items', function(newVal, oldVal){
@@ -642,19 +637,21 @@ angular.module('engines.acumen', [])
             resultsPath: 'Acumen.data',
             totalsPath: 'Acumen.metadata.numFound',
             templateUrl: 'common/engines/acumen/acumen.tpl.html',
-            controller: function($scope, $filter){
-                var items = $scope.items;
-
-                for (var i = 0, len = items.length; i < len; i++) {
-                    if (items[i].type) {
-                        //console.log(items[i].type);
-                        if (items[i].type[0] == 'text' && items[i].details && items[i].details.genre) items[i].type = items[i].details.genre.sort().shift();
-                        else items[i].type = items[i].type.sort().shift();
-                    }
-                }
-            }
+            controller: 'AcumenCtrl'
         })
     }])
+
+    .controller('AcumenCtrl', ['$scope', '$filter', function($scope, $filter){
+        var items = $scope.items;
+
+        for (var i = 0, len = items.length; i < len; i++) {
+            if (items[i].type) {
+                //console.log(items[i].type);
+                if (items[i].type[0] == 'text' && items[i].details && items[i].details.genre) items[i].type = items[i].details.genre.sort().shift();
+                else items[i].type = items[i].type.sort().shift();
+            }
+        }
+    }]);
 angular.module('engines.catalog', [])
 
     .config(['oneSearchProvider', function(oneSearchProvider){
@@ -672,43 +669,7 @@ angular.module('engines.catalog', [])
                 }
             },
             templateUrl: 'common/engines/catalog/catalog.tpl.html',
-            controller: function($scope, $filter){
-                var types = {
-                    bc: "Archive/Manuscript",
-                    cm: "Music Score",
-                    em: "Map",
-                    im: "Nonmusical Recording",
-                    jm: "Musical Recording",
-                    mm: "Computer File/Software",
-                    om: "Kit",
-                    pc: "Mixed Material/Collection",
-                    pm: "Mixed Material",
-                    rm: "Visual Material"
-                };
-                var items = $scope.items;
-
-                for (var i = 0; i < items.length; i++){
-                    var t = items[i]['bibFormat'];
-                    items[i].mediaType = types[t];
-
-                    //Check for authors field. If not there, check the title for author names.
-                    if (!items[i].author){
-                        var split = $filter('catalogSplitTitleAuthor')(items[i].title);
-                        if (angular.isArray(split)){
-                            items[i].title = split[0];
-                            items[i].author = split[2];
-                        }
-                    }
-                }
-
-                if (angular.isArray($scope.resourceLinkParams)){
-                    var typeParam = '&type=';
-                    var params = typeParam + $scope.resourceLinkParams.join(typeParam);
-                    $scope.resourceLink += params;
-                }
-
-                $scope.items = items;
-            }
+            controller: 'CatalogCtrl'
         })
     }])
 
@@ -720,6 +681,44 @@ angular.module('engines.catalog', [])
             }
             return title;
         }
+    }])
+
+    .controller('CatalogCtrl', ['$scope', '$filter', function($scope, $filter){
+        var types = {
+            bc: "Archive/Manuscript",
+            cm: "Music Score",
+            em: "Map",
+            im: "Nonmusical Recording",
+            jm: "Musical Recording",
+            mm: "Computer File/Software",
+            om: "Kit",
+            pc: "Mixed Material/Collection",
+            pm: "Mixed Material",
+            rm: "Visual Material"
+        };
+        var items = $scope.items;
+
+        for (var i = 0; i < items.length; i++){
+            var t = items[i]['bibFormat'];
+            items[i].mediaType = types[t];
+
+            //Check for authors field. If not there, check the title for author names.
+            if (!items[i].author){
+                var split = $filter('catalogSplitTitleAuthor')(items[i].title);
+                if (angular.isArray(split)){
+                    items[i].title = split[0];
+                    items[i].author = split[2];
+                }
+            }
+        }
+
+        if (angular.isArray($scope.resourceLinkParams)){
+            var typeParam = '&type=';
+            var params = typeParam + $scope.resourceLinkParams.join(typeParam);
+            $scope.resourceLink += params;
+        }
+
+        $scope.items = items;
     }]);
 
 angular.module('engines.databases', [])
@@ -749,26 +748,28 @@ angular.module('engines.ejournals', [])
                 }
             },
             templateUrl: 'common/engines/ejournals/ejournals.tpl.html',
-            controller: function($scope){
-
-                var param;
-                switch ($scope.mediaType){
-                    case 'books':
-                        param = 'SS_searchTypeBook=yes';
-                        break;
-                    case 'journals':
-                        param = 'SS_searchTypeJournal=yes';
-                        break;
-                    case 'other':
-                        param = 'SS_searchTypeOther=yes'
-                }
-
-                if (param){
-                    $scope.resourceLink = $scope.resourceLink.replace('SS_searchTypeAll=yes&SS_searchTypeBook=yes&SS_searchTypeJournal=yes&SS_searchTypeOther=yes', param);
-                }
-            }
+            controller: 'EjouralsCtrl'
         })
     }])
+
+    .controller('EjouralsCtrl', ['$scope', function($scope){
+
+        var param;
+        switch ($scope.mediaType){
+            case 'books':
+                param = 'SS_searchTypeBook=yes';
+                break;
+            case 'journals':
+                param = 'SS_searchTypeJournal=yes';
+                break;
+            case 'other':
+                param = 'SS_searchTypeOther=yes'
+        }
+
+        if (param){
+            $scope.resourceLink = $scope.resourceLink.replace('SS_searchTypeAll=yes&SS_searchTypeBook=yes&SS_searchTypeJournal=yes&SS_searchTypeOther=yes', param);
+        }
+    }]);
 /**
  * @module common.engines
  *
@@ -879,68 +880,70 @@ angular.module('engines.scout', [])
                 }
             },
             templateUrl: 'common/engines/scout/scout.tpl.html',
-            controller: function($scope){
-                var items = $scope.items;
-                for (var i = 0; i < items.length; i++){
-                    if (items[i].Header.PubTypeId == 'audio'){
-                        items[i].mediaType = 'Audio';
-                    }
-                    if (items[i].Header.PubTypeId == 'videoRecording'){
-                        items[i].mediaType = 'Video Recording';
-                    }
-
-                    //Search for "source"
-                    var bibRelationships = [];
-                    if (angular.isDefined(items[i].RecordInfo.BibRecord.BibRelationships.IsPartOfRelationships)){
-                        bibRelationships = items[i].RecordInfo.BibRecord.BibRelationships.IsPartOfRelationships;
-                        for (var x = 0, len = bibRelationships.length; x < len; x++){
-                            if (angular.isDefined(bibRelationships[x].BibEntity.Identifiers) && bibRelationships[x].BibEntity.Identifiers[0].Type === 'issn-print'){
-                                // define source title
-                                items[i].source = bibRelationships[x].BibEntity.Titles[0].TitleFull;
-
-                                // Append source volume, issue, etc.
-                                if (angular.isDefined(bibRelationships[x].BibEntity.Numbering)){
-                                    for (var y = 0, l = bibRelationships[x].BibEntity.Numbering.length; y < l; y++){
-                                        items[i].source += ' ' + bibRelationships[x].BibEntity.Numbering[y].Type.substring(0,3) + '.' + bibRelationships[x].BibEntity.Numbering[y].Value;
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-
-                    if (angular.isDefined(items[i].Items)){
-                        for (var x = 0; x < items[i].Items.length; x++){
-                            if (items[i].Items[x].Group == 'Src'){
-                                //console.log(items[i].Items[x].Group);
-                                items[i].source = items[i].Items[x].Data;
-                            }
-                        }
-                    }
-                }
-                $scope.items = items;
-
-                //Preprocess resource link to include facet. This is injected in the EDS header to limit results to media type (this is not native to EDS API)
-                var box = angular.copy($scope.boxName);
-                var link = angular.copy($scope.resourceLink);
-
-                // Tokenize box name to camelCase for EDS inject script
-                box = box.replace(/(?:^\w|[A-Z]|\b\w|\s+)/g, function(match, index) {
-                    if (+match === 0) return ""; // or if (/\s+/.test(match)) for white spaces
-                    return index == 0 ? match.toLowerCase() : match.toUpperCase();
-                });
-
-                if (link.indexOf('facet=') > 0){
-                    link = link.replace(/&facet=(.+)&?/, box);
-                }
-                else {
-                    link += '&facet=' + box;
-                }
-
-                $scope.resourceLink = angular.copy(link);
-            }
+            controller: 'ScoutCtrl'
         })
     }])
+
+    .controller('ScoutCtrl', ['$scope', function($scope){
+        var items = $scope.items;
+        for (var i = 0; i < items.length; i++){
+            if (items[i].Header.PubTypeId == 'audio'){
+                items[i].mediaType = 'Audio';
+            }
+            if (items[i].Header.PubTypeId == 'videoRecording'){
+                items[i].mediaType = 'Video Recording';
+            }
+
+            //Search for "source"
+            var bibRelationships = [];
+            if (angular.isDefined(items[i].RecordInfo.BibRecord.BibRelationships.IsPartOfRelationships)){
+                bibRelationships = items[i].RecordInfo.BibRecord.BibRelationships.IsPartOfRelationships;
+                for (var x = 0, len = bibRelationships.length; x < len; x++){
+                    if (angular.isDefined(bibRelationships[x].BibEntity.Identifiers) && bibRelationships[x].BibEntity.Identifiers[0].Type === 'issn-print'){
+                        // define source title
+                        items[i].source = bibRelationships[x].BibEntity.Titles[0].TitleFull;
+
+                        // Append source volume, issue, etc.
+                        if (angular.isDefined(bibRelationships[x].BibEntity.Numbering)){
+                            for (var y = 0, l = bibRelationships[x].BibEntity.Numbering.length; y < l; y++){
+                                items[i].source += ' ' + bibRelationships[x].BibEntity.Numbering[y].Type.substring(0,3) + '.' + bibRelationships[x].BibEntity.Numbering[y].Value;
+                            }
+                        }
+                    }
+                }
+            }
+
+
+            if (angular.isDefined(items[i].Items)){
+                for (var x = 0; x < items[i].Items.length; x++){
+                    if (items[i].Items[x].Group == 'Src'){
+                        //console.log(items[i].Items[x].Group);
+                        items[i].source = items[i].Items[x].Data;
+                    }
+                }
+            }
+        }
+        $scope.items = items;
+
+        //Preprocess resource link to include facet. This is injected in the EDS header to limit results to media type (this is not native to EDS API)
+        var box = angular.copy($scope.boxName);
+        var link = angular.copy($scope.resourceLink);
+
+        // Tokenize box name to camelCase for EDS inject script
+        box = box.replace(/(?:^\w|[A-Z]|\b\w|\s+)/g, function(match, index) {
+            if (+match === 0) return ""; // or if (/\s+/.test(match)) for white spaces
+            return index == 0 ? match.toLowerCase() : match.toUpperCase();
+        });
+
+        if (link.indexOf('facet=') > 0){
+            link = link.replace(/&facet=(.+)&?/, box);
+        }
+        else {
+            link += '&facet=' + box;
+        }
+
+        $scope.resourceLink = angular.copy(link);
+    }]);
 angular.module('filters.nameFilter', [])
 
     .filter('nameFilter', ['$filter', function($filter){

@@ -25,6 +25,18 @@ module.exports = function(grunt){
                 }
             }
         },
+        ngAnnotate: {
+            options: {
+                singleQuotes: true
+            },
+            dist: {
+                files: [
+                    {
+                        'dist/onesearch.js': ['dist/onesearch.js']
+                    }
+                ]
+            }
+        },
         uglify: {
             options: {
                 banner: '/*! <%= pkg.name %> <%= grunt.template.today("dd-mm-yyyy") %> */\n'
@@ -80,11 +92,12 @@ module.exports = function(grunt){
 
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-html2js');
+    grunt.loadNpmTasks('grunt-ng-annotate');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-less');
     grunt.loadNpmTasks('grunt-bump');
 
-    grunt.registerTask('default', ['clean', 'html2js', 'concat', 'less','cssmin', 'uglify']);
+    grunt.registerTask('default', ['clean', 'html2js', 'concat', 'less','cssmin', 'ngAnnotate', 'uglify']);
 };

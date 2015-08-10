@@ -14,23 +14,25 @@ angular.module('engines.ejournals', [])
                 }
             },
             templateUrl: 'common/engines/ejournals/ejournals.tpl.html',
-            controller: function($scope){
-
-                var param;
-                switch ($scope.mediaType){
-                    case 'books':
-                        param = 'SS_searchTypeBook=yes';
-                        break;
-                    case 'journals':
-                        param = 'SS_searchTypeJournal=yes';
-                        break;
-                    case 'other':
-                        param = 'SS_searchTypeOther=yes'
-                }
-
-                if (param){
-                    $scope.resourceLink = $scope.resourceLink.replace('SS_searchTypeAll=yes&SS_searchTypeBook=yes&SS_searchTypeJournal=yes&SS_searchTypeOther=yes', param);
-                }
-            }
+            controller: 'EjouralsCtrl'
         })
     }])
+
+    .controller('EjouralsCtrl', function($scope){
+
+        var param;
+        switch ($scope.mediaType){
+            case 'books':
+                param = 'SS_searchTypeBook=yes';
+                break;
+            case 'journals':
+                param = 'SS_searchTypeJournal=yes';
+                break;
+            case 'other':
+                param = 'SS_searchTypeOther=yes'
+        }
+
+        if (param){
+            $scope.resourceLink = $scope.resourceLink.replace('SS_searchTypeAll=yes&SS_searchTypeBook=yes&SS_searchTypeJournal=yes&SS_searchTypeOther=yes', param);
+        }
+    });
