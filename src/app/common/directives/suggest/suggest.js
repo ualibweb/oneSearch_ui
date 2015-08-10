@@ -1,5 +1,5 @@
 angular.module('oneSearch.common')
-    .factory('dataFactory', function($http) {
+    .factory('dataFactory', ['$http', function($http) {
         return {
             get: function(url) {
                 return $http.get(url).then(function(resp) {
@@ -7,8 +7,8 @@ angular.module('oneSearch.common')
                 });
             }
         };
-    })
-    .directive('suggestOneSearch', function($timeout) {
+    }])
+    .directive('suggestOneSearch', ['$timeout', function($timeout) {
         return {
             restrict: 'AEC',
             scope: {
@@ -182,4 +182,4 @@ angular.module('oneSearch.common')
             },
             templateUrl: 'common/directives/suggest/suggest.tpl.html'
         };
-    })
+    }]);

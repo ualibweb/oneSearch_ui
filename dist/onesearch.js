@@ -313,7 +313,7 @@ angular.module('oneSearch.bento', [])
 
                                 ///engineScope.limit = Bento.boxes[box].resultLimit;
                                 engineScope.engine = engine;
-                                engineScope.resourceLink = Bento.boxes[box]['resourceLinks'][engine];
+                                engineScope.resourceLink = Bento.boxes[box]['resourceLinks'][engine] === "undefined" ? false : Bento.boxes[box]['resourceLinks'][engine];
                                 engineScope.resourceLinkParams = Bento.boxes[box]['resourceLinkParams'][engine];
                                 engineScope.boxName = titleElm.text();
                                 engineScope.mediaType = box;
@@ -335,7 +335,7 @@ angular.module('oneSearch.bento', [])
 
                                     // Wrap the template in an element that specifies ng-repeat over the "items" object (i.e., the results),
                                     // gives the generic classes for items in a bento box.
-                                    var template = angular.element('<div class="animate-repeat bento-box-item" ng-repeat="item in items | limitTo: box.resultLimit">'+data+'</div><div class="resource-link-container"><a class="btn btn-link btn-sm" ng-href="{{resourceLink}}">More results from {{engine | ucfirst}}  <span class="fa fa-fw fa-external-link"></span></a></div>');
+                                    var template = angular.element('<div class="animate-repeat bento-box-item" ng-repeat="item in items | limitTo: box.resultLimit">'+data+'</div><div class="resource-link-container"><a class="btn btn-link btn-sm" ng-href="{{resourceLink}}" ng-if="resourceLink">More results from {{engine | ucfirst}}  <span class="fa fa-fw fa-external-link"></span></a></div>');
 
                                     // Compile wrapped template with the isolated scope's context
                                     var html = $compile(template)(engineScope);
@@ -448,7 +448,7 @@ angular.module('oneSearch.common', [
     'filters.nameFilter'
 ])
 angular.module('oneSearch.common')
-    .factory('dataFactory', function($http) {
+    .factory('dataFactory', ['$http', function($http) {
         return {
             get: function(url) {
                 return $http.get(url).then(function(resp) {
@@ -456,8 +456,8 @@ angular.module('oneSearch.common')
                 });
             }
         };
-    })
-    .directive('suggestOneSearch', function($timeout) {
+    }])
+    .directive('suggestOneSearch', ['$timeout', function($timeout) {
         return {
             restrict: 'AEC',
             scope: {
@@ -631,7 +631,7 @@ angular.module('oneSearch.common')
             },
             templateUrl: 'common/directives/suggest/suggest.tpl.html'
         };
-    })
+    }]);
 
 angular.module('engines.acumen', [])
 
@@ -781,7 +781,7 @@ angular.module('common.engines', [
     'engines.catalog',
     'engines.databases',
     'engines.scout',
-    'engines.googleCS',
+    //'engines.googleCS',
     'engines.faq',
     'engines.libguides',
     'engines.ejournals',
@@ -1005,6 +1005,34 @@ function isEmpty(obj) {
     }
 
     return true;
+}
+/**
+ * Adopted from UI Router library
+ * https://github.com/angular-ui/ui-router/blob/master/src/common.js
+ */
+function merge(dst) {
+    forEach(arguments, function(obj) {
+        if (obj !== dst) {
+            forEach(obj, function(value, key) {
+                if (!dst.hasOwnProperty(key)) dst[key] = value;
+            });
+        }
+    });
+    return dst;
+}
+/**
+ * Adopted from UI Router library
+ * https://github.com/angular-ui/ui-router/blob/master/src/common.js
+ */
+// extracted from underscore.js
+// Return a copy of the object omitting the blacklisted properties.
+function omit(obj) {
+    var copy = {};
+    var keys = Array.prototype.concat.apply(Array.prototype, Array.prototype.slice.call(arguments, 1));
+    for (var key in obj) {
+        if (indexOf(keys, key) == -1) copy[key] = obj[key];
+    }
+    return copy;
 }
 // adopted from https://github.com/a8m/angular-filter/blob/master/src/_common.js
 function toArray(object) {
