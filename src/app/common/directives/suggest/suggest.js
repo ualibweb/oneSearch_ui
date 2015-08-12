@@ -40,7 +40,8 @@ angular.module('oneSearch.common')
                         $scope.selected = false;
                     }
                     if ($scope.model.length > 2 && !$scope.dataRequested){
-                        dataFactory.get('//wwwdev2.lib.ua.edu/oneSearch/api/suggest/' + $scope.model)
+                        var fixedString = $scope.model.replace(/\//g, " ");
+                        dataFactory.get('//wwwdev2.lib.ua.edu/oneSearch/api/suggest/' + encodeURI(fixedString))
                             .then(function(data) {
                                 $scope.items.suggest = data;
                                 $scope.setCurrent(-1, false);
@@ -49,16 +50,17 @@ angular.module('oneSearch.common')
                     }
                     if ($scope.model.length > 2){
                         $timeout(function() {
-                            dataFactory.get('//wwwdev2.lib.ua.edu/oneSearch/api/recommend/' + $scope.model)
+                            var fixedString = $scope.model.replace(/\//g, " ");
+                            dataFactory.get('//wwwdev2.lib.ua.edu/oneSearch/api/recommend/' + encodeURI(fixedString))
                                 .then(function(data) {
                                     $scope.items.recommend = data;
                                 });
-                            dataFactory.get('//wwwdev2.lib.ua.edu/staffDir/api/subject/' + $scope.model + '/match/startwith')
+                            dataFactory.get('//wwwdev2.lib.ua.edu/staffDir/api/subject/' + encodeURI(fixedString) + '/match/startwith')
                                 .then(function(data) {
                                     $scope.items.subjects = data;
                                 });
                             dataFactory.get('https://www.googleapis.com/customsearch/v1?key=AIzaSyCMGfdDaSfjqv5zYoS0mTJnOT3e9MURWkU&cx=003453353330912650815:lfyr_-azrxe&q=' +
-                            $scope.model + '&siteSearch=ask.lib.ua.edu')
+                                encodeURI(fixedString) + '&siteSearch=ask.lib.ua.edu')
                                 .then(function(data) {
                                     // pluck out the items array for easier 'suggestWatcher' processing
                                     $scope.items.faq = data.items;
