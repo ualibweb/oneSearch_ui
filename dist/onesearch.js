@@ -1011,34 +1011,6 @@ function isEmpty(obj) {
 
     return true;
 }
-/**
- * Adopted from UI Router library
- * https://github.com/angular-ui/ui-router/blob/master/src/common.js
- */
-function merge(dst) {
-    forEach(arguments, function(obj) {
-        if (obj !== dst) {
-            forEach(obj, function(value, key) {
-                if (!dst.hasOwnProperty(key)) dst[key] = value;
-            });
-        }
-    });
-    return dst;
-}
-/**
- * Adopted from UI Router library
- * https://github.com/angular-ui/ui-router/blob/master/src/common.js
- */
-// extracted from underscore.js
-// Return a copy of the object omitting the blacklisted properties.
-function omit(obj) {
-    var copy = {};
-    var keys = Array.prototype.concat.apply(Array.prototype, Array.prototype.slice.call(arguments, 1));
-    for (var key in obj) {
-        if (indexOf(keys, key) == -1) copy[key] = obj[key];
-    }
-    return copy;
-}
 // adopted from https://github.com/a8m/angular-filter/blob/master/src/_common.js
 function toArray(object) {
     return Array.isArray(object) ? object :
