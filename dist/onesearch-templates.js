@@ -62,15 +62,8 @@ angular.module("bento/bento.tpl.html", []).run(["$templateCache", function($temp
     "    </div>\n" +
     "    <div class=\"row\">\n" +
     "        <div class=\"col-md-6\">\n" +
-    "            <div class=\"bento-box\">\n" +
+    "            <div class=\"bento-box\" bento-box=\"googleCS\">\n" +
     "                <h2 id=\"site-search\">Libraries' Website</h2>\n" +
-    "                <div class=\"alert alert-warning\">\n" +
-    "                    <h4><span class=\"fa fa-fw fa-info-circle\"></span> Temporarily disabled</h4>\n" +
-    "                    <p>\n" +
-    "                        We have completely restructured our website for the better. But Google still needs time to catch up!\n" +
-    "                        Searching of the University Libraries' website will be available shortly.\n" +
-    "                    </p>\n" +
-    "                </div>\n" +
     "\n" +
     "            </div>\n" +
     "        </div>\n" +

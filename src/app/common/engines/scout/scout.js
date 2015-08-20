@@ -37,7 +37,9 @@ angular.module('engines.scout', [])
                 for (var x = 0, len = bibRelationships.length; x < len; x++){
                     if (angular.isDefined(bibRelationships[x].BibEntity.Identifiers) && bibRelationships[x].BibEntity.Identifiers[0].Type === 'issn-print'){
                         // define source title
-                        items[i].source = bibRelationships[x].BibEntity.Titles[0].TitleFull;
+                        if (bibRelationships[x].BibEntity.Titles){
+                            items[i].source = bibRelationships[x].BibEntity.Titles[0].TitleFull;
+                        }
 
                         // Append source volume, issue, etc.
                         if (angular.isDefined(bibRelationships[x].BibEntity.Numbering)){

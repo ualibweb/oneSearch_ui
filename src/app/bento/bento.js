@@ -142,6 +142,12 @@ angular.module('oneSearch.bento', [])
                             //console.log(self.boxes);
                         }
                         else {
+                            res = res.map(function(item, i){
+                                var newItem = item;
+                                newItem.position = i;
+                                return newItem;
+                            });
+                            //console.log(res);
                             // Group the results by defined media types
                             var grouped = mediaTypes.groupBy(res, engine.mediaTypes);
 
@@ -153,7 +159,16 @@ angular.module('oneSearch.bento', [])
                                     // Ex: self.boxes['books'].results['catalog'] = group_result;
                                     //
                                     // Also, limit the number of results per group by 3
-                                    self.boxes[type].results[name] = grouped[type];
+                                    // and sort by generation position in the original results list
+                                    self.boxes[type].results[name] = grouped[type].sort(function(a, b){
+                                        if (a.position > b.position){
+                                            return 1;
+                                        }
+                                        if (a.position < b.position){
+                                            return -1;
+                                        }
+                                        return 0;
+                                    });
 
                                     // set resource "more" link
                                     self.boxes[type].resourceLinks[name] = decodeURIComponent(link[engine.id]);

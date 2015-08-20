@@ -25,7 +25,7 @@ angular.module('common.mediaTypes', [])
             }
             _types[type].engines.push(engine);
 
-        }
+        };
 
         // Helper function
         // will return a new object to map results from an engines results
@@ -52,7 +52,7 @@ angular.module('common.mediaTypes', [])
                 // Honestly, I had almost no clue what to call it...
                 v = invertArrayToObject(v);
                 angular.extend(groups, v);
-            })
+            });
             return groups;
         }
 

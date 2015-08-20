@@ -173,6 +173,12 @@ angular.module('oneSearch.bento', [])
                             //console.log(self.boxes);
                         }
                         else {
+                            res = res.map(function(item, i){
+                                var newItem = item;
+                                newItem.position = i;
+                                return newItem;
+                            });
+                            //console.log(res);
                             // Group the results by defined media types
                             var grouped = mediaTypes.groupBy(res, engine.mediaTypes);
 
@@ -184,7 +190,16 @@ angular.module('oneSearch.bento', [])
                                     // Ex: self.boxes['books'].results['catalog'] = group_result;
                                     //
                                     // Also, limit the number of results per group by 3
-                                    self.boxes[type].results[name] = grouped[type];
+                                    // and sort by generation position in the original results list
+                                    self.boxes[type].results[name] = grouped[type].sort(function(a, b){
+                                        if (a.position > b.position){
+                                            return 1;
+                                        }
+                                        if (a.position < b.position){
+                                            return -1;
+                                        }
+                                        return 0;
+                                    });
 
                                     // set resource "more" link
                                     self.boxes[type].resourceLinks[name] = decodeURIComponent(link[engine.id]);
@@ -784,7 +799,7 @@ angular.module('common.engines', [
     'engines.catalog',
     'engines.databases',
     'engines.scout',
-    //'engines.googleCS',
+    'engines.googleCS',
     'engines.faq',
     'engines.libguides',
     'engines.ejournals',
@@ -903,7 +918,9 @@ angular.module('engines.scout', [])
                 for (var x = 0, len = bibRelationships.length; x < len; x++){
                     if (angular.isDefined(bibRelationships[x].BibEntity.Identifiers) && bibRelationships[x].BibEntity.Identifiers[0].Type === 'issn-print'){
                         // define source title
-                        items[i].source = bibRelationships[x].BibEntity.Titles[0].TitleFull;
+                        if (bibRelationships[x].BibEntity.Titles){
+                            items[i].source = bibRelationships[x].BibEntity.Titles[0].TitleFull;
+                        }
 
                         // Append source volume, issue, etc.
                         if (angular.isDefined(bibRelationships[x].BibEntity.Numbering)){
@@ -1045,7 +1062,7 @@ angular.module('common.mediaTypes', [])
             }
             _types[type].engines.push(engine);
 
-        }
+        };
 
         // Helper function
         // will return a new object to map results from an engines results
@@ -1072,7 +1089,7 @@ angular.module('common.mediaTypes', [])
                 // Honestly, I had almost no clue what to call it...
                 v = invertArrayToObject(v);
                 angular.extend(groups, v);
-            })
+            });
             return groups;
         }
 
@@ -1155,9 +1172,12 @@ angular.module('common.mediaTypes', [])
 angular.module('common.oneSearch', [])
 
     .factory('Search', ['$resource', function($resource){
-        return $resource("//wwwdev2.lib.ua.edu/oneSearch/api/search/:s/engine/:engine/limit/:limit", {}, {cache: true});
-    }])
 
+        return $resource("//wwwdev2.lib.ua.edu/oneSearch/api/search/:s/engine/:engine/limit/:limit", {}, {
+            cache: false
+        });
+    }])
+    
     .provider('oneSearch', ['mediaTypesProvider', function oneSearchProvider(mediaTypesProvider){
         //private object that holds registered engines
         var _engines = {};
@@ -1229,6 +1249,7 @@ angular.module('common.oneSearch', [])
                         // Create results getter function from given results JSON path
                         if (angular.isDefined(engine.resultsPath)){
                             engine.getResults = $parse(engine.resultsPath);
+
                         }
 
                         // Create results getter function from given results JSON path

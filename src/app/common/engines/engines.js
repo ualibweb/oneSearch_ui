@@ -10,7 +10,7 @@ angular.module('common.engines', [
     'engines.catalog',
     'engines.databases',
     'engines.scout',
-    //'engines.googleCS',
+    'engines.googleCS',
     'engines.faq',
     'engines.libguides',
     'engines.ejournals',
