@@ -8,11 +8,7 @@ angular.module('oneSearch.bento', [])
             .when('/bento/:s', {
                 templateUrl: 'bento/bento.tpl.html',
                 controller: 'BentoCtrl'
-            })
-            .when('/bento-test/:s', {
-                templateUrl: 'bento/bento-test.tpl.html',
-                controller: 'BentoCtrl'
-            })
+            });
     }])
 
 /**
@@ -104,13 +100,18 @@ angular.module('oneSearch.bento', [])
                 });
         }
 
-
+        var engines;
 
         // Gets all boxes
         this.getBoxes = function(){
+            if (engines){
+                for (var e in engines){
+                    engines[e].response.abort();
+                }
+            }
             // Search all engines registered with the oneSearch Provider, giving the
             // $routeParams object as the parameter (https://code.angularjs.org/1.3.0/docs/api/ngRoute/service/$routeParams)
-            var engines = oneSearch.searchAll($routeParams);
+            engines = oneSearch.searchAll($routeParams);
 
             // Deep copy media types defined by registered engines to the this.boxes object.
             angular.copy(mediaTypes.types, self.boxes);
@@ -126,8 +127,9 @@ angular.module('oneSearch.bento', [])
 
             //  Iterate over the Promises for each engine returned by the oneSearch.searchAll() function
             angular.forEach(engines, function(engine, name){
+
                 engine.response
-                    .$promise.then(function(data){ // If $http call was a success
+                    .then(function(data){ // If $http call was a success
 
                         // User the engine's results getter to get the results object
                         // The results getter is defined by the JSON path defined by the

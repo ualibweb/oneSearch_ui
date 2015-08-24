@@ -95,7 +95,7 @@ angular.module("common/directives/suggest/suggest.tpl.html", []).run(["$template
     "    </div>\n" +
     "</div>\n" +
     "<div class=\"suggest\" ng-show=\"showSuggestions && selected && (items.suggest.length > 0 || items.recommend.length > 0 || items.subjects[0].subjects.length > 0 || items.faq.length > 0)\">\n" +
-    "    <div class=\"row\" ng-show=\"items.suggest.length > 0\">\n" +
+    "    <div ng-show=\"items.suggest.length > 0\">\n" +
     "        <ul class=\"nav nav-pills nav-stacked\">\n" +
     "            <li role=\"presentation\"\n" +
     "                ng-repeat=\"item in filteredItems = (items.suggest | filter:compare(originalValue)) | limitTo:numShow track by $index\"\n" +
@@ -107,8 +107,8 @@ angular.module("common/directives/suggest/suggest.tpl.html", []).run(["$template
     "    </div>\n" +
     "    <div class=\"suggest-row\" ng-show=\"items.recommend.length > 0 || items.subjects[0].subjects.length > 0 || items.faq.length > 0\">\n" +
     "        <div class=\"row\">\n" +
-    "            <div class=\"col-sm-4\" ng-show=\"items.recommend.length > 0\">\n" +
-    "                <div class=\"suggest-col\">\n" +
+    "            <div class=\"col-sm-4 suggest-col\" ng-show=\"items.recommend.length > 0\">\n" +
+    "                <div class=\"\">\n" +
     "                    <h4>Recommended Links</h4>\n" +
     "                    <div ng-repeat=\"recommendation in items.recommend | limitTo:10\">\n" +
     "                        <a href=\"{{recommendation.link}}\" ng-mousedown=\"go(recommendation.link)\">\n" +
@@ -117,8 +117,8 @@ angular.module("common/directives/suggest/suggest.tpl.html", []).run(["$template
     "                    </div>\n" +
     "                </div>\n" +
     "            </div>\n" +
-    "            <div class=\"col-sm-4\" ng-show=\"items.subjects[0].subjects.length > 0\">\n" +
-    "                <div class=\"suggest-col\">\n" +
+    "            <div class=\"col-sm-4 suggest-col\" ng-show=\"items.subjects[0].subjects.length > 0\">\n" +
+    "                <div class=\"\">\n" +
     "                    <h4>LibGuides Subjects <a href=\"http://guides.lib.ua.edu/\" class=\"small\" ng-mousedown=\"go('http://guides.lib.ua.edu/')\">more</a></h4>\n" +
     "                    <div ng-repeat=\"person in items.subjects | limitTo:10\">\n" +
     "                        <div ng-repeat=\"subject in person.subjects | limitTo:2\">\n" +
@@ -133,12 +133,11 @@ angular.module("common/directives/suggest/suggest.tpl.html", []).run(["$template
     "                    </div>\n" +
     "                </div>\n" +
     "            </div>\n" +
-    "            <div class=\"col-sm-4\" ng-show=\"items.faq.length > 0\">\n" +
-    "                <div class=\"suggest-col\">\n" +
+    "            <div class=\"col-sm-4 suggest-col\" ng-show=\"items.faq.length > 0\">\n" +
+    "                <div class=\"\">\n" +
     "                    <h4>FAQ <a href=\"http://ask.lib.ua.edu/\" class=\"small\" ng-mousedown=\"go('http://ask.lib.ua.edu/')\">more</a></h4>\n" +
     "                    <div ng-repeat=\"faq in items.faq | limitTo:5\">\n" +
-    "                        <a href=\"{{faq.link}}\" ng-mousedown=\"go(faq.link)\">\n" +
-    "                            {{faq.title}}\n" +
+    "                        <a ng-href=\"{{faq.link}}\" ng-mousedown=\"go(faq.link)\" ng-bind-html=\"faq.title\">\n" +
     "                        </a>\n" +
     "                    </div>\n" +
     "                </div>\n" +

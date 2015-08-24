@@ -34,11 +34,47 @@
  */
 angular.module('common.oneSearch', [])
 
-    .factory('Search', ['$resource', function($resource){
+    .factory('Search', ['$http', '$q', function($http, $q){
 
-        return $resource("//wwwdev2.lib.ua.edu/oneSearch/api/search/:s/engine/:engine/limit/:limit", {}, {
-            cache: false
-        });
+        function search(params){
+
+            var canceller = $q.defer();
+            var url = '//wwwdev2.lib.ua.edu/oneSearch/api/search/' + params['s'] + '/engine/' + params['engine'] + '/limit/' + params['limit'];
+
+            var request = $http({
+                method: 'GET',
+                url: url,
+                timeout: canceller.promise
+            });
+
+            var promise = request.then(function(data){
+                this.done = true;
+                return data.data;
+            }, function(data){
+                return $q.reject('Error');
+            });
+
+            promise.done = false;
+
+            promise.abort = function(){
+                this.done = true;
+                canceller.resolve();
+            };
+
+            promise.finally(
+                function(){
+                    promise.abort = angular.noop;
+                    canceller = request = promise = null;
+                    this.done = false;
+                }
+            );
+
+            return promise;
+        }
+
+        return {
+            request: search
+        };
     }])
 
     .provider('oneSearch', ['mediaTypesProvider', function oneSearchProvider(mediaTypesProvider){
@@ -73,16 +109,15 @@ angular.module('common.oneSearch', [])
             }
         };
 
-        this.$get = ['$http', '$parse', '$filter', 'enginesTemplateFactory', 'SearchParams', 'Search', function($http, $parse, $filter, enginesTemplateFactory, SearchParams, Search){
-            this.resourceLinks = {};
+        this.$get = ['$q', '$parse', '$filter', '$rootScope', 'enginesTemplateFactory', 'SearchParams', 'Search', function($q, $parse, $filter, $rootScope, enginesTemplateFactory, SearchParams, Search){
 
             return {
                 engines: _engines, // Expose engines at Service level
                 searchAll: function(params){
+
                     //extend give params with default SearchParams
                     angular.extend(params, SearchParams);
-
-
+                    console.log(_engines);
                     // Sort engines by 'priority'
                     var prioritized = $filter('orderObjectBy')( _engines, 'priority');
 
@@ -106,13 +141,16 @@ angular.module('common.oneSearch', [])
                          params: p
                          });*/
 
-                        // Store the $http response promise in the engine's object with key 'response
-                        engine.response = Search.get(p); //$http({method: 'GET', url: url, params: p});
+                        if (engine.response){
+                            engine.response.abort();
+                        }
+
+                        // Store the $http response promise in the engine's object with key 'response'
+                        engine.response = Search.request(p);
 
                         // Create results getter function from given results JSON path
                         if (angular.isDefined(engine.resultsPath)){
                             engine.getResults = $parse(engine.resultsPath);
-
                         }
 
                         // Create results getter function from given results JSON path
@@ -141,10 +179,17 @@ angular.module('common.oneSearch', [])
         }]
     }])
 
-    .controller('OneSearchCtrl', ['$scope', '$location', '$rootScope', '$resource', function($scope, $location, $rootScope, $resource){
+    .controller('OneSearchCtrl', ['$scope', '$location', '$rootScope', 'oneSearch', function($scope, $location, $rootScope, oneSearch){
         $scope.searchText;
+
         $scope.search = function(){
             if ($scope.searchText){
+                //Cancel any pending searches - prevents mixed results by canceling the ajax requests
+                for (var e in oneSearch.engines){
+                    if (!oneSearch.engines[e].response.done){
+                        oneSearch.engines[e].response.abort();
+                    }
+                }
                 // Compensate for when not on home page
                 // Since WP pages aren't loaded as angular routes, we must detect if there is no '#/PATH' present
                 // after the URI (or that it's not a 'bento' route), then send the browser to a pre-build URL.

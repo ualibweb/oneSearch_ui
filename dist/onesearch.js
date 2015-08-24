@@ -39,11 +39,7 @@ angular.module('oneSearch.bento', [])
             .when('/bento/:s', {
                 templateUrl: 'bento/bento.tpl.html',
                 controller: 'BentoCtrl'
-            })
-            .when('/bento-test/:s', {
-                templateUrl: 'bento/bento-test.tpl.html',
-                controller: 'BentoCtrl'
-            })
+            });
     }])
 
 /**
@@ -135,13 +131,18 @@ angular.module('oneSearch.bento', [])
                 });
         }
 
-
+        var engines;
 
         // Gets all boxes
         this.getBoxes = function(){
+            if (engines){
+                for (var e in engines){
+                    engines[e].response.abort();
+                }
+            }
             // Search all engines registered with the oneSearch Provider, giving the
             // $routeParams object as the parameter (https://code.angularjs.org/1.3.0/docs/api/ngRoute/service/$routeParams)
-            var engines = oneSearch.searchAll($routeParams);
+            engines = oneSearch.searchAll($routeParams);
 
             // Deep copy media types defined by registered engines to the this.boxes object.
             angular.copy(mediaTypes.types, self.boxes);
@@ -157,8 +158,9 @@ angular.module('oneSearch.bento', [])
 
             //  Iterate over the Promises for each engine returned by the oneSearch.searchAll() function
             angular.forEach(engines, function(engine, name){
+
                 engine.response
-                    .$promise.then(function(data){ // If $http call was a success
+                    .then(function(data){ // If $http call was a success
 
                         // User the engine's results getter to get the results object
                         // The results getter is defined by the JSON path defined by the
@@ -853,7 +855,7 @@ angular.module('engines.googleCS', [])
             priority: 2,
             resultsPath: 'GoogleCS.items',
             totalsPath: 'GoogleCS.searchInformation.totalResults',
-            filterQuery: '-side:guides.lib.ua.edu -site:ask.lib.ua.edu',
+            filterQuery: '-site:guides.lib.ua.edu -site:ask.lib.ua.edu',
             templateUrl: 'common/engines/google-cs/google-cs.tpl.html'
         })
     }])
@@ -1028,6 +1030,34 @@ function isEmpty(obj) {
 
     return true;
 }
+/**
+ * Adopted from UI Router library
+ * https://github.com/angular-ui/ui-router/blob/master/src/common.js
+ */
+function merge(dst) {
+    forEach(arguments, function(obj) {
+        if (obj !== dst) {
+            forEach(obj, function(value, key) {
+                if (!dst.hasOwnProperty(key)) dst[key] = value;
+            });
+        }
+    });
+    return dst;
+}
+/**
+ * Adopted from UI Router library
+ * https://github.com/angular-ui/ui-router/blob/master/src/common.js
+ */
+// extracted from underscore.js
+// Return a copy of the object omitting the blacklisted properties.
+function omit(obj) {
+    var copy = {};
+    var keys = Array.prototype.concat.apply(Array.prototype, Array.prototype.slice.call(arguments, 1));
+    for (var key in obj) {
+        if (indexOf(keys, key) == -1) copy[key] = obj[key];
+    }
+    return copy;
+}
 // adopted from https://github.com/a8m/angular-filter/blob/master/src/_common.js
 function toArray(object) {
     return Array.isArray(object) ? object :
@@ -1171,13 +1201,49 @@ angular.module('common.mediaTypes', [])
  */
 angular.module('common.oneSearch', [])
 
-    .factory('Search', ['$resource', function($resource){
+    .factory('Search', ['$http', '$q', function($http, $q){
 
-        return $resource("//wwwdev2.lib.ua.edu/oneSearch/api/search/:s/engine/:engine/limit/:limit", {}, {
-            cache: false
-        });
+        function search(params){
+
+            var canceller = $q.defer();
+            var url = '//wwwdev2.lib.ua.edu/oneSearch/api/search/' + params['s'] + '/engine/' + params['engine'] + '/limit/' + params['limit'];
+
+            var request = $http({
+                method: 'GET',
+                url: url,
+                timeout: canceller.promise
+            });
+
+            var promise = request.then(function(data){
+                this.done = true;
+                return data.data;
+            }, function(data){
+                return $q.reject('Error');
+            });
+
+            promise.done = false;
+
+            promise.abort = function(){
+                this.done = true;
+                canceller.resolve();
+            };
+
+            promise.finally(
+                function(){
+                    promise.abort = angular.noop;
+                    canceller = request = promise = null;
+                    this.done = false;
+                }
+            );
+
+            return promise;
+        }
+
+        return {
+            request: search
+        };
     }])
-    
+
     .provider('oneSearch', ['mediaTypesProvider', function oneSearchProvider(mediaTypesProvider){
         //private object that holds registered engines
         var _engines = {};
@@ -1210,16 +1276,15 @@ angular.module('common.oneSearch', [])
             }
         };
 
-        this.$get = ['$http', '$parse', '$filter', 'enginesTemplateFactory', 'SearchParams', 'Search', function($http, $parse, $filter, enginesTemplateFactory, SearchParams, Search){
-            this.resourceLinks = {};
+        this.$get = ['$q', '$parse', '$filter', '$rootScope', 'enginesTemplateFactory', 'SearchParams', 'Search', function($q, $parse, $filter, $rootScope, enginesTemplateFactory, SearchParams, Search){
 
             return {
                 engines: _engines, // Expose engines at Service level
                 searchAll: function(params){
+
                     //extend give params with default SearchParams
                     angular.extend(params, SearchParams);
-
-
+                    console.log(_engines);
                     // Sort engines by 'priority'
                     var prioritized = $filter('orderObjectBy')( _engines, 'priority');
 
@@ -1243,13 +1308,18 @@ angular.module('common.oneSearch', [])
                          params: p
                          });*/
 
+                        if (engine.response){
+                            engine.response.abort();
+                        }
+
                         // Store the $http response promise in the engine's object with key 'response
-                        engine.response = Search.get(p); //$http({method: 'GET', url: url, params: p});
+                        //engine.response = Search.get(p, {timeout: canceller}); //$http({method: 'GET', url: url, params: p});
+
+                        engine.response = Search.request(p);
 
                         // Create results getter function from given results JSON path
                         if (angular.isDefined(engine.resultsPath)){
                             engine.getResults = $parse(engine.resultsPath);
-
                         }
 
                         // Create results getter function from given results JSON path
@@ -1278,10 +1348,16 @@ angular.module('common.oneSearch', [])
         }]
     }])
 
-    .controller('OneSearchCtrl', ['$scope', '$location', '$rootScope', '$resource', function($scope, $location, $rootScope, $resource){
+    .controller('OneSearchCtrl', ['$scope', '$location', '$rootScope', 'oneSearch', function($scope, $location, $rootScope, oneSearch){
         $scope.searchText;
+
         $scope.search = function(){
             if ($scope.searchText){
+                for (var e in oneSearch.engines){
+                    if (!oneSearch.engines[e].response.done){
+                        oneSearch.engines[e].response.abort();
+                    }
+                }
                 // Compensate for when not on home page
                 // Since WP pages aren't loaded as angular routes, we must detect if there is no '#/PATH' present
                 // after the URI (or that it's not a 'bento' route), then send the browser to a pre-build URL.
