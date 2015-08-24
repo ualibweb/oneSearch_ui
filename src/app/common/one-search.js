@@ -117,7 +117,7 @@ angular.module('common.oneSearch', [])
 
                     //extend give params with default SearchParams
                     angular.extend(params, SearchParams);
-                    console.log(_engines);
+
                     // Sort engines by 'priority'
                     var prioritized = $filter('orderObjectBy')( _engines, 'priority');
 
@@ -186,7 +186,7 @@ angular.module('common.oneSearch', [])
             if ($scope.searchText){
                 //Cancel any pending searches - prevents mixed results by canceling the ajax requests
                 for (var e in oneSearch.engines){
-                    if (!oneSearch.engines[e].response.done){
+                    if (oneSearch.engines[e].response && !oneSearch.engines[e].response.done){
                         oneSearch.engines[e].response.abort();
                     }
                 }
@@ -207,7 +207,7 @@ angular.module('common.oneSearch', [])
             return $resource('//wwwdev2.lib.ua.edu/oneSearch/api/recommend/:search')
                 .query({search: val})
                 .$promise.then(function(rec) {
-                    console.log(rec);
+                    //console.log(rec);
 
                     return rec;
                 });
