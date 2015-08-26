@@ -141,10 +141,6 @@ angular.module('common.oneSearch', [])
                          params: p
                          });*/
 
-                        if (engine.response){
-                            engine.response.abort();
-                        }
-
                         // Store the $http response promise in the engine's object with key 'response'
                         engine.response = Search.request(p);
 
@@ -179,11 +175,12 @@ angular.module('common.oneSearch', [])
         }]
     }])
 
-    .controller('OneSearchCtrl', ['$scope', '$location', '$rootScope', 'oneSearch', function($scope, $location, $rootScope, oneSearch){
+    .controller('OneSearchCtrl', ['$scope', '$location', '$rootScope', '$window', 'oneSearch', function($scope, $location, $rootScope, $window, oneSearch){
         $scope.searchText;
 
         $scope.search = function(){
             if ($scope.searchText){
+                var searchText = encodeURIComponent($scope.searchText);
                 //Cancel any pending searches - prevents mixed results by canceling the ajax requests
                 for (var e in oneSearch.engines){
                     if (oneSearch.engines[e].response && !oneSearch.engines[e].response.done){
@@ -194,8 +191,8 @@ angular.module('common.oneSearch', [])
                 // Since WP pages aren't loaded as angular routes, we must detect if there is no '#/PATH' present
                 // after the URI (or that it's not a 'bento' route), then send the browser to a pre-build URL.
                 if (!$location.path() || $location.path().indexOf('/bento') < 0){
-                    var url = '//' + $location.host() + '#/bento/'+$scope.searchText;
-                    window.location = url; //Angular 1.2.8 $location is too limited...
+                    var url = '//' + $location.host() + '#/bento/'+searchText;
+                    $window.location = url; //Angular 1.2.8 $location is too limited...
                 }
                 else{
                     $location.path('/bento/'+$scope.searchText);

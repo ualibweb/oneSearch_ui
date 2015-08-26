@@ -104,11 +104,6 @@ angular.module('oneSearch.bento', [])
 
         // Gets all boxes
         this.getBoxes = function(){
-            if (engines){
-                for (var e in engines){
-                    engines[e].response.abort();
-                }
-            }
             // Search all engines registered with the oneSearch Provider, giving the
             // $routeParams object as the parameter (https://code.angularjs.org/1.3.0/docs/api/ngRoute/service/$routeParams)
             engines = oneSearch.searchAll($routeParams);
