@@ -178,15 +178,21 @@ angular.module('common.oneSearch', [])
     .controller('OneSearchCtrl', ['$scope', '$location', '$rootScope', '$window', 'oneSearch', function($scope, $location, $rootScope, $window, oneSearch){
         $scope.searchText;
 
+        function abortPendingSearches(){
+            for (var e in oneSearch.engines){
+                if (oneSearch.engines[e].response && !oneSearch.engines[e].response.done){
+                    oneSearch.engines[e].response.abort();
+                }
+            }
+        }
+
         $scope.search = function(){
             if ($scope.searchText){
+                $scope.searchText = $scope.searchText.replace(/[\/]/, ' ')
                 var searchText = encodeURIComponent($scope.searchText);
+
                 //Cancel any pending searches - prevents mixed results by canceling the ajax requests
-                for (var e in oneSearch.engines){
-                    if (oneSearch.engines[e].response && !oneSearch.engines[e].response.done){
-                        oneSearch.engines[e].response.abort();
-                    }
-                }
+                abortPendingSearches();
                 // Compensate for when not on home page
                 // Since WP pages aren't loaded as angular routes, we must detect if there is no '#/PATH' present
                 // after the URI (or that it's not a 'bento' route), then send the browser to a pre-build URL.

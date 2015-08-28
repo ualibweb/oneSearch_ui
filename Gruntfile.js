@@ -39,36 +39,33 @@ module.exports = function(grunt){
         },
         uglify: {
             options: {
-                banner: '/*! <%= pkg.name %> <%= grunt.template.today("dd-mm-yyyy") %> */\n'
+                mangle: true
             },
-            dist: {
-                files: [{
-                    expand: true,
-                    cwd: 'dist',
-                    src: '**/*.js',
-                    dest: 'dist',
-                    ext: '-<%= pkg.version %>.min.js'
-                }]
-            }
-        },
-        less:   {
-            all: {
+            app: {
                 files: {
-                    'dist/onesearch.css': 'src/**/*.less'
+                    'dist/onesearch.min.js': ['dist/onesearch-templates.js', 'dist/onesearch.js']
                 }
             }
         },
-        cssmin: {
-            minify: {
-                expand: true,
-                cwd: 'dist',
-                src: ['*.css', '!*.min.css'],
-                dest: 'dist',
-                ext: '-<%= pkg.version %>.min.css'
+        less: {
+            dev: {
+                files: {
+                    'dist/onesearch.css': ['src/**/*.less']
+                },
+                options: {
+                    compress: false,
+                    sourceMap: true,
+                    sourceMapFilename: 'dist/<%= pkg.name %>.css.map'
+                }
+            },
+            build: {
+                files: {
+                    'dist/onesearch.min.css': ['src/**/*.less']
+                },
+                options: {
+                    compress: true
+                }
             }
-        },
-        clean: {
-            js: ['dist']
         },
         bump: {
             options: {
@@ -93,11 +90,11 @@ module.exports = function(grunt){
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-html2js');
     grunt.loadNpmTasks('grunt-ng-annotate');
-    grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-less');
     grunt.loadNpmTasks('grunt-bump');
 
-    grunt.registerTask('default', ['clean', 'html2js', 'concat', 'less','cssmin', 'ngAnnotate', 'uglify']);
+    grunt.registerTask('default', ['html2js', 'concat', 'less:dev']);
+    grunt.registerTask('build', ['html2js', 'concat', 'less:build', 'ngAnnotate', 'uglify']);
 };

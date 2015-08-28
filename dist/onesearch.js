@@ -1025,34 +1025,6 @@ function isEmpty(obj) {
 
     return true;
 }
-/**
- * Adopted from UI Router library
- * https://github.com/angular-ui/ui-router/blob/master/src/common.js
- */
-function merge(dst) {
-    forEach(arguments, function(obj) {
-        if (obj !== dst) {
-            forEach(obj, function(value, key) {
-                if (!dst.hasOwnProperty(key)) dst[key] = value;
-            });
-        }
-    });
-    return dst;
-}
-/**
- * Adopted from UI Router library
- * https://github.com/angular-ui/ui-router/blob/master/src/common.js
- */
-// extracted from underscore.js
-// Return a copy of the object omitting the blacklisted properties.
-function omit(obj) {
-    var copy = {};
-    var keys = Array.prototype.concat.apply(Array.prototype, Array.prototype.slice.call(arguments, 1));
-    for (var key in obj) {
-        if (indexOf(keys, key) == -1) copy[key] = obj[key];
-    }
-    return copy;
-}
 // adopted from https://github.com/a8m/angular-filter/blob/master/src/_common.js
 function toArray(object) {
     return Array.isArray(object) ? object :
@@ -1340,15 +1312,21 @@ angular.module('common.oneSearch', [])
     .controller('OneSearchCtrl', ['$scope', '$location', '$rootScope', '$window', 'oneSearch', function($scope, $location, $rootScope, $window, oneSearch){
         $scope.searchText;
 
+        function abortPendingSearches(){
+            for (var e in oneSearch.engines){
+                if (oneSearch.engines[e].response && !oneSearch.engines[e].response.done){
+                    oneSearch.engines[e].response.abort();
+                }
+            }
+        }
+
         $scope.search = function(){
             if ($scope.searchText){
+                $scope.searchText = $scope.searchText.replace(/[\/]/, ' ')
                 var searchText = encodeURIComponent($scope.searchText);
+
                 //Cancel any pending searches - prevents mixed results by canceling the ajax requests
-                for (var e in oneSearch.engines){
-                    if (oneSearch.engines[e].response && !oneSearch.engines[e].response.done){
-                        oneSearch.engines[e].response.abort();
-                    }
-                }
+                abortPendingSearches();
                 // Compensate for when not on home page
                 // Since WP pages aren't loaded as angular routes, we must detect if there is no '#/PATH' present
                 // after the URI (or that it's not a 'bento' route), then send the browser to a pre-build URL.

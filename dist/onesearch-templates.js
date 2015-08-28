@@ -56,7 +56,7 @@ angular.module("bento/bento.tpl.html", []).run(["$templateCache", function($temp
     "        </div>\n" +
     "        <div class=\"col-sm-12 col-md-4\">\n" +
     "            <div class=\"bento-box\" bento-box=\"libguides\">\n" +
-    "                <h2>LibGuides</h2>\n" +
+    "                <h2>Research Guides</h2>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "    </div>\n" +
