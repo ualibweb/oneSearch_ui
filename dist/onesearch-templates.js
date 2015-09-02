@@ -4,7 +4,7 @@ angular.module("bento/bento.tpl.html", []).run(["$templateCache", function($temp
   $templateCache.put("bento/bento.tpl.html",
     "<div class=\"bento-box-container\">\n" +
     "    <div class=\"bento-box-menu-container hidden-sm hidden-xs\">\n" +
-    "        <nav class=\"bento-box-menu navbar navbar-default\" ui-scrollfix=\"+0\">\n" +
+    "        <nav class=\"bento-box-menu\" ui-scrollfix=\"+0\">\n" +
     "            <ul class=\"nav nav-justified\">\n" +
     "                <li ng-repeat=\"item in boxMenu\">\n" +
     "                    <a href=\"\" du-smooth-scroll=\"{{item.box}}\" ng-click=\"selectBox(item.box)\">{{item.title}}</a>\n" +
