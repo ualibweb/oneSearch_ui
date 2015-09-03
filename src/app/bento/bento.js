@@ -93,8 +93,8 @@ angular.module('oneSearch.bento', [])
                 .then(function(results){
                     var numResults = Object.keys(results).length;
                     var numEngines = self.boxes[box]['engines'].length;
-
-                    if (self.boxes[box].resultLimit < 3 && numResults < 2 && numEngines < 2){
+                    var expecting = numResults + numEngines;
+                    if (expecting < 2 && self.boxes[box].resultLimit < 3){
                         self.boxes[box].resultLimit++;
                     }
                 });

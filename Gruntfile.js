@@ -8,13 +8,13 @@ module.exports = function(grunt){
                     process: true
                 },
                 src: 'src/app/**/*.tpl.html',
-                dest: 'dist/onesearch-templates.js',
+                dest: 'tmp/templates.js',
                 module: 'oneSearch.templates'
             }
         },
         concat: {
-            dist: {
-                src: ['src/app/**/*.js'],
+            app: {
+                src: ['tmp/templates.js', 'src/app/**/*.js'],
                 dest: 'dist/onesearch.js'
             },
             index: {
@@ -43,7 +43,7 @@ module.exports = function(grunt){
             },
             app: {
                 files: {
-                    'dist/onesearch.min.js': ['dist/onesearch-templates.js', 'dist/onesearch.js']
+                    'dist/onesearch.min.js': ['dist/onesearch.js']
                 }
             }
         },
@@ -66,6 +66,9 @@ module.exports = function(grunt){
                     compress: true
                 }
             }
+        },
+        clean: {
+            app: ['tmp/']
         },
         bump: {
             options: {
@@ -95,6 +98,6 @@ module.exports = function(grunt){
     grunt.loadNpmTasks('grunt-contrib-less');
     grunt.loadNpmTasks('grunt-bump');
 
-    grunt.registerTask('default', ['html2js', 'concat', 'less:dev']);
-    grunt.registerTask('build', ['html2js', 'concat', 'less:build', 'ngAnnotate', 'uglify']);
+    grunt.registerTask('default', ['html2js', 'concat', 'less:dev', 'clean']);
+    grunt.registerTask('build', ['html2js', 'concat', 'less:build', 'ngAnnotate', 'uglify', 'clean']);
 };
