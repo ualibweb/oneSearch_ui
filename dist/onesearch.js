@@ -1645,7 +1645,7 @@ angular.module('common.oneSearch', [])
 
         $scope.search = function(){
             if ($scope.searchText){
-                $scope.searchText = $scope.searchText.replace(/[\/]/, ' ')
+                $scope.searchText = $scope.searchText.replace(/\//g, ' ').trim();
                 var searchText = encodeURIComponent($scope.searchText);
 
                 //Cancel any pending searches - prevents mixed results by canceling the ajax requests
