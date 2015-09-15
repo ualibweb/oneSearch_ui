@@ -54,30 +54,24 @@ angular.module("bento/bento.tpl.html", []).run(["$templateCache", function($temp
     "    </div>\n" +
     "\n" +
     "    <div class=\"row\">\n" +
-    "        <div class=\"col-md-6\">\n" +
+    "        <div class=\"col-md-4\">\n" +
     "            <div class=\"bento-box\" bento-box=\"databases\">\n" +
     "                <h2>Databases </h2>\n" +
     "            </div>\n" +
     "        </div>\n" +
-    "        <div class=\"col-md-6\">\n" +
+    "        <div class=\"col-md-4\">\n" +
     "            <div class=\"bento-box\" bento-box=\"acumen\">\n" +
     "                <h2 id=\"acumen\">Acumen</h2>\n" +
     "            </div>\n" +
     "        </div>\n" +
-    "    </div>\n" +
-    "\n" +
-    "    <div class=\"row\">\n" +
-    "        <div class=\"col-md-6\">\n" +
-    "            <div class=\"bento-box\" bento-box=\"media\">\n" +
-    "                <h2>Multimedia</h2>\n" +
-    "            </div>\n" +
-    "        </div>\n" +
-    "        <div class=\"col-md-6\">\n" +
+    "        <div class=\"col-md-4\">\n" +
     "            <div class=\"bento-box\" bento-box=\"other\">\n" +
     "                <h2>Other Media</h2>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "    </div>\n" +
+    "\n" +
+    "    \n" +
     "    <div class=\"row\">\n" +
     "        <div class=\"col-md-12\">\n" +
     "            <div class=\"bento-box well\" bento-box=\"recommend\" hide-if-empty=\"true\" omit-from-menu=\"true\">\n" +
@@ -154,12 +148,12 @@ angular.module("common/directives/suggest/suggest.tpl.html", []).run(["$template
 angular.module("common/engines/acumen/acumen.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("common/engines/acumen/acumen.tpl.html",
     "<div class=\"media\">\n" +
-    "    <a class=\"pull-left\" ng-href=\"http://acumen.lib.ua.edu/{{item.link}}\" title=\"{{item.title}}\">\n" +
+    "    <a class=\"pull-left\" ng-href=\"http://acumen.lib.ua.edu/{{item.link}}\" title=\"{{item.title}}\" target=\"_acumen\">\n" +
     "        <img ng-src=\"{{item.thumb_path}}\">\n" +
     "    </a>\n" +
     "    <div class=\"media-body\">\n" +
     "        <h4 class=\"media-heading\">\n" +
-    "            <a ng-href=\"http://acumen.lib.ua.edu/{{item.link}}\" title=\"item.title\">{{item.title | truncate: 40: '...': true}}</a>\n" +
+    "            <a ng-href=\"http://acumen.lib.ua.edu/{{item.link}}\" target=\"_acumen\" title=\"{{item.title}}\">{{item.title | truncate: 40: '...': true}}</a>\n" +
     "        </h4>\n" +
     "        <div class=\"details-context\">\n" +
     "            <span ng-if=\"item.date\" ng-bind-html=\"item.date\"></span>\n" +
@@ -177,7 +171,7 @@ angular.module("common/engines/catalog/catalog.tpl.html", []).run(["$templateCac
     "        <h4 class=\"media-heading\">\n" +
     "            <a ng-href=\"{{item.href}}\"\n" +
     "               title=\"{{item.title}}\"\n" +
-    "               ng-bind-html=\"item.title | truncate: 50: '...': true\"></a>\n" +
+    "               ng-bind-html=\"item.title | truncate: 50: '...': true\" target=\"_catalog\"></a>\n" +
     "        </h4>\n" +
     "        <div class=\"details-context\">\n" +
     "            <span ng-if=\"item.year && item.year | number\" ng-bind-html=\"item.year\"></span>\n" +
@@ -199,7 +193,7 @@ angular.module("common/engines/databases/databases.tpl.html", []).run(["$templat
     "<div class=\"media\">\n" +
     "    <div class=\"media-body\">\n" +
     "        <h4 class=\"media-heading\">\n" +
-    "            <a ng-href=\"{{item.url}}\" title=\"{{item.title}}\">{{item.title | truncate: 40: '...': true}}</a>\n" +
+    "            <a ng-href=\"{{item.url}}\" title=\"{{item.title}}\" target=\"_databases\">{{item.title | truncate: 40: '...': true}}</a>\n" +
     "        </h4>\n" +
     "        <div class=\"details-context\">\n" +
     "            <span ng-if=\"item.coverage\" ng-bind-html=\"item.coverage\"></span>\n" +
@@ -216,7 +210,7 @@ angular.module("common/engines/ejournals/ejournals.tpl.html", []).run(["$templat
     "<div class=\"media\">\n" +
     "    <div class=\"media-body\">\n" +
     "        <h4 class=\"media-heading\">\n" +
-    "            <a ng-href=\"{{item.links[0].href}}\" title=\"{{item.title}}\">{{item.title | ltrim | truncate: 50: '...': true}}</a>\n" +
+    "            <a ng-href=\"{{item.links[0].href}}\" title=\"{{item.title}}\" target=\"_ejournals\">{{item.title | ltrim | truncate: 50: '...': true}}</a>\n" +
     "        </h4>\n" +
     "\n" +
     "        <div class=\"details-context\">\n" +
@@ -251,7 +245,7 @@ angular.module("common/engines/google-cs/google-cs.tpl.html", []).run(["$templat
   $templateCache.put("common/engines/google-cs/google-cs.tpl.html",
     "<div class=\"media\">\n" +
     "    <div class=\"media-body\">\n" +
-    "        <h4 class=\"media-heading\"><a ng-href=\"{{item.link}}\" title=\"{{item.title}}\">{{item.title | truncate: 40: '...': true}}</a></h4>\n" +
+    "        <h4 class=\"media-heading\"><a ng-href=\"{{item.link}}\" title=\"{{item.title}}\" target=\"_googlecs\">{{item.title | truncate: 40: '...': true}}</a></h4>\n" +
     "        <p ng-bind-html=\"item.htmlSnippet\"></p>\n" +
     "    </div>\n" +
     "</div>\n" +
@@ -288,6 +282,7 @@ angular.module("common/engines/scout/scout.tpl.html", []).run(["$templateCache",
     "        <h4 class=\"media-heading\">\n" +
     "            <a ng-href=\"{{item.PLink}}\"\n" +
     "               title=\"{{item.Items[0].Data}}\"\n" +
+    "               target=\"_scout\"\n" +
     "               ng-bind-html=\"item.RecordInfo.BibRecord.BibEntity.Titles[0].TitleFull | lowercase | ucfirst\"></a>\n" +
     "        </h4>\n" +
     "        <div class=\"details-context\">\n" +
@@ -444,11 +439,13 @@ angular.module('oneSearch.bento', [])
         }
 
         function setResultLimit(box){
+
             $q.when(self.boxes[box].results)
                 .then(function(results){
                     var numResults = Object.keys(results).length;
                     var numEngines = self.boxes[box]['engines'].length;
                     var expecting = numResults + numEngines;
+                    
                     if (expecting < 2 && self.boxes[box].resultLimit < 3){
                         self.boxes[box].resultLimit++;
                     }
@@ -502,6 +499,7 @@ angular.module('oneSearch.bento', [])
                             //console.log(res);
                             // Group the results by defined media types
                             var grouped = mediaTypes.groupBy(res, engine.mediaTypes);
+                            console.log(grouped);
 
                             // Iterate over the boxes.
                             Object.keys(self.boxes).forEach(function(type){
@@ -796,7 +794,7 @@ angular.module('oneSearch.common')
                 model: '=',
                 search: '='
             },
-            controller: ['$scope', '$window', '$timeout', 'dataFactory', function($scope, $window, $timeout, dataFactory){
+            controller: function($scope, $window, $timeout, dataFactory){
                 $scope.items = {};
                 $scope.filteredItems = [];
                 $scope.model = "";
@@ -885,7 +883,7 @@ angular.module('oneSearch.common')
                         return false;
                     };
                 };
-            }],
+            },
             link: function(scope, elem, attrs) {
                 scope.showSuggestions = false;
                 var suggestWatcher = scope.$watch('items', function(newVal, oldVal){
@@ -979,7 +977,7 @@ angular.module('engines.acumen', [])
         })
     }])
 
-    .controller('AcumenCtrl', ['$scope', '$filter', function($scope, $filter){
+    .controller('AcumenCtrl', function($scope, $filter){
         var items = $scope.items;
 
         for (var i = 0, len = items.length; i < len; i++) {
@@ -989,7 +987,7 @@ angular.module('engines.acumen', [])
                 else items[i].type = items[i].type.sort().shift();
             }
         }
-    }]);
+    });
 angular.module('engines.catalog', [])
 
     .config(['oneSearchProvider', function(oneSearchProvider){
@@ -1002,8 +1000,7 @@ angular.module('engines.catalog', [])
                 path: 'bibFormat',
                 types: {
                     books: ['aa','ac', 'ad', 'am'],
-                    journals: ['ab','as','bb','bs','cb','cs','db','ds','eb','es','fb','fs','gb','gs','ib','is','jb','js','kb','ks','mb','ms','ob','os','pb','ps','rb','rs','tb','ts'],
-                    media: ['ga','gc','gd','gm','ia','ic','id','im','ja','jc','jd','jm']
+                    journals: ['ab','as','bb','bs','cb','cs','db','ds','eb','es','fb','fs','gb','gs','ib','is','jb','js','kb','ks','mb','ms','ob','os','pb','ps','rb','rs','tb','ts']
                 }
             },
             templateUrl: 'common/engines/catalog/catalog.tpl.html',
@@ -1021,7 +1018,7 @@ angular.module('engines.catalog', [])
         }
     }])
 
-    .controller('CatalogCtrl', ['$scope', '$filter', function($scope, $filter){
+    .controller('CatalogCtrl', function($scope, $filter){
         var types = {
             bc: "Archive/Manuscript",
             cm: "Music Score",
@@ -1057,7 +1054,7 @@ angular.module('engines.catalog', [])
         }
 
         $scope.items = items;
-    }]);
+    });
 
 angular.module('engines.databases', [])
 
@@ -1090,7 +1087,7 @@ angular.module('engines.ejournals', [])
         })
     }])
 
-    .controller('EjouralsCtrl', ['$scope', function($scope){
+    .controller('EjouralsCtrl', function($scope){
 
         var param;
         switch ($scope.mediaType){
@@ -1107,7 +1104,7 @@ angular.module('engines.ejournals', [])
         if (param){
             $scope.resourceLink = $scope.resourceLink.replace('SS_searchTypeAll=yes&SS_searchTypeBook=yes&SS_searchTypeJournal=yes&SS_searchTypeOther=yes', param);
         }
-    }]);
+    });
 /**
  * @module common.engines
  *
@@ -1212,8 +1209,7 @@ angular.module('engines.scout', [])
                 path: 'Header.PubTypeId',
                 types: {
                     books: ['book', 'ebook'],
-                    articles: 'academicJournal',
-                    media: ['audio', 'videoRecording']
+                    articles: 'academicJournal'
                 }
             },
             templateUrl: 'common/engines/scout/scout.tpl.html',
@@ -1221,7 +1217,7 @@ angular.module('engines.scout', [])
         })
     }])
 
-    .controller('ScoutCtrl', ['$scope', function($scope){
+    .controller('ScoutCtrl', function($scope){
         var items = $scope.items;
         for (var i = 0; i < items.length; i++){
             if (items[i].Header.PubTypeId == 'audio'){
@@ -1282,7 +1278,7 @@ angular.module('engines.scout', [])
         }
 
         $scope.resourceLink = angular.copy(link);
-    }]);
+    });
 angular.module('filters.nameFilter', [])
 
     .filter('nameFilter', ['$filter', function($filter){

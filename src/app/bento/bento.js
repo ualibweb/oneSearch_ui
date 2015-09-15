@@ -89,11 +89,13 @@ angular.module('oneSearch.bento', [])
         }
 
         function setResultLimit(box){
+
             $q.when(self.boxes[box].results)
                 .then(function(results){
                     var numResults = Object.keys(results).length;
                     var numEngines = self.boxes[box]['engines'].length;
                     var expecting = numResults + numEngines;
+
                     if (expecting < 2 && self.boxes[box].resultLimit < 3){
                         self.boxes[box].resultLimit++;
                     }
@@ -147,6 +149,7 @@ angular.module('oneSearch.bento', [])
                             //console.log(res);
                             // Group the results by defined media types
                             var grouped = mediaTypes.groupBy(res, engine.mediaTypes);
+                            console.log(grouped);
 
                             // Iterate over the boxes.
                             Object.keys(self.boxes).forEach(function(type){

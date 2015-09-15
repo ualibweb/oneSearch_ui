@@ -3,6 +3,7 @@
         <h4 class="media-heading">
             <a ng-href="{{item.PLink}}"
                title="{{item.Items[0].Data}}"
+               target="_scout"
                ng-bind-html="item.RecordInfo.BibRecord.BibEntity.Titles[0].TitleFull | lowercase | ucfirst"></a>
         </h4>
         <div class="details-context">

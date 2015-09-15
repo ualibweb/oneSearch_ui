@@ -10,8 +10,7 @@ angular.module('engines.catalog', [])
                 path: 'bibFormat',
                 types: {
                     books: ['aa','ac', 'ad', 'am'],
-                    journals: ['ab','as','bb','bs','cb','cs','db','ds','eb','es','fb','fs','gb','gs','ib','is','jb','js','kb','ks','mb','ms','ob','os','pb','ps','rb','rs','tb','ts'],
-                    media: ['ga','gc','gd','gm','ia','ic','id','im','ja','jc','jd','jm']
+                    journals: ['ab','as','bb','bs','cb','cs','db','ds','eb','es','fb','fs','gb','gs','ib','is','jb','js','kb','ks','mb','ms','ob','os','pb','ps','rb','rs','tb','ts']
                 }
             },
             templateUrl: 'common/engines/catalog/catalog.tpl.html',

@@ -10,8 +10,7 @@ angular.module('engines.scout', [])
                 path: 'Header.PubTypeId',
                 types: {
                     books: ['book', 'ebook'],
-                    articles: 'academicJournal',
-                    media: ['audio', 'videoRecording']
+                    articles: 'academicJournal'
                 }
             },
             templateUrl: 'common/engines/scout/scout.tpl.html',

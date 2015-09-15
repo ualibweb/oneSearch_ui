@@ -1,10 +1,10 @@
 <div class="media">
-    <a class="pull-left" ng-href="http://acumen.lib.ua.edu/{{item.link}}" title="{{item.title}}">
+    <a class="pull-left" ng-href="http://acumen.lib.ua.edu/{{item.link}}" title="{{item.title}}" target="_acumen">
         <img ng-src="{{item.thumb_path}}">
     </a>
     <div class="media-body">
         <h4 class="media-heading">
-            <a ng-href="http://acumen.lib.ua.edu/{{item.link}}" title="item.title">{{item.title | truncate: 40: '...': true}}</a>
+            <a ng-href="http://acumen.lib.ua.edu/{{item.link}}" target="_acumen" title="{{item.title}}">{{item.title | truncate: 40: '...': true}}</a>
         </h4>
         <div class="details-context">
             <span ng-if="item.date" ng-bind-html="item.date"></span>
