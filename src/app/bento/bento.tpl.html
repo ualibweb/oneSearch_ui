@@ -2,7 +2,7 @@
     <div class="bento-box-menu-container hidden-sm hidden-xs">
         <nav class="bento-box-menu" ui-scrollfix="+0">
             <ul class="nav nav-justified">
-                <li ng-repeat="item in boxMenu">
+                <li ng-repeat="item in boxMenu" class="{{item.box}}">
                     <a href="" du-smooth-scroll="{{item.box}}" ng-click="selectBox(item.box)">{{item.title}}</a>
                 </li>
             </ul>

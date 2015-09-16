@@ -6,7 +6,7 @@ angular.module("bento/bento.tpl.html", []).run(["$templateCache", function($temp
     "    <div class=\"bento-box-menu-container hidden-sm hidden-xs\">\n" +
     "        <nav class=\"bento-box-menu\" ui-scrollfix=\"+0\">\n" +
     "            <ul class=\"nav nav-justified\">\n" +
-    "                <li ng-repeat=\"item in boxMenu\">\n" +
+    "                <li ng-repeat=\"item in boxMenu\" class=\"{{item.box}}\">\n" +
     "                    <a href=\"\" du-smooth-scroll=\"{{item.box}}\" ng-click=\"selectBox(item.box)\">{{item.title}}</a>\n" +
     "                </li>\n" +
     "            </ul>\n" +
@@ -246,7 +246,7 @@ angular.module("common/engines/google-cs/google-cs.tpl.html", []).run(["$templat
     "<div class=\"media\">\n" +
     "    <div class=\"media-body\">\n" +
     "        <h4 class=\"media-heading\"><a ng-href=\"{{item.link}}\" title=\"{{item.title}}\" target=\"_googlecs\">{{item.title | truncate: 40: '...': true}}</a></h4>\n" +
-    "        <p ng-bind-html=\"item.htmlSnippet\"></p>\n" +
+    "        <p ng-bind-html=\"item.snippet\"></p>\n" +
     "    </div>\n" +
     "</div>\n" +
     "<!--div class=\"media\">\n" +
@@ -434,19 +434,18 @@ angular.module('oneSearch.bento', [])
 
         function initResultLimit(box){
             var numEngines = self.boxes[box]['engines'].length;
-            var limit = numEngines > 2 ? 1 : (numEngines < 2 ? 3 : 2);
+            var limit = numEngines > 1 ? 1 : (numEngines < 2 ? 3 : 2);
             self.boxes[box].resultLimit = limit;
         }
 
         function setResultLimit(box){
-
             $q.when(self.boxes[box].results)
                 .then(function(results){
                     var numResults = Object.keys(results).length;
                     var numEngines = self.boxes[box]['engines'].length;
                     var expecting = numResults + numEngines;
-                    
-                    if (expecting < 2 && self.boxes[box].resultLimit < 3){
+
+                    if ((expecting < 2 && self.boxes[box].resultLimit < 3) || (expecting < 3 && self.boxes[box].resultLimit < 2)){
                         self.boxes[box].resultLimit++;
                     }
                 });

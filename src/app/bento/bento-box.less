@@ -1,5 +1,5 @@
 .bento-box-container {
-
+  text-align: justify;
 
   > .row > div {
     border: 1px solid transparent;
@@ -61,13 +61,20 @@
   }
 
   .nav {
-    > li > a {
-      padding: 15px 0;
-      white-space: nowrap;
+    > li {
+      &.journals, &.libguides {
+        border-right: 1px solid #ddd;
+      }
 
-      &:hover {
-        background-color: #993333;
-        color: #f6f6f6;
+      > a {
+        padding: 15px 0;
+        white-space: nowrap;
+
+        &:hover {
+          background-color: #993333;
+          color: #f6f6f6;
+        }
+
       }
     }
   }
