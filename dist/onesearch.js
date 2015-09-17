@@ -801,6 +801,7 @@ angular.module('oneSearch.common')
                 $scope.originalValue = $scope.model;
                 $scope.dataRequested = false;
                 $scope.numShow = 5;
+                $scope.faqSearched = false;
 
                 // hides the list initially
                 $scope.selected = false;
@@ -815,6 +816,7 @@ angular.module('oneSearch.common')
                         $scope.setCurrent(-1, false);
                         $scope.dataRequested = false;
                         $scope.selected = false;
+                        $scope.faqSearched = false;
                     }
                     if ($scope.model.length > 2 && !$scope.dataRequested){
                         var fixedString = $scope.model.replace(/\//g, " ");
@@ -836,12 +838,17 @@ angular.module('oneSearch.common')
                                 .then(function(data) {
                                     $scope.items.subjects = data;
                                 });
-                            dataFactory.get('https://www.googleapis.com/customsearch/v1?key=AIzaSyCMGfdDaSfjqv5zYoS0mTJnOT3e9MURWkU&cx=003453353330912650815:lfyr_-azrxe&q=' +
-                                encodeURI(fixedString) + '&siteSearch=ask.lib.ua.edu')
-                                .then(function(data) {
-                                    // pluck out the items array for easier 'suggestWatcher' processing
-                                    $scope.items.faq = data.items;
-                                });
+                            var lastTwo = $scope.model.slice(-2);
+                            if (lastTwo.indexOf(" ") === 1 && $scope.model.length > 4 && !$scope.faqSearched) {
+                                console.log("Running GCS search.");
+                                $scope.faqSearched = true;
+                                dataFactory.get('https://www.googleapis.com/customsearch/v1?key=AIzaSyCMGfdDaSfjqv5zYoS0mTJnOT3e9MURWkU&cx=003453353330912650815:lfyr_-azrxe&q=' +
+                                    encodeURI(fixedString) + '&siteSearch=ask.lib.ua.edu')
+                                    .then(function (data) {
+                                        // pluck out the items array for easier 'suggestWatcher' processing
+                                        $scope.items.faq = data.items;
+                                    });
+                            }
                         }, 0);
                     }
                     $scope.originalValue = $scope.model;
@@ -953,6 +960,7 @@ angular.module('oneSearch.common')
                         scope.setCurrent(-1, false);
                         scope.dataRequested = false;
                         scope.selected = false;
+                        scope.faqSearched = false;
                         scope.$apply();
                         scope.search();
                     }, 0);
