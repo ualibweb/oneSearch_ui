@@ -148,7 +148,6 @@ angular.module('oneSearch.bento', [])
                             //console.log(res);
                             // Group the results by defined media types
                             var grouped = mediaTypes.groupBy(res, engine.mediaTypes);
-                            console.log(grouped);
 
                             // Iterate over the boxes.
                             Object.keys(self.boxes).forEach(function(type){
@@ -226,7 +225,7 @@ angular.module('oneSearch.bento', [])
 
 
 
-    .directive('bentoBox', ['$rootScope', '$controller', '$compile', '$animate', 'Bento', function($rootScope, $controller, $compile, $animate, Bento){
+    .directive('bentoBox', ['$rootScope', '$controller', '$compile', '$animate', '$timeout', 'Bento', 'oneSearch', function($rootScope, $controller, $compile, $animate, $timeout, Bento, oneSearch){
         return {
             restrict: 'A', //The directive always requires and attribute, so disallow class use to avoid conflict
             scope: {},
@@ -254,15 +253,47 @@ angular.module('oneSearch.bento', [])
                 //Enter the spinner animation, appending it to the title element
                 $animate.enter(spinner, titleElm, angular.element(titleElm[0].lastChild));
 
+                var engineTimeout;
+                var waitingMessage = angular.element(' <span class="unresponsive-msg">Still waiting on more results</span>');
+
+                function checkEngineStatus(){
+                    var engines = angular.copy(Bento.boxes[box]['engines']);
+                    var en = [];
+                    for (var e in oneSearch.engines){
+                        if (engines.indexOf(e) > -1){
+                            if (oneSearch.engines[e].response && !oneSearch.engines[e].response.done){
+                                en.push(e);
+                            }
+
+                        }
+                    }
+                    if (engineTimeout && !spinner.hasClass('unresponsive')){
+                        spinner.addClass('unresponsive');
+
+                        $animate.enter(waitingMessage, spinner, angular.element(spinner[0].lastChild));
+                    }
+
+                    if (en.length){
+                        engineTimeout = $timeout(checkEngineStatus, 500)
+                    }
+
+                }
+
+                $timeout(checkEngineStatus, 2000);
+
                 //Watch the boxes "engines" Array
                 var boxWatcher = scope.$watchCollection(
                     function(){
-
                         return Bento.boxes[box]['engines'];
                     },
                     function(newVal, oldVal) {
                         // Has the "engines" Array changed?
                         if (newVal !== oldVal){
+                            //console.log(box);
+                            //console.log(newVal);
+                            //console.log(oldVal);
+                            //console.log('----------------------------');
+
                             //variable for engine removed from array
                             var engine = '';
 
@@ -365,6 +396,8 @@ angular.module('oneSearch.bento', [])
 
                     // Tell spinner to exit animation
                     $animate.leave(spinner);
+
+                    //$timeout.cancel(engineTimeout);
 
                     // Destroy this box's watcher (no need to waste the cycles)
                     boxWatcher();

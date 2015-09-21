@@ -193,6 +193,7 @@ angular.module('common.oneSearch', [])
 
                 //Cancel any pending searches - prevents mixed results by canceling the ajax requests
                 abortPendingSearches();
+
                 // Compensate for when not on home page
                 // Since WP pages aren't loaded as angular routes, we must detect if there is no '#/PATH' present
                 // after the URI (or that it's not a 'bento' route), then send the browser to a pre-build URL.

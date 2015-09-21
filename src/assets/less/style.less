@@ -139,7 +139,7 @@
 
 
 /* Make clicks pass-through */
-#loading-bar-spinner {
+#loading-bar-spinner, .unresponsive-msg {
     pointer-events: none;
     -webkit-pointer-events: none;
     -webkit-transition: 350ms linear all;
@@ -166,6 +166,10 @@
     left: 10px;*/
     display: inline-block;
     margin-left: 15px;
+
+    > div {
+      display: inline-block;
+    }
 }
 
 #loading-bar-spinner .spinner-icon {
@@ -183,6 +187,27 @@
     -o-animation:      loading-bar-spinner 350ms linear infinite;
     animation:         loading-bar-spinner 350ms linear infinite;
 }
+
+.unresponsive {
+  .spinner-icon {
+    border-top-color:  #ccc !important;
+    border-left-color: #ccc !important;
+    border-right-color: #ccc !important;
+
+    -webkit-animation-duration: 1.5s !important;
+    -moz-animation-duration:    1.5s !important;
+    -ms-animation-duration:     1.5s !important;
+    -o-animation-duration:      1.5s !important;
+    animation-duration:         1.5s !important;
+  }
+  .unresponsive-msg{
+    margin-left: 5px;
+    font-size: .55em;
+    color: #999;
+  }
+}
+
+
 
 @-webkit-keyframes loading-bar-spinner {
     0%   { -webkit-transform: rotate(0deg);   transform: rotate(0deg); }
