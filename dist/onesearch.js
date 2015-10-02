@@ -1000,6 +1000,8 @@ angular.module('oneSearch.common')
 
                 elem.bind("contextmenu", function (event) {
                     event.stopPropagation();
+                    event.preventDefault();
+                    console.log("Right click");
                 });
 
                 scope.handleSelection = function(selectedItem) {
