@@ -108,9 +108,12 @@ angular.module('oneSearch.common')
                     }
                     console.log("On Focus");
                 };
-                $scope.onBlur = function(){
-                    $scope.selected = false;
-                    console.log("On Blur");
+                $scope.onBlur = function(event){
+                    console.log("onBlur()");
+                    if (event.button < 1) {
+                        $scope.selected = false;
+                    }
+                    console.dir(event);
                 };
                 $scope.compare = function(query){
                     return function(item){
