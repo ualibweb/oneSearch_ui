@@ -189,7 +189,7 @@ angular.module('oneSearch.common')
                 });
 
                 elem.bind("contextmenu", function (event) {
-
+                    event.stopPropagation();
                 });
 
                 scope.handleSelection = function(selectedItem) {
