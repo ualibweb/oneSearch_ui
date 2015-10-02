@@ -190,8 +190,8 @@ angular.module('oneSearch.common')
                     suggestWatcher();
                 });
 
-                elem.bind("click", function (event) {
-                    console.log("Click");
+                elem.bind("mousedown", function (event) {
+                    console.log("Mousedown");
                     if (event.button > 0) {
                         event.stopPropagation();
                         console.dir(event);
