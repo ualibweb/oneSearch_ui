@@ -1007,6 +1007,13 @@ angular.module('oneSearch.common')
                         console.dir(event);
                     }
                 });
+                elem.bind("mouseup", function (event) {
+                    console.log("Mouseup");
+                    if (event.button > 0) {
+                        event.stopPropagation();
+                        console.dir(event);
+                    }
+                });
 
                 scope.handleSelection = function(selectedItem) {
                     $timeout(function() {
