@@ -1000,9 +1000,11 @@ angular.module('oneSearch.common')
                     suggestWatcher();
                 });
 
-                elem.bind("contextmenu", function (event) {
-                    event.stopPropagation();
-                    console.log("Right click");
+                elem.bind("click", function (event) {
+                    if (event.button > 0) {
+                        event.stopPropagation();
+                        console.log("Right click");
+                    }
                 });
 
                 scope.handleSelection = function(selectedItem) {

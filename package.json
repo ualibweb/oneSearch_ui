@@ -1,6 +1,6 @@
 {
   "name": "oneSearch-ui",
-  "version": "0.14.14",
+  "version": "0.14.15",
   "deDependencies": {
     "grunt": "~0.4.5"
   },
