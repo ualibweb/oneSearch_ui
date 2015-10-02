@@ -916,9 +916,11 @@ angular.module('oneSearch.common')
                     if (angular.isDefined($scope.model) && $scope.model.length > 2){
                         $scope.selected = true;
                     }
+                    console.log("On Focus");
                 };
                 $scope.onBlur = function($event){
                     $scope.selected = false;
+                    console.log("On Blur");
                 };
                 $scope.compare = function(query){
                     return function(item){
@@ -1000,7 +1002,6 @@ angular.module('oneSearch.common')
 
                 elem.bind("contextmenu", function (event) {
                     event.stopPropagation();
-                    event.preventDefault();
                     console.log("Right click");
                 });
 
