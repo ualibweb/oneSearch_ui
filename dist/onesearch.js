@@ -87,7 +87,7 @@ angular.module("common/directives/suggest/suggest.tpl.html", []).run(["$template
   $templateCache.put("common/directives/suggest/suggest.tpl.html",
     "<div class=\"input-group input-group-lg\">\n" +
     "    <input type=\"text\" name=\"search\" class=\"form-control onesearch-text\" placeholder=\"{{prompt}}\"\n" +
-    "           ng-model=\"model\" ng-change=\"onChange()\" autocomplete=\"off\" ng-blur=\"onBlur()\" ng-focus=\"onFocus()\" />\n" +
+    "           ng-model=\"model\" ng-change=\"onChange()\" autocomplete=\"off\" ng-focus=\"onFocus()\" />\n" +
     "    <div class=\"input-group-btn\">\n" +
     "        <button type=\"submit\" class=\"btn btn-onesearch btn-primary\"><span class=\"fa fa-search\"></span></button>\n" +
     "    </div>\n" +
@@ -918,7 +918,7 @@ angular.module('oneSearch.common')
                     }
                     console.log("On Focus");
                 };
-                $scope.onBlur = function($event){
+                $scope.onBlur = function(){
                     $scope.selected = false;
                     console.log("On Blur");
                 };
@@ -1000,6 +1000,14 @@ angular.module('oneSearch.common')
                     suggestWatcher();
                 });
 
+                elem.bind("blur", function (event) {
+                    console.log("Blur event");
+                    if (event.button < 1) {
+                        scope.onBlur();
+                        scope.$apply();
+                    }
+                    console.dir(event);
+                });
                 elem.bind("mousedown", function (event) {
                     console.log("Mousedown");
                     if (event.button > 0) {

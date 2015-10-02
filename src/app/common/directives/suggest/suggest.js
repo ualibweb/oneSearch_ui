@@ -108,7 +108,7 @@ angular.module('oneSearch.common')
                     }
                     console.log("On Focus");
                 };
-                $scope.onBlur = function($event){
+                $scope.onBlur = function(){
                     $scope.selected = false;
                     console.log("On Blur");
                 };
@@ -190,6 +190,14 @@ angular.module('oneSearch.common')
                     suggestWatcher();
                 });
 
+                elem.bind("blur", function (event) {
+                    console.log("Blur event");
+                    if (event.button < 1) {
+                        scope.onBlur();
+                        scope.$apply();
+                    }
+                    console.dir(event);
+                });
                 elem.bind("mousedown", function (event) {
                     console.log("Mousedown");
                     if (event.button > 0) {
