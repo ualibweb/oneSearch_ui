@@ -188,6 +188,10 @@ angular.module('oneSearch.common')
                     suggestWatcher();
                 });
 
+                elem.bind("contextmenu", function (event) {
+
+                });
+
                 scope.handleSelection = function(selectedItem) {
                     $timeout(function() {
                         scope.model = selectedItem;

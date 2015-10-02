@@ -22,7 +22,7 @@
                 <div class="">
                     <h4>Recommended Links</h4>
                     <div ng-repeat="recommendation in items.recommend | limitTo:10">
-                        <a href="{{recommendation.link}}" ng-mousedown="go(recommendation.link)">
+                        <a ng-href="{{recommendation.link}}">
                             {{recommendation.description}}
                         </a>
                     </div>
