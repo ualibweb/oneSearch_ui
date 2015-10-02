@@ -1001,9 +1001,10 @@ angular.module('oneSearch.common')
                 });
 
                 elem.bind("click", function (event) {
+                    console.log("Click");
                     if (event.button > 0) {
                         event.stopPropagation();
-                        console.log("Right click");
+                        console.dir(event);
                     }
                 });
 
