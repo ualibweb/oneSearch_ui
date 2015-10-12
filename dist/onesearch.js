@@ -99,7 +99,7 @@ angular.module("common/directives/suggest/suggest.tpl.html", []).run(["$template
     "                ng-repeat=\"item in filteredItems = (items.suggest | filter:compare(originalValue)) | limitTo:numShow track by $index\"\n" +
     "                ng-mousedown=\"handleSelection(item.search)\" ng-class=\"item.class\"\n" +
     "                ng-mouseenter=\"setCurrent($index, false)\">\n" +
-    "                <a href=\"#/bento/{{item.search}}\">{{item.search}}</a>\n" +
+    "                <a href=\"#/bento/{{item.search}}\" ng-click=\"gaTypeAhead(item.search)\">{{item.search}}</a>\n" +
     "            </li>\n" +
     "        </ul>\n" +
     "    </div>\n" +
@@ -109,7 +109,7 @@ angular.module("common/directives/suggest/suggest.tpl.html", []).run(["$template
     "                <div class=\"\">\n" +
     "                    <h4>Recommended Links</h4>\n" +
     "                    <div ng-repeat=\"recommendation in items.recommend | limitTo:10\">\n" +
-    "                        <a ng-href=\"{{recommendation.link}}\">\n" +
+    "                        <a ng-href=\"{{recommendation.link}}\" ng-click=\"gaSuggestion(recommendation.description)\">\n" +
     "                            {{recommendation.description}}\n" +
     "                        </a>\n" +
     "                    </div>\n" +
@@ -120,7 +120,7 @@ angular.module("common/directives/suggest/suggest.tpl.html", []).run(["$template
     "                    <h4>LibGuides Subjects <a href=\"http://guides.lib.ua.edu/\" class=\"small\" ng-mousedown=\"go('http://guides.lib.ua.edu/')\">more</a></h4>\n" +
     "                    <div ng-repeat=\"person in items.subjects | limitTo:10\">\n" +
     "                        <div ng-repeat=\"subject in person.subjects | limitTo:2\">\n" +
-    "                            <a ng-if=\"subject.link.length > 7\" ng-href=\"{{subject.link}}\" ng-mousedown=\"go(subject.link)\">\n" +
+    "                            <a ng-if=\"subject.link.length > 7\" ng-href=\"{{subject.link}}\" ng-mousedown=\"go(subject.link)\" ng-click=\"gaSuggestion(subject.subject)\">\n" +
     "                                {{subject.subject}}\n" +
     "                            </a>\n" +
     "                            <a ng-if=\"subject.link.length <= 7\" href=\"#\"\n" +
@@ -135,7 +135,7 @@ angular.module("common/directives/suggest/suggest.tpl.html", []).run(["$template
     "                <div class=\"\">\n" +
     "                    <h4>FAQ <a href=\"http://ask.lib.ua.edu/\" class=\"small\" ng-mousedown=\"go('http://ask.lib.ua.edu/')\">more</a></h4>\n" +
     "                    <div ng-repeat=\"faq in items.faq | limitTo:5\">\n" +
-    "                        <a ng-href=\"{{faq.link}}\" ng-mousedown=\"go(faq.link)\" ng-bind-html=\"faq.title\">\n" +
+    "                        <a ng-href=\"{{faq.link}}\" ng-mousedown=\"go(faq.link)\"  ng-click=\"gaSuggestion(faq.title)\" ng-bind-html=\"faq.title\">\n" +
     "                        </a>\n" +
     "                    </div>\n" +
     "                </div>\n" +
@@ -672,7 +672,10 @@ angular.module('oneSearch.bento', [])
                                         $scope.box = Bento.boxes[box];
                                         $scope.gaPush = function(){
                                             ga('send', 'event', 'oneSearch', 'item_click', gaBox);
-                                        }
+                                        };
+                                        $scope.gaMore = function(){
+                                            ga('send', 'event', 'oneSearch', 'more_click', 'more_' + gaBox);
+                                        };
 
                                     }];
 
@@ -682,7 +685,7 @@ angular.module('oneSearch.bento', [])
 
                                     // Wrap the template in an element that specifies ng-repeat over the "items" object (i.e., the results),
                                     // gives the generic classes for items in a bento box.
-                                    var template = angular.element('<div class="animate-repeat bento-box-item" ng-repeat="item in items | limitTo: box.resultLimit">'+data+'</div><div class="resource-link-container"><a class="btn btn-link btn-sm" ng-href="{{resourceLink}}" ng-if="resourceLink" target="_{{engine}}">More results from {{engine | ucfirst}}  <span class="fa fa-fw fa-external-link"></span></a></div>');
+                                    var template = angular.element('<div class="animate-repeat bento-box-item" ng-repeat="item in items | limitTo: box.resultLimit">'+data+'</div><div class="resource-link-container"><a class="btn btn-link btn-sm" ng-href="{{resourceLink}}" ng-if="resourceLink" target="_{{engine}}" ng-click="gaMore()">More results from {{engine | ucfirst}}  <span class="fa fa-fw fa-external-link"></span></a></div>');
 
                                     // Compile wrapped template with the isolated scope's context
                                     var html = $compile(template)(engineScope);
@@ -919,6 +922,15 @@ angular.module('oneSearch.common')
                         return false;
                     };
                 };
+
+                // This is dumb, but quick fix to get GA events on suggestion box.
+                // TODO: Remove this and add in global GA directives
+                $scope.gaSuggestion = function(linkTitle){
+                    ga('send', 'event', 'oneSearch', 'suggestion_click', linkTitle);
+                };
+                $scope.gaTypeAhead = function(linkTitle){
+                    ga('send', 'event', 'oneSearch', 'type_ahead_click', linkTitle);
+                };
             }],
             link: function(scope, elem, attrs) {
                 scope.showSuggestions = false;
@@ -961,6 +973,12 @@ angular.module('oneSearch.common')
                         //Enter
                         case 13:
                             scope.selected = false;
+
+                            // Check if type-ahead selected. If so, trigger GA event
+                            // gaTypeAhead() is also bound to ng-click for each type-ahead link
+                            if (scope.current > -1 && scope.filteredItems[scope.current] && scope.model === scope.filteredItems[scope.current].search){
+                                scope.gaTypeAhead(scope.model);
+                            }
                             break;
 
                         //Backspace

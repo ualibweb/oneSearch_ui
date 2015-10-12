@@ -121,6 +121,15 @@ angular.module('oneSearch.common')
                         return false;
                     };
                 };
+
+                // This is dumb, but quick fix to get GA events on suggestion box.
+                // TODO: Remove this and add in global GA directives
+                $scope.gaSuggestion = function(linkTitle){
+                    ga('send', 'event', 'oneSearch', 'suggestion_click', linkTitle);
+                };
+                $scope.gaTypeAhead = function(linkTitle){
+                    ga('send', 'event', 'oneSearch', 'type_ahead_click', linkTitle);
+                };
             },
             link: function(scope, elem, attrs) {
                 scope.showSuggestions = false;
@@ -163,6 +172,12 @@ angular.module('oneSearch.common')
                         //Enter
                         case 13:
                             scope.selected = false;
+
+                            // Check if type-ahead selected. If so, trigger GA event
+                            // gaTypeAhead() is also bound to ng-click for each type-ahead link
+                            if (scope.current > -1 && scope.filteredItems[scope.current] && scope.model === scope.filteredItems[scope.current].search){
+                                scope.gaTypeAhead(scope.model);
+                            }
                             break;
 
                         //Backspace
