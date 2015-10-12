@@ -30,7 +30,7 @@ angular.module('oneSearch.common')
                 $scope.selected = false;
 
                 $scope.onChange = function(){
-                    console.log("OnChange event.");
+                    //console.log("OnChange event.");
                     $scope.selected = true;
                     var fixedString = $scope.model.replace(/\//g, " ");
 
@@ -66,9 +66,9 @@ angular.module('oneSearch.common')
                     if ($scope.model.length > 4 && !$scope.faqSearched){
                         //run GCS only if the last character is a space and prev one is not
                         var lastTwo = fixedString.slice(-2);
-                        console.log("Checking conditions for GCS search..." + lastTwo);
+                        //console.log("Checking conditions for GCS search..." + lastTwo);
                         if (lastTwo.indexOf(" ") > 0) {
-                            console.log("Running GCS search.");
+                            //console.log("Running GCS search.");
                             $timeout(function() {
                                 $scope.faqSearched = true;
                                 dataFactory.get('https://www.googleapis.com/customsearch/v1?key=AIzaSyCMGfdDaSfjqv5zYoS0mTJnOT3e9MURWkU&cx=003453353330912650815:lfyr_-azrxe&q=' +
@@ -106,10 +106,10 @@ angular.module('oneSearch.common')
                     if (angular.isDefined($scope.model) && $scope.model.length > 2){
                         $scope.selected = true;
                     }
-                    console.log("onFocus()");
+                    //console.log("onFocus()");
                 };
                 $scope.onBlur = function(event){
-                    console.log("onBlur()");
+                    //console.log("onBlur()");
                     $scope.selected = false;
                     $document.unbind("click");
                 };
@@ -179,7 +179,7 @@ angular.module('oneSearch.common')
                             break;
 
                         default:
-                            console.log("KeyCode " + event.keyCode);
+                            //console.log("KeyCode " + event.keyCode);
                             break;
                     }
                     scope.$apply();
@@ -189,7 +189,7 @@ angular.module('oneSearch.common')
                 scope.$on('$destroy', function(){
                     elem.unbind("keydown");
                     suggestWatcher();
-                    console.log("$destroy");
+                    //console.log("$destroy");
                 });
 
                 elem.bind("click", function (event) {

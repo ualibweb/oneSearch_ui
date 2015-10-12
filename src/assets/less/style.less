@@ -169,6 +169,11 @@
 
     > div {
       display: inline-block;
+      -webkit-transition: border-color  500ms linear;
+      -moz-transition:    border-color  500ms linear;
+      -ms-transition:     border-color  500ms linear;
+      -o-transition:      border-color  500ms linear;
+      transition:         border-color  500ms linear;
     }
 }
 
@@ -186,13 +191,14 @@
     -ms-animation:     loading-bar-spinner 350ms linear infinite;
     -o-animation:      loading-bar-spinner 350ms linear infinite;
     animation:         loading-bar-spinner 350ms linear infinite;
+  
+  
 }
 
 .unresponsive {
   .spinner-icon {
     border-top-color:  #ccc !important;
     border-left-color: #ccc !important;
-    border-right-color: #ccc !important;
 
     -webkit-animation-duration: 1.5s !important;
     -moz-animation-duration:    1.5s !important;

@@ -153,7 +153,7 @@ angular.module("common/engines/acumen/acumen.tpl.html", []).run(["$templateCache
     "    </a>\n" +
     "    <div class=\"media-body\">\n" +
     "        <h4 class=\"media-heading\">\n" +
-    "            <a ng-href=\"http://acumen.lib.ua.edu/{{item.link}}\" target=\"_acumen\" title=\"{{item.title}}\">{{item.title | truncate: 40: '...': true}}</a>\n" +
+    "            <a ng-href=\"http://acumen.lib.ua.edu/{{item.link}}\" target=\"_acumen\" title=\"{{item.title}}\" ng-click=\"gaPush()\">{{item.title | truncate: 40: '...': true}}</a>\n" +
     "        </h4>\n" +
     "        <div class=\"details-context\">\n" +
     "            <span ng-if=\"item.date\" ng-bind-html=\"item.date\"></span>\n" +
@@ -171,7 +171,7 @@ angular.module("common/engines/catalog/catalog.tpl.html", []).run(["$templateCac
     "        <h4 class=\"media-heading\">\n" +
     "            <a ng-href=\"{{item.href}}\"\n" +
     "               title=\"{{item.title}}\"\n" +
-    "               ng-bind-html=\"item.title | truncate: 50: '...': true\" target=\"_catalog\"></a>\n" +
+    "               ng-bind-html=\"item.title | truncate: 50: '...': true\" target=\"_catalog\" ng-click=\"gaPush()\"></a>\n" +
     "        </h4>\n" +
     "        <div class=\"details-context\">\n" +
     "            <span ng-if=\"item.year && item.year | number\" ng-bind-html=\"item.year\"></span>\n" +
@@ -193,7 +193,7 @@ angular.module("common/engines/databases/databases.tpl.html", []).run(["$templat
     "<div class=\"media\">\n" +
     "    <div class=\"media-body\">\n" +
     "        <h4 class=\"media-heading\">\n" +
-    "            <a ng-href=\"{{item.url}}\" title=\"{{item.title}}\" target=\"_databases\">{{item.title | truncate: 40: '...': true}}</a>\n" +
+    "            <a ng-href=\"{{item.url}}\" title=\"{{item.title}}\" target=\"_databases\" ng-click=\"gaPush()\">{{item.title | truncate: 40: '...': true}}</a>\n" +
     "        </h4>\n" +
     "        <div class=\"details-context\">\n" +
     "            <span ng-if=\"item.coverage\" ng-bind-html=\"item.coverage\"></span>\n" +
@@ -210,7 +210,7 @@ angular.module("common/engines/ejournals/ejournals.tpl.html", []).run(["$templat
     "<div class=\"media\">\n" +
     "    <div class=\"media-body\">\n" +
     "        <h4 class=\"media-heading\">\n" +
-    "            <a ng-href=\"{{item.links[0].href}}\" title=\"{{item.title}}\" target=\"_ejournals\">{{item.title | ltrim | truncate: 50: '...': true}}</a>\n" +
+    "            <a ng-href=\"{{item.links[0].href}}\" title=\"{{item.title}}\" target=\"_ejournals\" ng-click=\"gaPush()\">{{item.title | ltrim | truncate: 50: '...': true}}</a>\n" +
     "        </h4>\n" +
     "\n" +
     "        <div class=\"details-context\">\n" +
@@ -245,28 +245,10 @@ angular.module("common/engines/google-cs/google-cs.tpl.html", []).run(["$templat
   $templateCache.put("common/engines/google-cs/google-cs.tpl.html",
     "<div class=\"media\">\n" +
     "    <div class=\"media-body\">\n" +
-    "        <h4 class=\"media-heading\"><a ng-href=\"{{item.link}}\" title=\"{{item.title}}\" target=\"_googlecs\">{{item.title | truncate: 40: '...': true}}</a></h4>\n" +
+    "        <h4 class=\"media-heading\"><a ng-href=\"{{item.link}}\" title=\"{{item.title}}\" target=\"_googlecs\" ng-click=\"gaPush()\">{{item.title | truncate: 40: '...': true}}</a></h4>\n" +
     "        <p ng-bind-html=\"item.snippet\"></p>\n" +
     "    </div>\n" +
-    "</div>\n" +
-    "<!--div class=\"media\">\n" +
-    "    <div class=\"media-body\">\n" +
-    "        <h4 class=\"media-heading\"><a href=\"http://guides.lib.ua.edu\">Library Guides</a></h4>\n" +
-    "        <div class=\"media\" ng-repeat=\"guide in items | limitTo:2 | filter:{link:'guides.lib.ua.edu'}\">\n" +
-    "            <a class=\"media-left\" ng-href=\"{{guide.link}}\" title=\"{{guide.title}}\">\n" +
-    "                <img ng-src=\"guide.pagemap.cse_thumbnail[0].src\"\n" +
-    "                     width=\"{{guide.pagemap.cse_thumbnail[0].width}}\"\n" +
-    "                     height=\"{{guide.pagemap.cse_thumbnail[0].height}}\">\n" +
-    "            </a>\n" +
-    "            <div class=\"media-body\">\n" +
-    "                <h4 class=\"media-heading\">\n" +
-    "                    <a ng-href=\"{{guide.link}}\">{{guide.title}}</a>\n" +
-    "                </h4>\n" +
-    "                <p>{{guide.snippet}}</p>\n" +
-    "            </div>\n" +
-    "        </div>\n" +
-    "    </div>\n" +
-    "</div-->");
+    "</div>");
 }]);
 
 angular.module("common/engines/recommend/recommend.tpl.html", []).run(["$templateCache", function($templateCache) {
@@ -283,7 +265,7 @@ angular.module("common/engines/scout/scout.tpl.html", []).run(["$templateCache",
     "            <a ng-href=\"{{item.PLink}}\"\n" +
     "               title=\"{{item.Items[0].Data}}\"\n" +
     "               target=\"_scout\"\n" +
-    "               ng-bind-html=\"item.RecordInfo.BibRecord.BibEntity.Titles[0].TitleFull | lowercase | ucfirst\"></a>\n" +
+    "               ng-bind-html=\"item.title | lowercase | ucfirst | truncate: 80: '...': true\" ng-click=\"gaPush()\"></a>\n" +
     "        </h4>\n" +
     "        <div class=\"details-context\">\n" +
     "            <span ng-if=\"item.RecordInfo.BibRecord.BibRelationships.IsPartOfRelationships[0].BibEntity.Dates[0]\">{{item.RecordInfo.BibRecord.BibRelationships.IsPartOfRelationships[0].BibEntity.Dates[0].Y}} </span>\n" +
@@ -604,7 +586,7 @@ angular.module('oneSearch.bento', [])
                 $animate.enter(spinner, titleElm, angular.element(titleElm[0].lastChild));
 
                 var engineTimeout;
-                var waitingMessage = angular.element(' <span class="unresponsive-msg">Still waiting on more results</span>');
+                var waitingMessage = angular.element(' <span class="unresponsive-msg">Awaiting results from provider</span>');
 
                 function checkEngineStatus(){
                     var engines = angular.copy(Bento.boxes[box]['engines']);
@@ -681,15 +663,20 @@ angular.module('oneSearch.bento', [])
                                 // the new isolated scope.
                                 Bento.engines[engine].tpl.then(function(data){
 
-                                    var EngCtrl = ['$scope', 'Bento', function($scope, Bento){
+                                    var EngCtrl = ['$scope', '$element', 'Bento', function($scope, $element, Bento){
                                         // Extend any controller defined by an engine's config
                                         if (Bento.engines[$scope.engine].controller){
                                             angular.extend(this, $controller(Bento.engines[$scope.engine].controller, {$scope: $scope}));
                                         }
+                                        var gaBox = $scope.boxName.toLowerCase().replace(/\s+/g, '_').replace(/[']+/g, '');
                                         $scope.box = Bento.boxes[box];
+                                        $scope.gaPush = function(){
+                                            _gaq.push(['_trackEvent', 'onesearch', 'item_click', gaBox]);
+                                        }
+
                                     }];
 
-                                    var controller = $controller(EngCtrl, {$scope: engineScope});
+                                    var controller = $controller(EngCtrl, {$scope: engineScope, $element: elm});
                                     elm.data('$ngControllerController', controller);
                                     elm.children().data('$ngControllerController', controller);
 
@@ -759,6 +746,7 @@ angular.module('oneSearch.bento', [])
     .directive('bentoBoxMenu', ['Bento', '$document', '$rootScope', '$timeout', '$q', function(Bento, $document, $rootScope, $timeout, $q){
         return {
             restrict: 'AC',
+            replace: true,
             link: function(scope, elm){
                 var selected;
                 var timeout;
@@ -826,7 +814,7 @@ angular.module('oneSearch.common')
                 model: '=',
                 search: '='
             },
-            controller: ['$scope', '$window', '$timeout', '$document', 'dataFactory', function($scope, $window, $timeout, $document,  dataFactory){
+            controller: function($scope, $window, $timeout, $document,  dataFactory){
                 $scope.items = {};
                 $scope.filteredItems = [];
                 $scope.model = "";
@@ -840,7 +828,7 @@ angular.module('oneSearch.common')
                 $scope.selected = false;
 
                 $scope.onChange = function(){
-                    console.log("OnChange event.");
+                    //console.log("OnChange event.");
                     $scope.selected = true;
                     var fixedString = $scope.model.replace(/\//g, " ");
 
@@ -876,9 +864,9 @@ angular.module('oneSearch.common')
                     if ($scope.model.length > 4 && !$scope.faqSearched){
                         //run GCS only if the last character is a space and prev one is not
                         var lastTwo = fixedString.slice(-2);
-                        console.log("Checking conditions for GCS search..." + lastTwo);
+                        //console.log("Checking conditions for GCS search..." + lastTwo);
                         if (lastTwo.indexOf(" ") > 0) {
-                            console.log("Running GCS search.");
+                            //console.log("Running GCS search.");
                             $timeout(function() {
                                 $scope.faqSearched = true;
                                 dataFactory.get('https://www.googleapis.com/customsearch/v1?key=AIzaSyCMGfdDaSfjqv5zYoS0mTJnOT3e9MURWkU&cx=003453353330912650815:lfyr_-azrxe&q=' +
@@ -916,10 +904,10 @@ angular.module('oneSearch.common')
                     if (angular.isDefined($scope.model) && $scope.model.length > 2){
                         $scope.selected = true;
                     }
-                    console.log("onFocus()");
+                    //console.log("onFocus()");
                 };
                 $scope.onBlur = function(event){
-                    console.log("onBlur()");
+                    //console.log("onBlur()");
                     $scope.selected = false;
                     $document.unbind("click");
                 };
@@ -931,7 +919,7 @@ angular.module('oneSearch.common')
                         return false;
                     };
                 };
-            }],
+            },
             link: function(scope, elem, attrs) {
                 scope.showSuggestions = false;
                 var suggestWatcher = scope.$watch('items', function(newVal, oldVal){
@@ -989,7 +977,7 @@ angular.module('oneSearch.common')
                             break;
 
                         default:
-                            console.log("KeyCode " + event.keyCode);
+                            //console.log("KeyCode " + event.keyCode);
                             break;
                     }
                     scope.$apply();
@@ -999,7 +987,7 @@ angular.module('oneSearch.common')
                 scope.$on('$destroy', function(){
                     elem.unbind("keydown");
                     suggestWatcher();
-                    console.log("$destroy");
+                    //console.log("$destroy");
                 });
 
                 elem.bind("click", function (event) {
@@ -1053,7 +1041,7 @@ angular.module('engines.acumen', [])
         })
     }])
 
-    .controller('AcumenCtrl', ['$scope', '$filter', function($scope, $filter){
+    .controller('AcumenCtrl', function($scope, $filter){
         var items = $scope.items;
 
         for (var i = 0, len = items.length; i < len; i++) {
@@ -1063,7 +1051,7 @@ angular.module('engines.acumen', [])
                 else items[i].type = items[i].type.sort().shift();
             }
         }
-    }]);
+    });
 angular.module('engines.catalog', [])
 
     .config(['oneSearchProvider', function(oneSearchProvider){
@@ -1094,7 +1082,7 @@ angular.module('engines.catalog', [])
         }
     }])
 
-    .controller('CatalogCtrl', ['$scope', '$filter', function($scope, $filter){
+    .controller('CatalogCtrl', function($scope, $filter){
         var types = {
             bc: "Archive/Manuscript",
             cm: "Music Score",
@@ -1130,7 +1118,7 @@ angular.module('engines.catalog', [])
         }
 
         $scope.items = items;
-    }]);
+    });
 
 angular.module('engines.databases', [])
 
@@ -1163,7 +1151,7 @@ angular.module('engines.ejournals', [])
         })
     }])
 
-    .controller('EjouralsCtrl', ['$scope', function($scope){
+    .controller('EjouralsCtrl', function($scope){
 
         var param;
         switch ($scope.mediaType){
@@ -1180,7 +1168,7 @@ angular.module('engines.ejournals', [])
         if (param){
             $scope.resourceLink = $scope.resourceLink.replace('SS_searchTypeAll=yes&SS_searchTypeBook=yes&SS_searchTypeJournal=yes&SS_searchTypeOther=yes', param);
         }
-    }]);
+    });
 /**
  * @module common.engines
  *
@@ -1293,7 +1281,8 @@ angular.module('engines.scout', [])
         })
     }])
 
-    .controller('ScoutCtrl', ['$scope', function($scope){
+    .controller('ScoutCtrl', function($scope){
+        var title; // Title variable to bind to $scope. ".BibRelationships.IsPartOfRelationships" title is used if no item title is present.
         var items = $scope.items;
         for (var i = 0; i < items.length; i++){
             if (items[i].Header.PubTypeId == 'audio'){
@@ -1303,11 +1292,23 @@ angular.module('engines.scout', [])
                 items[i].mediaType = 'Video Recording';
             }
 
+            //Check if item has a title
+            if (items[i].RecordInfo.BibRecord.BibEntity.Titles){
+                title = items[i].RecordInfo.BibRecord.BibEntity.Titles[0].TitleFull;
+            }
+
             //Search for "source"
             var bibRelationships = [];
             if (angular.isDefined(items[i].RecordInfo.BibRecord.BibRelationships.IsPartOfRelationships)){
+
                 bibRelationships = items[i].RecordInfo.BibRecord.BibRelationships.IsPartOfRelationships;
+
                 for (var x = 0, len = bibRelationships.length; x < len; x++){
+                    if (angular.isUndefined(title)){
+                        if (bibRelationships[x].BibEntity && bibRelationships[x].BibEntity.Titles){
+                            title = bibRelationships[x].BibEntity.Titles[0].TitleFull;
+                        }
+                    }
                     if (angular.isDefined(bibRelationships[x].BibEntity.Identifiers) && bibRelationships[x].BibEntity.Identifiers[0].Type === 'issn-print'){
                         // define source title
                         if (bibRelationships[x].BibEntity.Titles){
@@ -1324,7 +1325,6 @@ angular.module('engines.scout', [])
                 }
             }
 
-
             if (angular.isDefined(items[i].Items)){
                 for (var x = 0; x < items[i].Items.length; x++){
                     if (items[i].Items[x].Group == 'Src'){
@@ -1333,6 +1333,9 @@ angular.module('engines.scout', [])
                     }
                 }
             }
+
+            //Set item title
+            items[i].title = title;
         }
         $scope.items = items;
 
@@ -1354,7 +1357,7 @@ angular.module('engines.scout', [])
         }
 
         $scope.resourceLink = angular.copy(link);
-    }]);
+    });
 angular.module('filters.nameFilter', [])
 
     .filter('nameFilter', ['$filter', function($filter){

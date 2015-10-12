@@ -1,7 +1,7 @@
 <div class="media">
     <div class="media-body">
         <h4 class="media-heading">
-            <a ng-href="{{item.links[0].href}}" title="{{item.title}}" target="_ejournals">{{item.title | ltrim | truncate: 50: '...': true}}</a>
+            <a ng-href="{{item.links[0].href}}" title="{{item.title}}" target="_ejournals" ng-click="gaPush()">{{item.title | ltrim | truncate: 50: '...': true}}</a>
         </h4>
 
         <div class="details-context">

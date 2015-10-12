@@ -254,7 +254,7 @@ angular.module('oneSearch.bento', [])
                 $animate.enter(spinner, titleElm, angular.element(titleElm[0].lastChild));
 
                 var engineTimeout;
-                var waitingMessage = angular.element(' <span class="unresponsive-msg">Still waiting on more results</span>');
+                var waitingMessage = angular.element(' <span class="unresponsive-msg">Awaiting results from provider</span>');
 
                 function checkEngineStatus(){
                     var engines = angular.copy(Bento.boxes[box]['engines']);
@@ -331,15 +331,20 @@ angular.module('oneSearch.bento', [])
                                 // the new isolated scope.
                                 Bento.engines[engine].tpl.then(function(data){
 
-                                    var EngCtrl = ['$scope', 'Bento', function($scope, Bento){
+                                    var EngCtrl = ['$scope', '$element', 'Bento', function($scope, $element, Bento){
                                         // Extend any controller defined by an engine's config
                                         if (Bento.engines[$scope.engine].controller){
                                             angular.extend(this, $controller(Bento.engines[$scope.engine].controller, {$scope: $scope}));
                                         }
+                                        var gaBox = $scope.boxName.toLowerCase().replace(/\s+/g, '_').replace(/[']+/g, '');
                                         $scope.box = Bento.boxes[box];
+                                        $scope.gaPush = function(){
+                                            _gaq.push(['_trackEvent', 'onesearch', 'item_click', gaBox]);
+                                        }
+
                                     }];
 
-                                    var controller = $controller(EngCtrl, {$scope: engineScope});
+                                    var controller = $controller(EngCtrl, {$scope: engineScope, $element: elm});
                                     elm.data('$ngControllerController', controller);
                                     elm.children().data('$ngControllerController', controller);
 
@@ -409,6 +414,7 @@ angular.module('oneSearch.bento', [])
     .directive('bentoBoxMenu', ['Bento', '$document', '$rootScope', '$timeout', '$q', function(Bento, $document, $rootScope, $timeout, $q){
         return {
             restrict: 'AC',
+            replace: true,
             link: function(scope, elm){
                 var selected;
                 var timeout;

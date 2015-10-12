@@ -4,7 +4,7 @@
             <a ng-href="{{item.PLink}}"
                title="{{item.Items[0].Data}}"
                target="_scout"
-               ng-bind-html="item.RecordInfo.BibRecord.BibEntity.Titles[0].TitleFull | lowercase | ucfirst"></a>
+               ng-bind-html="item.title | lowercase | ucfirst | truncate: 80: '...': true" ng-click="gaPush()"></a>
         </h4>
         <div class="details-context">
             <span ng-if="item.RecordInfo.BibRecord.BibRelationships.IsPartOfRelationships[0].BibEntity.Dates[0]">{{item.RecordInfo.BibRecord.BibRelationships.IsPartOfRelationships[0].BibEntity.Dates[0].Y}} </span>

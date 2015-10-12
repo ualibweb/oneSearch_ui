@@ -4,7 +4,7 @@
     </a>
     <div class="media-body">
         <h4 class="media-heading">
-            <a ng-href="http://acumen.lib.ua.edu/{{item.link}}" target="_acumen" title="{{item.title}}">{{item.title | truncate: 40: '...': true}}</a>
+            <a ng-href="http://acumen.lib.ua.edu/{{item.link}}" target="_acumen" title="{{item.title}}" ng-click="gaPush()">{{item.title | truncate: 40: '...': true}}</a>
         </h4>
         <div class="details-context">
             <span ng-if="item.date" ng-bind-html="item.date"></span>

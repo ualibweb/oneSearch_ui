@@ -3,7 +3,7 @@
         <h4 class="media-heading">
             <a ng-href="{{item.href}}"
                title="{{item.title}}"
-               ng-bind-html="item.title | truncate: 50: '...': true" target="_catalog"></a>
+               ng-bind-html="item.title | truncate: 50: '...': true" target="_catalog" ng-click="gaPush()"></a>
         </h4>
         <div class="details-context">
             <span ng-if="item.year && item.year | number" ng-bind-html="item.year"></span>

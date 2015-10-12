@@ -19,6 +19,7 @@ angular.module('engines.scout', [])
     }])
 
     .controller('ScoutCtrl', function($scope){
+        var title; // Title variable to bind to $scope. ".BibRelationships.IsPartOfRelationships" title is used if no item title is present.
         var items = $scope.items;
         for (var i = 0; i < items.length; i++){
             if (items[i].Header.PubTypeId == 'audio'){
@@ -28,11 +29,23 @@ angular.module('engines.scout', [])
                 items[i].mediaType = 'Video Recording';
             }
 
+            //Check if item has a title
+            if (items[i].RecordInfo.BibRecord.BibEntity.Titles){
+                title = items[i].RecordInfo.BibRecord.BibEntity.Titles[0].TitleFull;
+            }
+
             //Search for "source"
             var bibRelationships = [];
             if (angular.isDefined(items[i].RecordInfo.BibRecord.BibRelationships.IsPartOfRelationships)){
+
                 bibRelationships = items[i].RecordInfo.BibRecord.BibRelationships.IsPartOfRelationships;
+
                 for (var x = 0, len = bibRelationships.length; x < len; x++){
+                    if (angular.isUndefined(title)){
+                        if (bibRelationships[x].BibEntity && bibRelationships[x].BibEntity.Titles){
+                            title = bibRelationships[x].BibEntity.Titles[0].TitleFull;
+                        }
+                    }
                     if (angular.isDefined(bibRelationships[x].BibEntity.Identifiers) && bibRelationships[x].BibEntity.Identifiers[0].Type === 'issn-print'){
                         // define source title
                         if (bibRelationships[x].BibEntity.Titles){
@@ -49,7 +62,6 @@ angular.module('engines.scout', [])
                 }
             }
 
-
             if (angular.isDefined(items[i].Items)){
                 for (var x = 0; x < items[i].Items.length; x++){
                     if (items[i].Items[x].Group == 'Src'){
@@ -58,6 +70,9 @@ angular.module('engines.scout', [])
                     }
                 }
             }
+
+            //Set item title
+            items[i].title = title;
         }
         $scope.items = items;
 

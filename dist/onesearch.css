@@ -1,6 +1,3 @@
-.bento-box-container {
-  text-align: justify;
-}
 .bento-box-container > .row > div {
   border: 1px solid transparent;
   -webkit-transition: all 250ms;
@@ -72,6 +69,7 @@
 }
 .bento-box-item {
   margin-bottom: 15px;
+  text-align: justify;
 }
 .resource-link-container {
   text-align: right;
@@ -319,6 +317,11 @@
 }
 #loading-bar-spinner > div {
   display: inline-block;
+  -webkit-transition: border-color 500ms linear;
+  -moz-transition: border-color 500ms linear;
+  -ms-transition: border-color 500ms linear;
+  -o-transition: border-color 500ms linear;
+  transition: border-color 500ms linear;
 }
 #loading-bar-spinner .spinner-icon {
   width: 14px;
@@ -336,7 +339,6 @@
 .unresponsive .spinner-icon {
   border-top-color: #ccc !important;
   border-left-color: #ccc !important;
-  border-right-color: #ccc !important;
   -webkit-animation-duration: 1.5s !important;
   -moz-animation-duration: 1.5s !important;
   -ms-animation-duration: 1.5s !important;
