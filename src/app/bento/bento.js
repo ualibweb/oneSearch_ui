@@ -339,7 +339,7 @@ angular.module('oneSearch.bento', [])
                                         var gaBox = $scope.boxName.toLowerCase().replace(/\s+/g, '_').replace(/[']+/g, '');
                                         $scope.box = Bento.boxes[box];
                                         $scope.gaPush = function(){
-                                            _gaq.push(['_trackEvent', 'onesearch', 'item_click', gaBox]);
+                                            ga('send', 'event', 'oneSearch', 'item_click', gaBox);
                                         }
 
                                     }];
