@@ -244,10 +244,13 @@ angular.module('oneSearch.bento', [])
                 var titleElm = elm.find('h2');
                 titleElm.attr('id', box);
 
+                // Preserve boxTitle text before any loading/waiting messages are inserted.
+                var boxTitle = titleElm.text();
+
 
                 // Box menu/index scope variables
                 if (!attrs.omitFromMenu){
-                    Bento.boxMenu.push({box: box, title: titleElm.text(), loaded: false, noResults: false});
+                    Bento.boxMenu.push({box: box, title: boxTitle, loaded: false, noResults: false});
                 }
 
                 //Enter the spinner animation, appending it to the title element
@@ -325,7 +328,7 @@ angular.module('oneSearch.bento', [])
                                 engineScope.engine = engine;
                                 engineScope.resourceLink = Bento.boxes[box]['resourceLinks'][engine] === "undefined" ? false : Bento.boxes[box]['resourceLinks'][engine];
                                 engineScope.resourceLinkParams = Bento.boxes[box]['resourceLinkParams'][engine];
-                                engineScope.boxName = titleElm.text();
+                                engineScope.boxName = boxTitle;
                                 engineScope.mediaType = box;
                                 // When the engine's promise is ready, then load the engine's controller/template data applying
                                 // the new isolated scope.
@@ -336,8 +339,9 @@ angular.module('oneSearch.bento', [])
                                         if (Bento.engines[$scope.engine].controller){
                                             angular.extend(this, $controller(Bento.engines[$scope.engine].controller, {$scope: $scope}));
                                         }
-                                        var gaBox = $scope.boxName.toLowerCase().replace(/\s+/g, '_').replace(/[']+/g, '');
+                                        var gaBox = $scope.boxName.toLowerCase().trim().replace(/\s+/g, '_').replace(/[']+/g, '');
                                         $scope.box = Bento.boxes[box];
+
                                         $scope.gaPush = function(){
                                             ga('send', 'event', 'oneSearch', 'item_click', gaBox);
                                         };
