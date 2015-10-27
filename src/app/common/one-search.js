@@ -198,7 +198,18 @@ angular.module('common.oneSearch', [])
                 // Since WP pages aren't loaded as angular routes, we must detect if there is no '#/PATH' present
                 // after the URI (or that it's not a 'bento' route), then send the browser to a pre-build URL.
                 if (!$location.path() || $location.path().indexOf('/bento') < 0){
-                    var url = '//' + $location.host() + '#/bento/'+searchText;
+                    var url = '#/bento/' + searchText;
+                    switch ($location.host()){
+                        case 'wwwdev2.lib.ua.edu':
+                        case 'www.lib.ua.edu':
+                            url = '//' + $location.host() + url;
+                            break;
+                        case 'localhost':
+                            url = $location.absUrl() + url;
+                            break;
+                        default:
+                            url = '//www.lib.ua.edu' + url;
+                    }
                     $window.location = url; //Angular 1.2.8 $location is too limited...
                 }
                 else{
@@ -219,9 +230,8 @@ angular.module('common.oneSearch', [])
 
 
         $rootScope.$on('$routeChangeSuccess', function(event,currentRoute){
-            var s = currentRoute.params.s;
-            if ($scope.searchText !== s){
-                $scope.searchText = s;
+            if (currentRoute && $scope.searchText !== currentRoute.params.s){
+                $scope.searchText = currentRoute.params.s;
             }
         });
 
