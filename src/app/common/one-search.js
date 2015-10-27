@@ -193,6 +193,8 @@ angular.module('common.oneSearch', [])
 
                 //Cancel any pending searches - prevents mixed results by canceling the ajax requests
                 abortPendingSearches();
+                console.log($location.url());
+                console.log($location.path());
 
                 // Compensate for when not on home page
                 // Since WP pages aren't loaded as angular routes, we must detect if there is no '#/PATH' present
@@ -205,7 +207,7 @@ angular.module('common.oneSearch', [])
                             url = '//' + $location.host() + url;
                             break;
                         case 'localhost':
-                            url = $location.absUrl() + url;
+                            url = $location.absUrl().replace(/(#.*)/, '') + url;
                             break;
                         default:
                             url = '//www.lib.ua.edu' + url;
