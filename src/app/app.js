@@ -27,4 +27,4 @@ angular.module('oneSearch', [
         limit: 100
     })
 
-    .value('duScrollOffset', 81)
+    .value('duScrollOffset', 81);

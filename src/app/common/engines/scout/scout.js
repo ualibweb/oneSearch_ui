@@ -86,12 +86,13 @@ angular.module('engines.scout', [])
             return index == 0 ? match.toLowerCase() : match.toUpperCase();
         });
 
-        if (link.indexOf('facet=') > 0){
+        /*if (link.indexOf('facet=') > 0){
             link = link.replace(/&facet=(.+)&?/, box);
         }
         else {
             link += '&facet=' + box;
-        }
+        }*/
+        link = link.replace(/(&bquery=)([^&]+)/, '$1$2 OR (_ualib_facet:'+box+')');
 
         $scope.resourceLink = angular.copy(link);
     });
