@@ -117,7 +117,7 @@ angular.module("common/directives/suggest/suggest.tpl.html", []).run(["$template
     "            </div>\n" +
     "            <div class=\"col-sm-4 suggest-col\" ng-show=\"items.subjects[0].subjects.length > 0\">\n" +
     "                <div class=\"\">\n" +
-    "                    <h4>LibGuides Subjects <a href=\"http://guides.lib.ua.edu/\" class=\"small\" ng-mousedown=\"go('http://guides.lib.ua.edu/')\">more</a></h4>\n" +
+    "                    <h4>Research Guides&#39; Subjects <a href=\"http://guides.lib.ua.edu/\" class=\"small\" ng-mousedown=\"go('http://guides.lib.ua.edu/')\">more</a></h4>\n" +
     "                    <div ng-repeat=\"person in items.subjects | limitTo:10\">\n" +
     "                        <div ng-repeat=\"subject in person.subjects | limitTo:2\">\n" +
     "                            <a ng-if=\"subject.link.length > 7\" ng-href=\"{{subject.link}}\" ng-mousedown=\"go(subject.link)\" ng-click=\"gaSuggestion(subject.subject)\">\n" +
