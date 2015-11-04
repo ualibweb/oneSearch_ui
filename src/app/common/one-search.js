@@ -85,7 +85,7 @@ angular.module('common.oneSearch', [])
         this.engine = function(name, engine){
             if (angular.isString(name)){
                 var defaults = {
-                    id: null, priority: 10, resultsPath: null, totalsPath: null, mediaTypes: null, templateUrl: null, filterQuery: null, controller: null
+                    id: null, title: null, priority: 10, resultsPath: null, totalsPath: null, mediaTypes: null, templateUrl: null, filterQuery: null, controller: null
                 };
 
                 var e = angular.extend(defaults, engine);

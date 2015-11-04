@@ -3,6 +3,7 @@ angular.module('engines.googleCS', [])
     .config(['oneSearchProvider', function(oneSearchProvider){
         oneSearchProvider.engine('googleCS', {
             id: 16,
+            title: 'Libraries\' Website',
             priority: 2,
             resultsPath: 'GoogleCS.items',
             totalsPath: 'GoogleCS.searchInformation.totalResults',

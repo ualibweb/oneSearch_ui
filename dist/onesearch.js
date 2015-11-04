@@ -658,6 +658,9 @@ angular.module('oneSearch.bento', [])
 
                                 ///engineScope.limit = Bento.boxes[box].resultLimit;
                                 engineScope.engine = engine;
+
+                                // engineName used for "more" links. If 'title' property is not set in the engine's config, then use the string used when registering with the oneSearchProvider
+                                engineScope.engineName = oneSearch.engines[engine].title ? oneSearch.engines[engine].title : engine.charAt(0).toUpperCase() + engine.slice(1);
                                 engineScope.resourceLink = Bento.boxes[box]['resourceLinks'][engine] === "undefined" ? false : Bento.boxes[box]['resourceLinks'][engine];
                                 engineScope.resourceLinkParams = Bento.boxes[box]['resourceLinkParams'][engine];
                                 engineScope.boxName = boxTitle;
@@ -689,7 +692,7 @@ angular.module('oneSearch.bento', [])
 
                                     // Wrap the template in an element that specifies ng-repeat over the "items" object (i.e., the results),
                                     // gives the generic classes for items in a bento box.
-                                    var template = angular.element('<div class="animate-repeat bento-box-item" ng-repeat="item in items | limitTo: box.resultLimit">'+data+'</div><div class="resource-link-container"><a class="btn btn-link btn-sm" ng-href="{{resourceLink}}" ng-if="resourceLink" target="_{{engine}}" ng-click="gaMore()">More results from {{engine | ucfirst}}  <span class="fa fa-fw fa-external-link"></span></a></div>');
+                                    var template = angular.element('<div class="animate-repeat bento-box-item" ng-repeat="item in items | limitTo: box.resultLimit">'+data+'</div><div class="resource-link-container"><a class="btn btn-link btn-sm" ng-href="{{resourceLink}}" ng-if="resourceLink" target="_{{engine}}" ng-click="gaMore()">More results from {{engineName}}  <span class="fa fa-fw fa-external-link"></span></a></div>');
 
                                     // Compile wrapped template with the isolated scope's context
                                     var html = $compile(template)(engineScope);
@@ -1248,6 +1251,7 @@ angular.module('engines.googleCS', [])
     .config(['oneSearchProvider', function(oneSearchProvider){
         oneSearchProvider.engine('googleCS', {
             id: 16,
+            title: 'Libraries\' Website',
             priority: 2,
             resultsPath: 'GoogleCS.items',
             totalsPath: 'GoogleCS.searchInformation.totalResults',
@@ -1260,6 +1264,7 @@ angular.module('engines.libguides', [])
     .config(['oneSearchProvider', function(oneSearchProvider){
         oneSearchProvider.engine('libguides', {
             id: 16,
+            title: 'Research Guides',
             priority: 2,
             resultsPath: 'GoogleCS.items',
             totalsPath: 'GoogleCS.searchInformation.totalResults',
@@ -1634,7 +1639,7 @@ angular.module('common.oneSearch', [])
         this.engine = function(name, engine){
             if (angular.isString(name)){
                 var defaults = {
-                    id: null, priority: 10, resultsPath: null, totalsPath: null, mediaTypes: null, templateUrl: null, filterQuery: null, controller: null
+                    id: null, title: null, priority: 10, resultsPath: null, totalsPath: null, mediaTypes: null, templateUrl: null, filterQuery: null, controller: null
                 };
 
                 var e = angular.extend(defaults, engine);
