@@ -6,7 +6,7 @@
     </div>
 </div>
 <div class="suggest" ng-show="showSuggestions && selected && (items.suggest.length > 0 || items.recommend.length > 0 || items.subjects[0].subjects.length > 0 || items.faq.length > 0)">
-    <div ng-show="items.suggest.length > 0">
+    <div ng-if="items.suggest.length > 0">
         <ul class="nav nav-pills nav-stacked">
             <li role="presentation"
                 ng-repeat="item in filteredItems = (items.suggest | filter:compare(originalValue)) | limitTo:numShow track by $index"

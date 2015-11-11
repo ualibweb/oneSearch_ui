@@ -44,11 +44,13 @@ angular.module('oneSearch.common')
                         $scope.faqSearched = false;
                     }
                     if ($scope.model.length > 2 && !$scope.dataRequested){
+/*
                         dataFactory.get('//wwwdev2.lib.ua.edu/oneSearch/api/suggest/' + encodeURI(fixedString))
                             .then(function(data) {
                                 $scope.items.suggest = data;
                                 $scope.setCurrent(-1, false);
                             });
+*/
                         $scope.dataRequested = true;
                     }
                     if ($scope.model.length > 2){
