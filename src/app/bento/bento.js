@@ -172,7 +172,10 @@ angular.module('oneSearch.bento', [])
                                     self.boxes[type].resourceLinks[name] = decodeURIComponent(link[engine.id]);
 
                                     // set resource link parameters by media type specified by the engine config
-                                    if (angular.isObject(engine.mediaTypes)){
+                                    if (engine.resourceLink && engine.resourceLink.params){
+                                        self.boxes[type].resourceLinkParams[name] = engine.resourceLink.params;
+                                    }
+                                    else if (angular.isObject(engine.mediaTypes)){
                                         self.boxes[type].resourceLinkParams[name] = engine.mediaTypes.types[type];
                                     }
                                 }
@@ -331,6 +334,11 @@ angular.module('oneSearch.bento', [])
                                 engineScope.engineName = oneSearch.engines[engine].title ? oneSearch.engines[engine].title : engine.charAt(0).toUpperCase() + engine.slice(1);
                                 engineScope.resourceLink = Bento.boxes[box]['resourceLinks'][engine] === "undefined" ? false : Bento.boxes[box]['resourceLinks'][engine];
                                 engineScope.resourceLinkParams = Bento.boxes[box]['resourceLinkParams'][engine];
+
+                                if (oneSearch.engines[engine].resourceLink && oneSearch.engines[engine].resourceLink.params){
+                                    engineScope.resourceLinkParams = oneSearch.engines[engine].resourceLink.params;
+                                }
+
                                 engineScope.boxName = boxTitle;
                                 engineScope.mediaType = box;
                                 // When the engine's promise is ready, then load the engine's controller/template data applying

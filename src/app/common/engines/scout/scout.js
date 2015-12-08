@@ -13,6 +13,33 @@ angular.module('engines.scout', [])
                     articles: 'academicJournal'
                 }
             },
+            //TODO: Add this functionality to the oneSearchProvider. Currently, resourceLink params are assigned per each engine's custom Controller (see below)
+            //TODO: Merge properly with the 'resourceLink' and 'resourceLinkParams' generated from mediaTypes in Bento Service
+            // Param keys should match mediaTypes assigned about (keep in mind "other" is a default/catchall handled by mediaTypeProvider
+            // This will page params to match 'Source Types' from the Scout interface.
+            resourceLink: {
+                params: {
+                    books: ['Books', 'eBooks'],
+                    articles: ['AcademicJournals'],
+                    other: [
+                        'News',
+                        'Magazines',
+                        'Reviews',
+                        'Biographies',
+                        'ConferenceMaterials',
+                        'ElectronicResources',
+                        'TradePublications',
+                        'NonPrintResources',
+                        'MusicScores',
+                        'DissertationsTheses',
+                        'PrimarySourceDocuments',
+                        'Reports',
+                        'Maps',
+                        'Audio',
+                        'Videos'
+                    ]
+                }
+            },
             templateUrl: 'common/engines/scout/scout.tpl.html',
             controller: 'ScoutCtrl'
         })
@@ -77,26 +104,19 @@ angular.module('engines.scout', [])
         $scope.items = items;
 
         //Preprocess resource link to include facet. This is injected in the EDS header to limit results to media type (this is not native to EDS API)
-        var box = angular.copy($scope.boxName);
+        var mediaType = angular.copy($scope.mediaType);
         var link = angular.copy($scope.resourceLink);
+        var params;
 
-        // Tokenize box name to camelCase for EDS inject script
-        /*box = box.replace(/(?:^\w|[A-Z]|\b\w|\s+)/g, function(match, index) {
-            if (+match === 0) return ""; // or if (/\s+/.test(match)) for white spaces
-            return index == 0 ? match.toLowerCase() : match.toUpperCase();
-        });*/
-        if (box === 'Articles'){
-            box = 'AcademicJournals';
+        if ($scope.resourceLinkParams[mediaType]){
+            params = $scope.resourceLinkParams[mediaType].join(',');
+            if (link.indexOf('facet=') > 0){
+                link = link.replace(/&facet=(.+)&?/, params);
+            }
+            else {
+                link += '&facet=' + params;
+            }
         }
-
-        if (link.indexOf('facet=') > 0){
-
-            link = link.replace(/&facet=(.+)&?/, box);
-        }
-        else {
-            link += '&facet=' + box;
-        }
-        //link = link.replace(/(&bquery=)([^&]+)/, '$1$2 OR (_ualib_facet:'+box+')');
 
         $scope.resourceLink = angular.copy(link);
     });
