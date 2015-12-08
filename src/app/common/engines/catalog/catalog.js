@@ -58,9 +58,15 @@ angular.module('engines.catalog', [])
         }
 
         if (angular.isArray($scope.resourceLinkParams)){
-            var typeParam = '&type=';
+            var typeParam = '&limitTo=TYPE%3D';
             var params = typeParam + $scope.resourceLinkParams.join(typeParam);
-            $scope.resourceLink += params;
+            if ($scope.resourceLink.indexOf('limitTo=') > 0){
+                $scope.resourceLink = $scope.resourceLink.replace(/(&limitTo=.+?)&/, params);
+            }
+            else {
+                $scope.resourceLink += params;
+            }
+            //$scope.resourceLink += params;
         }
 
         $scope.items = items;
