@@ -1,5 +1,15 @@
 angular.module('engines.databases', [])
 
+    /**
+     * @ngdoc object
+     * @name engines.type:databases
+     *
+     * @description
+     * databases engine config
+     *
+     * @requires oneSearchProvider
+     */
+
     .config(['oneSearchProvider', function(oneSearchProvider){
         oneSearchProvider.engine('databases', {
             id: 2,

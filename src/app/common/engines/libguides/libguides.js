@@ -1,5 +1,15 @@
 angular.module('engines.libguides', [])
 
+    /**
+     * @ngdoc object
+     * @name engines.type:libguides
+     *
+     * @description
+     * libguides engine config
+     *
+     * @requires oneSearchProvider
+     */
+
     .config(['oneSearchProvider', function(oneSearchProvider){
         oneSearchProvider.engine('libguides', {
             id: 16,

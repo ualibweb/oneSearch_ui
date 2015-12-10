@@ -1,4 +1,17 @@
 /**
+ * @ngdoc overview
+ * @name oneSearch
+ *
+ * @requires ngRoute
+ * @requires ngResource
+ * @requires ngAnimate
+ * @requires ngSanitize
+ * @requires ui-bootstrap
+ * @requires angular-filter
+ * @requires duScroll
+ * @requires ualib-ui
+ * 
+ * @description
  * Central oneSearch module that defined all components and dependencies involved
  * for the oneSearch interface.
  *

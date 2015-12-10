@@ -1,5 +1,14 @@
 angular.module('engines.scout', [])
-
+    /**
+     * @ngdoc object
+     * @name engines.type:scout
+     *
+     * @description
+     * scout engine config
+     *
+     * @requires oneSearchProvider
+     */
+    
     .config(['oneSearchProvider', function(oneSearchProvider){
         oneSearchProvider.engine('scout', {
             id: 1,

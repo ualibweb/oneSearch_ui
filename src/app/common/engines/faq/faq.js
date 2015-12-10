@@ -1,4 +1,13 @@
 angular.module('engines.faq', [])
+    /**
+     * @ngdoc object
+     * @name engines.type:faq
+     *
+     * @description
+     * faq engine config
+     *
+     * @requires oneSearchProvider
+     */
 
     .config(['oneSearchProvider', function(oneSearchProvider){
         oneSearchProvider.engine('faq', {

@@ -1,0 +1,29 @@
+<a href="https://github.com/ualibweb/oneSearch_ui/edit/master/src/app/common/helpers/invert-array-to-object.js" class="improve-docs"><i class="icon-edit"> </i>Improve this doc</a><a href="https://github.com/ualibweb/oneSearch_ui/blob/9c80dbd/src/app/common/helpers/invert-array-to-object.js#L43" class="view-source"><i class="icon-eye-open"> </i>View source</a><h1><code ng:non-bindable="">invertArrayToObject</code>
+<div><span class="hint">function in module <code ng:non-bindable="">oneSearch</code>
+</span>
+</div>
+</h1>
+<div><h2 id="description">Description</h2>
+<div class="description"><div class="onesearch-type-page onesearch-type-invertarraytoobject-page"><p>Given an object with an array as it&#39;s value,
+this function will create a new object having the array
+keys as separate object keys and the old object keys as their value</p>
+</div></div>
+<h2 id="usage">Usage</h2>
+<div class="usage"><pre class="prettyprint linenums">new invertArrayToObject(obj);</pre>
+<h4 id="usage_parameters">Parameters</h4><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>obj</td><td><a href="" class="label type-hint type-hint-object">object</a></td><td><div class="onesearch-type-page onesearch-type-invertarraytoobject-page"><p>An <code>Object</code> with an <code>Array</code> as the property values</p>
+</div></td></tr></tbody></table><h4 id="usage_returns">Returns</h4><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-object">object</a></td><td><div class="onesearch-type-page onesearch-type-invertarraytoobject-page"><p>An new, inverted object, where the values of the <code>Array</code> are now the properties assigned a value of the old <code>property</code></p>
+</div></td></tr></table></div>
+<h2 id="example">Example</h2>
+<div class="example"><div class="onesearch-type-page onesearch-type-invertarraytoobject-page"><pre class="prettyprint linenums">
+var myObj = {
+     field: ['value1', 'value2']
+};
+var invertedObj = invertArrayToObject(myObj);
+// The resulting invertedObj will look like:
+// {
+//   value1: 'field',
+//   value2: 'field',
+// }
+</pre>
+</div></div>
+</div>

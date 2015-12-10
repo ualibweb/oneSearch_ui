@@ -1,6 +1,10 @@
 {
   "name": "oneSearch-ui",
   "version": "0.19.2",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ualibweb/oneSearch_ui.git"
+  },
   "deDependencies": {
     "grunt": "~0.4.5"
   },
@@ -13,6 +17,8 @@
     "less": "~2.4.0",
     "grunt-bump": "~0.3.0",
     "grunt-contrib-less": "~1.0.0",
-    "grunt-ng-annotate": "~1.0.1"
+    "grunt-ng-annotate": "~1.0.1",
+    "grunt-ngdocs": "~0.2.9",
+    "grunt-gh-pages": "~1.0.0"
   }
 }

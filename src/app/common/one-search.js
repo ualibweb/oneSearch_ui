@@ -32,6 +32,7 @@
     });
  *
  */
+
 angular.module('common.oneSearch', [])
 
     .factory('Search', ['$http', '$q', function($http, $q){
@@ -77,9 +78,69 @@ angular.module('common.oneSearch', [])
         };
     }])
 
+    /**
+     * @ngdoc service
+     * @name oneSearch.oneSearchProvider
+     *
+     * @requires mediaTypesProvider
+     *
+     * @description
+     * This is the core of the oneSearch application.
+     *  Search engines (i.e., resources) use the oneSearch Provider to register as searchable.
+     *  This allows resources/engines to be easily plug-able and templated independent of each other.
+     *
+     *  The oneSearch Provider expects engines to register in the config phase.
+     *  Engines are registered using the Provider's engine(engine_name, params) function:
+     *      engine_name: String - defines the identifier for the engine
+     *      params: Object - defines details for querying the engine (see example below)
+     *
+     * @example
+     * <pre>
+     * angular.module('engines.googleCS', [])
+     *
+     *    .config(['oneSearchProvider', function(oneSearchProvider){
+     *       oneSearchProvider.engine('googleCS', {
+     *           id: 16,
+     *           title: 'Libraries\' Website',
+     *           priority: 2,
+     *           resultsPath: 'GoogleCS.items',
+     *           totalsPath: 'GoogleCS.searchInformation.totalResults',
+     *           filterQuery: '-site:guides.lib.ua.edu -site:ask.lib.ua.edu',
+     *           templateUrl: 'common/engines/google-cs/google-cs.tpl.html',
+     *           controller: 'GoogleCsCtrl'
+     *       })
+     *     }])
+     *
+     *     .controller(['$scope', function($scope){
+     *       var items = $scope.items; // Grab the result items from controller $scope to manipulate
+     *     })
+     * </pre>
+     */
+
     .provider('oneSearch', ['mediaTypesProvider', function oneSearchProvider(mediaTypesProvider){
         //private object that holds registered engines
         var _engines = {};
+
+        /**
+         * @ngdoc function
+         * @name oneSearch.oneSearchProvider#engine
+         * @methodOf oneSearch.oneSearchProvider
+         *
+         * @param {string} name Machine readable name of the engine being registered (e.g., no space or special characters)
+         * @param {object} engine Then `engine` object. This tells oneSearch how to search and process results from each engine
+         *
+         *  Object properties:
+         *
+         *  - `id` - `{integer|string}` - The id given to the backend JSON response handler that identifies the engine
+         *  - `title` - `{string=}` - *Optional* Title to be displayed in the template *(defaults to `name` parameter of `oneSearchProvider.engine(name, {})`*
+         *  - `priority` - `{integer=}` - *Optional* Weight determining request order of engines. Smaller (lighter) number float to the top and are loaded first *(defaults to `10`)*
+         *  - `resultsPath` - `{string}` - String representing the JSON path to the search results from the API response (e.g., "engine.path.to.results")
+         *  - `totalsPath` - `{string=}` - *Optional* String representing the JSON path to the `total results` object from API response
+         *  - `mediaTypes` - `{object=}` - *Optional* Configuration object to assign certain results to different `mediaTypes` (see @link oneSearch.mediaTypesProvider for details)
+         *  - `templateUrl` - `{string}` - File path to the engine's template. The template can either be a physical file or loaded into $templateCache *(template functions not yet supported)*
+         *  - `filterQuery` - `{string}` - URL query string that will be appended to the engine request.
+         *  - `controller` - `{function|string}` - *Optional* Custom controller to control $scope of each engine. Will accept a function or the name of a defined controller
+         */
 
         //function to allow engines to register as searchable
         this.engine = function(name, engine){
@@ -109,10 +170,42 @@ angular.module('common.oneSearch', [])
             }
         };
 
+        /**
+         * @ngdoc object
+         * @name oneSearch.oneSearch
+         *
+         * @requires $q
+         * @requires $parse
+         * @requires $filter
+         * @requires $rootScope
+         * @requires $enginesTemplateFactory
+         * @requires SearchParams
+         * @requires Search
+         *
+         */
+
         this.$get = ['$q', '$parse', '$filter', '$rootScope', 'enginesTemplateFactory', 'SearchParams', 'Search', function($q, $parse, $filter, $rootScope, enginesTemplateFactory, SearchParams, Search){
 
             return {
+                /**
+                 * @ngdoc object
+                 * @name oneSearch.oneSearch#engines
+                 * @propertyOf oneSearch.oneSearch
+                 *
+                 * @description
+                 * Convenience object containing a reference to all engines registered through {@link oneSearch.oneSearchProvider}
+                 */
                 engines: _engines, // Expose engines at Service level
+                /**
+                 * @ngdoc method
+                 * @name oneSearch.oneSearch#searchAll
+                 * @methodOf oneSearch.oneSearch
+                 *
+                 * @param {object} params Params to send with REST API request
+                 *
+                 * @description
+                 * Function to search all engines. The order requests are made is determined by the [priority]{@link oneSearch.oneSearchProvider#engine} weight of each engine's configuration object
+                 */
                 searchAll: function(params){
 
                     //extend give params with default SearchParams
@@ -164,9 +257,29 @@ angular.module('common.oneSearch', [])
                     // Return all engines with response promises, and getter functions
                     return _engines;
                 },
+                /**
+                 * @ngdoc method
+                 * @name oneSearch.oneSearch#getEngineTemplate
+                 * @methodOf oneSearch.oneSearch
+                 *
+                 * @param {object} engine Config object for an engine
+                 *
+                 * @description
+                 * Gets the template defined in an engine's config object
+                 */
                 getEngineTemplate: function(engine){
                     return enginesTemplateFactory.get(engine);
                 },
+                /**
+                 * @ngdoc method
+                 * @name oneSearch.oneSearch#getEngineController
+                 * @methodOf oneSearch.oneSearch
+                 *
+                 * @param {object} engine Config object for an engine
+                 *
+                 * @description
+                 * Gets the controller defined in an engine's config object
+                 */
                 getEngineController: function(engine){
                     return angular.isDefined(engine.controller) ? engine.controller : null;
                 }
@@ -174,6 +287,20 @@ angular.module('common.oneSearch', [])
             }
         }]
     }])
+
+    /**
+     * @ngdoc controller
+     * @name oneSearch.oneSearch:oneSearchCtrl
+     *
+     * @requires $scope
+     * @requires $rootScope
+     * @requires $location
+     * @requires $window
+     * @requires $oneSearch
+     *
+     * @description
+     * Controller for oneSearch
+     */
 
     .controller('OneSearchCtrl', ['$scope', '$location', '$rootScope', '$window', 'oneSearch', function($scope, $location, $rootScope, $window, oneSearch){
         $scope.searchText;

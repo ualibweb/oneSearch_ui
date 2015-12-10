@@ -1,5 +1,15 @@
 angular.module('engines.catalog', [])
 
+    /**
+     * @ngdoc object
+     * @name engines.type:catalog
+     *
+     * @description
+     * catalog engine config
+     *
+     * @requires oneSearchProvider
+     */
+
     .config(['oneSearchProvider', function(oneSearchProvider){
         oneSearchProvider.engine('catalog', {
             id: 64,

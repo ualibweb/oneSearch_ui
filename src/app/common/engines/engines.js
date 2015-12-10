@@ -1,8 +1,10 @@
 /**
- * @module common.engines
+ * @ngdoc overview
+ * @name engines
+ * @methodOf oneSearch
  *
- * Acts as central dependency manager for search engines.
- * All engines must be included here to appear in the results.
+ * @description
+ * Engines are loaded and registered
  *
  */
 angular.module('common.engines', [
@@ -25,10 +27,31 @@ angular.module('common.engines', [
  *
  *
  */
+    /**
+     * @ngdoc service
+     * @name engines.enginesTemplateFactory
+     *
+     * @requires $http
+     * @requires $templateCache
+     *
+     * @description
+     * This service uses the mediaTypes service to organize the engine results by media type
+     * and preloaded an engine's template and controller (if defined) if there are results for that engine.
+     */
     .service('enginesTemplateFactory', ['$http', '$templateCache', function($http, $templateCache){
 
         // Generic getter to load template based on engine config
         // @param config An Engine's config Object
+        /**
+         * @ngdoc function
+         * @name engines.enginesTemplateFactory#get
+         * @methodOf engines.enginesTemplateFactory
+         *
+         * @param {object} config An engine's config object
+         *
+         * @description
+         * Takes an engine's `config` object and returns a template
+         **/
         this.get = function(config){
             // return template is "templateUrl" is defined. otherwise, return null
             return angular.isDefined(config.templateUrl) ? this.fromUrl(config.templateUrl) : null;

@@ -1,4 +1,23 @@
-// Adopted from http://stackoverflow.com/questions/4994201/is-object-empty
+/**
+ * @ngdoc function
+ * @name oneSearch.type:isEmpty
+ *
+ * @param {object|Array} obj An `Object` or `Array` to check.
+ *
+ * @description
+ * Checks to see if an `Object` or `Array` is empty
+ *
+ * Adopted from {@link http://stackoverflow.com/questions/4994201/is-object-empty}
+ *
+ * @example
+ * <pre>
+ * var myObj = {};
+ *
+ * var isObjEmpty = isEmpty(myObj); // true
+ * </pre>
+ *
+ * @returns {boolean} `true` or `false`
+ */
 var hasOwnProperty = Object.prototype.hasOwnProperty;
 
 function isEmpty(obj) {

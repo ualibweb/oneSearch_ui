@@ -1,5 +1,15 @@
 angular.module('engines.acumen', [])
 
+    /**
+     * @ngdoc object
+     * @name engines.type:acumen
+     *
+     * @description
+     * Acumen engine config
+     *
+     * @requires oneSearchProvider
+     */
+
     .config(['oneSearchProvider', function(oneSearchProvider){
         oneSearchProvider.engine('acumen', {
             id: 8,

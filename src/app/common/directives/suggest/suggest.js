@@ -1,4 +1,15 @@
 angular.module('oneSearch.common')
+    /**
+     * @ngdoc service
+     * @name oneSearch.dataFactory
+     *
+     * @requires $http
+     *
+     * @description
+     * Factory service to retrieve results for the search box suggestion dropdown
+     *
+     * @returns {HttpPromise} Returns a promise object with standard $http `then` method.
+     */
     .factory('dataFactory', ['$http', function($http) {
         return {
             get: function(url) {
@@ -8,6 +19,24 @@ angular.module('oneSearch.common')
             }
         };
     }])
+
+    /**
+     * @ngdoc directive
+     * @name oneSearch.directive:suggest-one-search
+     *
+     * @requires $timeout
+     * @requires $document
+     *
+     * @scope
+     * @restrict AEC
+     *
+     * @param {string} prompt The `placeholder` text to display in the search text box
+     * @param {string} model Name of the `$scope` variable to store the search string
+     * @param {string} search Name of the `$scope` reference to the `search()` function defined in the {@link oneSearch.oneSearch:oneSearchCtrl}
+     *
+     * @description
+     * Directive for the search box with suggestion dropdown
+     */
     .directive('suggestOneSearch', ['$timeout', '$document', function($timeout, $document) {
         return {
             restrict: 'AEC',

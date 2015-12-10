@@ -1,4 +1,13 @@
 angular.module('engines.ejournals', [])
+    /**
+     * @ngdoc object
+     * @name engines.type:ejournals
+     *
+     * @description
+     * ejournals engine config
+     *
+     * @requires oneSearchProvider
+     */
 
     .config(['oneSearchProvider', function(oneSearchProvider){
         oneSearchProvider.engine('ejournals', {

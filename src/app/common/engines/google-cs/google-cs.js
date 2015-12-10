@@ -1,4 +1,13 @@
 angular.module('engines.googleCS', [])
+    /**
+     * @ngdoc object
+     * @name engines.type:googleCS
+     *
+     * @description
+     * googleCS engine config
+     *
+     * @requires oneSearchProvider
+     */
 
     .config(['oneSearchProvider', function(oneSearchProvider){
         oneSearchProvider.engine('googleCS', {

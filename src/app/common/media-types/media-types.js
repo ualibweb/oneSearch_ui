@@ -1,4 +1,16 @@
+/**
+ * @ngdoc overview
+ * @name mediaTypes
+ */
 angular.module('common.mediaTypes', [])
+
+    /**
+     * @ngdoc service
+     * @name mediaTypes.mediaTypesProvider
+     *
+     * @description
+     * Allows engines to organize their results into different `media types`. This is done via the engine's config object passed to the {@link oneSearch.oneSearchProvider#methods_engine oneSearchProvider.engine()} method.
+     */
 
     .provider('mediaTypes', [function mediaTypesProvider(){
         // Private Object for registered types
@@ -12,6 +24,17 @@ angular.module('common.mediaTypes', [])
         // Register a media type and associate it with a given engine
         // These are only the anticipated media types - registered engines have no results
         // associated with a type, the type will be removed for that search.
+        /**
+         * @ngdoc method
+         * @name mediaTypes.mediaTypesProvider#type
+         * @methodOf mediaTypes.mediaTypesProvider
+         *
+         * @param {string} type The `type` of media to look in an engine's search results
+         * @param {object} engine The engine object
+         *
+         * @description
+         * This method allows the {@link oneSearch.oneSearchProvider oneSearchProvider} to register engines with the media types, if specified in the {@link oneSearch.oneSearchProvider#methods_engine engine object}
+         */
         this.type = function(type, engine){
             if (!_types[type]){
                 _types[type] = {
@@ -56,12 +79,37 @@ angular.module('common.mediaTypes', [])
             return groups;
         }
 
+        /**
+         * @ngdoc service
+         * @name mediaTypes.mediaTypes
+         *
+         * @requires $parse
+         */
+
         this.$get = ['$parse', function($parse){
             return {
+                /**
+                 * @ngdoc object
+                 * @name mediaTypes.mediaTypes#types
+                 * @propertyOf mediaTypes.mediaTypes
+                 *
+                 * @description
+                 * The `types` object contains results from engines organized by media type.
+                 */
                 types: _types,
 
                 // Heavily influenced by angular-filter's group-by function:
                 // https://github.com/a8m/angular-filter/blob/master/src/_filter/collection/group-by.js
+                /**
+                 * @ngdoc method
+                 * @name mediaTypes.mediaTypes#groupBy
+                 * @methodOf mediaTypes.mediaTypes
+                 *
+                 * @param {object} collection The `collection` object containing an engine's search results
+                 * @param {string|object} media The`mediaTypes` object defined in and engine's config. If no `mediaTypes` were defined, then the name of the engine is used
+                 * @returns {object} Returns an object organizing the results by `mediaType`
+                 *
+                 */
                 groupBy: function(collection, media){
                     var result = {};
 
@@ -97,4 +145,4 @@ angular.module('common.mediaTypes', [])
                 }
             }
         }];
-    }])
+    }]);
