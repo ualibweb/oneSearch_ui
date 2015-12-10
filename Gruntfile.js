@@ -87,9 +87,31 @@ module.exports = function(grunt){
                 prereleaseName: false,
                 regExp: false
             }
+        },
+        ngdocs: {
+            options: {
+                dest: 'docs',
+                html5Mode: true,
+                startPage: '/api/oneSearch',
+                sourceLink: true,
+                title: "oneSearch Docs",
+                titleLink: "/api"
+            },
+            api: {
+                src: ['src/**/*.js', '!src/**/*.spec.js'],
+                title: 'API Documentation'
+            }
+        },
+        'gh-pages': {
+            options: {
+                base: 'docs'
+            },
+            src: ['**']
         }
     });
 
+    grunt.loadNpmTasks('grunt-ngdocs');
+    grunt.loadNpmTasks('grunt-gh-pages');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-html2js');
     grunt.loadNpmTasks('grunt-ng-annotate');
@@ -98,6 +120,6 @@ module.exports = function(grunt){
     grunt.loadNpmTasks('grunt-contrib-less');
     grunt.loadNpmTasks('grunt-bump');
 
-    grunt.registerTask('default', ['html2js', 'concat', 'less:dev', 'clean']);
+    grunt.registerTask('default', ['html2js', 'concat', 'less:dev', 'clean', 'ngdocs']);
     grunt.registerTask('build', ['html2js', 'concat', 'less:build', 'ngAnnotate', 'uglify', 'clean']);
 };
