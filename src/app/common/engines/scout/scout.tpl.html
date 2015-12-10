@@ -1,0 +1,38 @@
+<div class="media">
+    <div class="media-body">
+        <h4 class="media-heading">
+            <a ng-href="{{item.PLink}}"
+               title="{{item.Items[0].Data}}"
+               target="_scout"
+               ng-bind-html="item.title | lowercase | ucfirst | truncate: 80: '...': true" ng-click="gaPush()"></a>
+        </h4>
+        <div class="details-context">
+            <span ng-if="item.RecordInfo.BibRecord.BibRelationships.IsPartOfRelationships[0].BibEntity.Dates[0]">{{item.RecordInfo.BibRecord.BibRelationships.IsPartOfRelationships[0].BibEntity.Dates[0].Y}} </span>
+            <span ng-if="item.mediaType">{{item.mediaType}} </span>
+            <span ng-if="item.FullText.Text.Availability">Full Text Online</span>
+        </div>
+        <div collapse="isCollapsed" ng-show="(item.RecordInfo.BibRecord.BibRelationships.HasContributorRelationships || item.source || item.RecordInfo.BibRecord.BibEntity.Subjects)">
+            <div class="details-container" ng-if="item.RecordInfo.BibRecord.BibRelationships.HasContributorRelationships">
+                <span class="text-muted">Authors </span>
+            <span class="details"
+                  ng-repeat="author in item.RecordInfo.BibRecord.BibRelationships.HasContributorRelationships | unique: 'PersonEntity.Name.NameFull'"
+                  ng-bind-html="author.PersonEntity.Name.NameFull | lowercase | ucfirst"></span>
+            </div>
+
+            <div class="details-container" ng-if="item.source">
+                <span class="text-muted">Sources </span>
+                <span class="details" ng-bind-html="item.source"></span>
+            </div>
+
+            <div class="details-container" ng-if="item.RecordInfo.BibRecord.BibEntity.Subjects">
+                <span class="text-muted">Subejcts </span>
+            <span class="details"
+                  ng-repeat="subject in item.RecordInfo.BibRecord.BibEntity.Subjects"
+                  ng-bind-html="subject.SubjectFull"></span>
+            </div>
+        </div>
+        <div ng-show="item.RecordInfo.BibRecord.BibRelationships.HasContributorRelationships || item.source || item.RecordInfo.BibRecord.BibEntity.Subjects">
+            <button type="button" class="btn btn-default btn-xs" ng-click="isCollapsed = !isCollapsed">{{!isCollapsed ? 'less' : 'more'}} detail</button>
+        </div>
+    </div>
+</div>

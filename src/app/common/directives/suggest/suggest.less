@@ -1,0 +1,75 @@
+.onesearch-container, .onesearch-form{
+  position: relative;
+}
+
+.suggest{
+  position:absolute;
+  z-index:10;
+  background-color: rgba(248, 248, 248, 1);
+  padding: 5px 3px 5px 3px;
+  width: 100%;
+  background-color: #f9f9f9;
+  border: 1px solid darken(#f9f9f9, 10%);
+  border-radius: 4px;
+  -webkit-box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+  background-clip: padding-box;
+  opacity: 1;
+  -webkit-transition: opacity  .2s;
+  -moz-transition: opacity  .2s;
+  transition: opacity  .2s;
+
+  &.ng-hide{
+    opacity: 0;
+    display: block;
+  }
+
+  > .suggest-row{
+    margin-bottom: 5px;
+    padding-left:  15px;
+    padding-right: 15px;
+    -webkit-transition: all .2s;
+    -moz-transition: all .2s;
+    transition: all .2s;
+  }
+
+  .nav-pills {
+
+    > li.active > a{
+      &,
+      &:hover,
+      &:focus {
+        color: #993333;
+        font-weight: bold;
+        background-color: darken(#f9f9f9, 7%);
+      }
+    }
+  }
+
+  ul, .suggest-col {
+    opacity: 1;
+    display: block;
+    -webkit-transition: opacity .2s;
+    -moz-transition: opacity .2s;
+    transition: opacity .2s;
+  }
+
+  .suggest-col{
+    padding-left: 15px;
+    padding-right: 15px;
+    &:first-child{
+      padding-left: 30px;
+    }
+    &:last-child{
+      padding-right: 30px;
+    }
+  }
+
+  ul.ng-hide, .suggest-col.ng-hide {
+    opacity: 0;
+    display: none;
+    -webkit-transition: opacity .2s;
+    -moz-transition: opacity .2s;
+    transition: opacity .2s;
+  }
+}

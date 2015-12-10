@@ -1,0 +1,32 @@
+<div class="media">
+    <div class="media-body">
+        <h4 class="media-heading">
+            <a ng-href="{{item.links[0].href}}" title="{{item.title}}" target="_ejournals" ng-click="gaPush()">{{item.title | ltrim | truncate: 50: '...': true}}</a>
+        </h4>
+
+        <div class="details-context">
+            <span ng-if="item.date" ng-bind-html="item.date"></span>
+            <span ng-if="item.links[0]">
+                <span title="{{item.links[0].name}}">{{item.links[0].name | ltrim | truncate: 35: '...'}}</span>
+            </span>
+        </div>
+
+        <div class="details-container" ng-if="item.authors">
+            <span class="text-muted">Authors </span>
+            <span class="details" ng-bind-html="item.authors"></span>
+        </div>
+
+        <div class="details-container" ng-if="item.links[1]">
+            <span class="text-muted">Other Sources </span>
+            <span class="details" ng-repeat="link in item.links | after:1 | limitTo : (sourceLimit ? 10 : 2)">
+                <a ng-href="{{link.href}}"
+                   title="{{link.name}}"
+                   class="source-link"
+                   ng-bind-html="link.name | ltrim | truncate: 35: '...': true"></a>
+            </span>
+            <div ng-show="item.links[3]">
+                <button type="button" class="btn btn-default btn-xs" ng-click="sourceLimit = !sourceLimit">{{sourceLimit? 'less' : 'more'}} sources</button>
+            </div>
+        </div>
+    </div>
+</div>

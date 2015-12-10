@@ -1,0 +1,79 @@
+<div class="bento-box-container">
+    <div class="bento-box-menu-container hidden-sm hidden-xs">
+        <nav class="bento-box-menu" ui-scrollfix="+0">
+            <ul class="nav nav-justified">
+                <li ng-repeat="item in boxMenu" class="{{item.box}}">
+                    <a href="" du-smooth-scroll="{{item.box}}" ng-click="selectBox(item.box)">{{item.title}}</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="bento-box" bento-box="articles">
+                <h2>Articles</h2>
+
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="bento-box" bento-box="books">
+                <h2>Books</h2>
+            </div>
+        </div>
+
+        <div class="col-sm-12 col-md-4">
+            <div class="bento-box" bento-box="journals">
+                <h2>Journals</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="bento-box" bento-box="googleCS">
+                <h2 id="site-search">Libraries' Website</h2>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="bento-box" bento-box="faq">
+                <h2>FAQ</h2>
+            </div>
+        </div>
+
+
+        <div class="col-md-4">
+            <div class="bento-box" bento-box="libguides">
+                <h2>Research Guides</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="bento-box" bento-box="databases">
+                <h2>Databases</h2>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="bento-box" bento-box="acumen">
+                <h2 id="acumen">Acumen</h2>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="bento-box" bento-box="other">
+                <h2>Other Items</h2>
+            </div>
+        </div>
+    </div>
+
+    
+    <div class="row">
+        <div class="col-md-12">
+            <div class="bento-box well" bento-box="recommend" hide-if-empty="true" omit-from-menu="true">
+                <h2>Recommended Links</h2>
+
+            </div>
+        </div>
+    </div>
+</div>
