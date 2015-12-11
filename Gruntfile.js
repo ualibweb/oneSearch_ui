@@ -107,7 +107,7 @@ module.exports = function(grunt){
                 base: 'docs'
             },
             firstTarget: {
-                src: '[**/*]'
+                src: ['**/*']
             }
         }
     });
