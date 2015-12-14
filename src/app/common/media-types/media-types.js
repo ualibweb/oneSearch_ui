@@ -1,6 +1,9 @@
 /**
  * @ngdoc overview
  * @name mediaTypes
+ *
+ * @description
+ * The `mediaTypes` module allows engines to easily split their results, grouped into different media types. See {@link mediaTypes.mediaTypesProvider mediaTypesProvider} for more details.
  */
 angular.module('common.mediaTypes', [])
 

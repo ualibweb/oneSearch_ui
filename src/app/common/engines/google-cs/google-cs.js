@@ -4,9 +4,21 @@ angular.module('engines.googleCS', [])
      * @name engines.type:googleCS
      *
      * @description
-     * googleCS engine config
+     * Engine config properties (For more details, see {@link oneSearch.oneSearchProvider#methods_engine oneSearchProvider.engine()} documentation)
      *
-     * @requires oneSearchProvider
+     * | property | value |
+     * |----------|-------|
+     * | id       | 16     |
+     * | title   | `Libraries' Website`    |
+     * | priority | 2     |
+     * | resultsPath | `GoogleCS.items`     |
+     * | totalsPath | `GoogleCS.searchInformation.totalResults`     |
+     * | mediaTypes | N/A *(appears as its own box)*    |
+     * | filterQuery | `-site:guides.lib.ua.edu -site:ask.lib.ua.edu`    |
+     * | templateUrl | `common/engines/google-cs/google-cs.tpl.html` |
+     * | controller | N/A |
+     *
+     * @requires oneSearch.oneSearchProvider
      */
 
     .config(['oneSearchProvider', function(oneSearchProvider){

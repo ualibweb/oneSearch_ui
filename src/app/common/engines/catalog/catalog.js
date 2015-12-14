@@ -5,9 +5,21 @@ angular.module('engines.catalog', [])
      * @name engines.type:catalog
      *
      * @description
-     * catalog engine config
+     * Engine config properties (For more details, see {@link oneSearch.oneSearchProvider#methods_engine oneSearchProvider.engine()} documentation)
      *
-     * @requires oneSearchProvider
+     * | property | value |
+     * |----------|-------|
+     * | id       | 64     |
+     * | title    | N/A *(defaults to Catalog)*     |
+     * | priority | 5     |
+     * | resultsPath | `Catalog.list`     |
+     * | totalsPath | `Catalog.total`     |
+     * | mediaTypes | <ul><li>**path:** `bibFormat`</li><li>**types**: <ul><li>**books**: ['aa','ac', 'ad', 'am']</li><li>**journals**:  ['ab','as','bb','bs','cb','cs','db','ds','eb','es','fb','fs','gb','gs','ib','is','jb','js','kb','ks','mb','ms','ob','os','pb','ps','rb','rs','tb','ts']</li></ul></li></ul>  |
+     * | filterQuery | N/A |
+     * | templateUrl | `common/engines/catalog/catalog.tpl.html` |
+     * | controller | {@link engines.type:catalog:CatalogCtrl CatalogCtrl} |
+     *
+     * @requires oneSearch.oneSearchProvider
      */
 
     .config(['oneSearchProvider', function(oneSearchProvider){
@@ -37,6 +49,14 @@ angular.module('engines.catalog', [])
             return title;
         }
     }])
+
+    /**
+     * @ngdoc controller
+     * @name engines.type:catalog:CatalogCtrl
+     *
+     * @description
+     * <mark>TODO:</mark>   add proper description.
+     */
 
     .controller('CatalogCtrl', function($scope, $filter){
         var types = {

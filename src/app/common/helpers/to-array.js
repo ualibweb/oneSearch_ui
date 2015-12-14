@@ -1,6 +1,6 @@
 /**
  * @ngdoc function
- * @name oneSearch.type:toArray
+ * @name oneSearch.global:toArray
  *
  * @param {object} object `Object` to convert into an `Array`.
  *

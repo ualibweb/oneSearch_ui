@@ -4,9 +4,21 @@ angular.module('engines.ejournals', [])
      * @name engines.type:ejournals
      *
      * @description
-     * ejournals engine config
+     * Engine config properties
      *
-     * @requires oneSearchProvider
+     * | property | value |
+     * |----------|-------|
+     * | id       | 4     |
+     * | title | N/A *(defaults to `Ejournals`)* |
+     * | priority | 6     |
+     * | resultsPath | `eJournals.results`     |
+     * | totalsPath | `eJournals.total`     |
+     * | mediaTypes | <ul><li>**books**: `book` </li><li>**journals**:  `periodical`</li></ul>  |
+     * | filterQuery | N/A |
+     * | templateUrl | `common/engines/ejournals/ejournals.tpl.html` |
+     * | controller | {@link engines.type:ejournals:EjouralsCtrl EjouralsCtrl} |
+     *
+     * @requires oneSearch.oneSearchProvider
      */
 
     .config(['oneSearchProvider', function(oneSearchProvider){
@@ -26,6 +38,14 @@ angular.module('engines.ejournals', [])
             controller: 'EjouralsCtrl'
         })
     }])
+
+    /**
+     * @ngdoc controller
+     * @name engines.type:ejournals:EjouralsCtrl
+     *
+     * @description
+     * <mark>TODO:</mark>   add proper description.
+     */
 
     .controller('EjouralsCtrl', function($scope){
 

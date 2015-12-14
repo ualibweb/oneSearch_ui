@@ -4,9 +4,21 @@ angular.module('engines.scout', [])
      * @name engines.type:scout
      *
      * @description
-     * scout engine config
+     * Engine config properties
      *
-     * @requires oneSearchProvider
+     * | property | value |
+     * |----------|-------|
+     * | id       | 1     |
+     * | title | N/A *(defaults to `Scout`)* |
+     * | priority | 4     |
+     * | resultsPath | `Scout.SearchResult.Data.Records`     |
+     * | totalsPath | `Scout.SearchResult.Statistics.TotalHits`     |
+     * | mediaTypes | <ul><li>**path:** `Header.PubTypeId`</li><li>**types:** <ul><li>**books**: `['book', 'ebook']`</li><li>**articles**: `academicJournal`</li></ul></li></ul>    |
+     * | filterQuery | N/A  |
+     * | templateUrl | `common/engines/scout/scout.tpl.html` |
+     * | controller | {@link engines.type:scout:ScoutCtrl ScoutCtrl} |
+     *
+     * @requires oneSearch.oneSearchProvider
      */
     
     .config(['oneSearchProvider', function(oneSearchProvider){
@@ -53,6 +65,14 @@ angular.module('engines.scout', [])
             controller: 'ScoutCtrl'
         })
     }])
+
+    /**
+     * @ngdoc controller
+     * @name engines.type:scout:ScoutCtrl
+     *
+     * @description
+     * <mark>TODO:</mark>   add proper description.
+     */
 
     .controller('ScoutCtrl', function($scope){
         var title; // Title variable to bind to $scope. ".BibRelationships.IsPartOfRelationships" title is used if no item title is present.

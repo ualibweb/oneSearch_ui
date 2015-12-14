@@ -5,9 +5,21 @@ angular.module('engines.acumen', [])
      * @name engines.type:acumen
      *
      * @description
-     * Acumen engine config
+     * Engine config properties (For more details, see {@link oneSearch.oneSearchProvider#methods_engine oneSearchProvider.engine()} documentation)
      *
-     * @requires oneSearchProvider
+     * | property | value |
+     * |----------|-------|
+     * | id       | 8     |
+     * | title      | N/A *(defaults to `Acumen`)*    |
+     * | priority | 3     |
+     * | resultsPath | `Acumen.data`     |
+     * | totalsPath | `Acumen.metadata.numFound`     |
+     * | mediaTypes | N/A *(appears as its own box)*    |
+     * | filterQuery | N/A  |
+     * | templateUrl | `common/engines/acumen/acumen.tpl.html` |
+     * | controller | {@link engines.type:acumen:AcumenCtrl AcumenCtrl} |
+     *
+     * @requires oneSearch.oneSearchProvider
      */
 
     .config(['oneSearchProvider', function(oneSearchProvider){
@@ -20,6 +32,14 @@ angular.module('engines.acumen', [])
             controller: 'AcumenCtrl'
         })
     }])
+
+    /**
+     * @ngdoc controller
+     * @name engines.type:acumen:AcumenCtrl
+     *
+     * @description
+     * <mark>TODO:</mark>   add proper description.
+     */
 
     .controller('AcumenCtrl', function($scope, $filter){
         var items = $scope.items;

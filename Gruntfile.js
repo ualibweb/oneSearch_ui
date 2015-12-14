@@ -91,11 +91,11 @@ module.exports = function(grunt){
         ngdocs: {
             options: {
                 dest: 'docs',
-                html5Mode: true,
+                html5Mode: false,
                 startPage: '/api/oneSearch',
                 sourceLink: true,
                 title: "oneSearch Docs",
-                titleLink: "/api"
+                titleLink: "/api/oneSearch"
             },
             api: {
                 src: ['src/**/*.js', '!src/**/*.spec.js'],

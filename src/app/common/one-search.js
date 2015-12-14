@@ -35,6 +35,17 @@
 
 angular.module('common.oneSearch', [])
 
+    /**
+     * @ngdoc service
+     * @name oneSearch.Search
+     *
+     * @requires $http
+     * @requires $q
+     *
+     * @description
+     * Factory service use to make requests to the oneSearch API which will query and return an engine's results
+     */
+
     .factory('Search', ['$http', '$q', function($http, $q){
 
         function search(params){
@@ -72,6 +83,21 @@ angular.module('common.oneSearch', [])
 
             return promise;
         }
+
+        /**
+         * @ngdoc method
+         * @name oneSearch.Search#request
+         * @methodOf oneSearch.Search
+         *
+         * @param {Object} params Object of search parameters
+         * @param {string} params.s Search string
+         * @param {integer|string} params.engine The `id` of the engine to search
+         * @param {integer=} [params.limit=100] - Maximum number of results to return
+         *
+         * @description
+         *
+         * @returns {Promise} Returns a custom `Promise` which allows the `$http` request to be aborted. See {@link oneSearch.oneSearch#engines} for details.
+         */
 
         return {
             request: search
@@ -115,6 +141,7 @@ angular.module('common.oneSearch', [])
      *       var items = $scope.items; // Grab the result items from controller $scope to manipulate
      *     })
      * </pre>
+     * *__Note:__ For details on how new engines should be configured, see the {@link engines engines module} docs*
      */
 
     .provider('oneSearch', ['mediaTypesProvider', function oneSearchProvider(mediaTypesProvider){
@@ -127,19 +154,19 @@ angular.module('common.oneSearch', [])
          * @methodOf oneSearch.oneSearchProvider
          *
          * @param {string} name Machine readable name of the engine being registered (e.g., no space or special characters)
-         * @param {object} engine Then `engine` object. This tells oneSearch how to search and process results from each engine
+         * @param {Object} engine Then `engine` object. This tells oneSearch how to search and process results from each engine
          *
-         *  Object properties:
+         * @param {number|string} engine.id The id given to the backend JSON response handler that identifies the engine
+         * @param {string=} engine.title Title to be displayed in the template
+         * *(defaults to `string` value give by {@link oneSearch.oneSearchProvider#engine.name name parameter})*
+         * @param {number} [engine.priority=10] Weight determining request order of engines. Smaller (lighter) number float to the top and are loaded first.
+         * @param {string} engine.resultsPath String representing the JSON path to the search results from the API response (e.g., "engine.path.to.results")
+         * @param {string=} engine.totalsPath String representing the JSON path to the `total results` object from API response
+         * @param {Object=} engine.mediaTypes Configuration object to assign certain results to different `mediaTypes` (see @link oneSearch.mediaTypesProvider for details)
+         * @param {string} engine.templateUrl File path to the engine's template. The template can either be a physical file or loaded into $templateCache *(template functions not yet supported)*
+         * @param {string=} engine.filterQuery Filter query string that will be appended to search string.
+         * @param {(string|function())=} engine.controller Custom controller to control $scope of each engine. Will accept a function or the name of a defined controller.
          *
-         *  - `id` - `{integer|string}` - The id given to the backend JSON response handler that identifies the engine
-         *  - `title` - `{string=}` - *Optional* Title to be displayed in the template *(defaults to `name` parameter of `oneSearchProvider.engine(name, {})`*
-         *  - `priority` - `{integer=}` - *Optional* Weight determining request order of engines. Smaller (lighter) number float to the top and are loaded first *(defaults to `10`)*
-         *  - `resultsPath` - `{string}` - String representing the JSON path to the search results from the API response (e.g., "engine.path.to.results")
-         *  - `totalsPath` - `{string=}` - *Optional* String representing the JSON path to the `total results` object from API response
-         *  - `mediaTypes` - `{object=}` - *Optional* Configuration object to assign certain results to different `mediaTypes` (see @link oneSearch.mediaTypesProvider for details)
-         *  - `templateUrl` - `{string}` - File path to the engine's template. The template can either be a physical file or loaded into $templateCache *(template functions not yet supported)*
-         *  - `filterQuery` - `{string}` - URL query string that will be appended to the engine request.
-         *  - `controller` - `{function|string}` - *Optional* Custom controller to control $scope of each engine. Will accept a function or the name of a defined controller
          */
 
         //function to allow engines to register as searchable
@@ -193,7 +220,9 @@ angular.module('common.oneSearch', [])
                  * @propertyOf oneSearch.oneSearch
                  *
                  * @description
-                 * Convenience object containing a reference to all engines registered through {@link oneSearch.oneSearchProvider}
+                 * Object containing information about all engines registered through the {@link oneSearch.oneSearchProvider}. This `object` is extended upon
+                 * search, adding the engine's results and status.
+                 *
                  */
                 engines: _engines, // Expose engines at Service level
                 /**
@@ -201,7 +230,7 @@ angular.module('common.oneSearch', [])
                  * @name oneSearch.oneSearch#searchAll
                  * @methodOf oneSearch.oneSearch
                  *
-                 * @param {object} params Params to send with REST API request
+                 * @param {Object} params Params to send with REST API request
                  *
                  * @description
                  * Function to search all engines. The order requests are made is determined by the [priority]{@link oneSearch.oneSearchProvider#engine} weight of each engine's configuration object
@@ -262,7 +291,7 @@ angular.module('common.oneSearch', [])
                  * @name oneSearch.oneSearch#getEngineTemplate
                  * @methodOf oneSearch.oneSearch
                  *
-                 * @param {object} engine Config object for an engine
+                 * @param {Object} engine Config object for an engine
                  *
                  * @description
                  * Gets the template defined in an engine's config object
@@ -275,7 +304,7 @@ angular.module('common.oneSearch', [])
                  * @name oneSearch.oneSearch#getEngineController
                  * @methodOf oneSearch.oneSearch
                  *
-                 * @param {object} engine Config object for an engine
+                 * @param {Object} engine Config object for an engine
                  *
                  * @description
                  * Gets the controller defined in an engine's config object
@@ -290,7 +319,7 @@ angular.module('common.oneSearch', [])
 
     /**
      * @ngdoc controller
-     * @name oneSearch.oneSearch:oneSearchCtrl
+     * @name oneSearch.oneSearch:OneSearchCtrl
      *
      * @requires $scope
      * @requires $rootScope
@@ -312,6 +341,16 @@ angular.module('common.oneSearch', [])
                 }
             }
         }
+
+        /**
+         * @ngdoc method
+         * @name oneSearch.oneSearch:OneSearchCtrl#search
+         * @methodOf oneSearch.oneSearch:OneSearchCtrl
+         *
+         * @description
+         * Search function on the `OneSearchCtrl's` $scope
+         *
+         */
 
         $scope.search = function(){
             if ($scope.searchText){
@@ -353,7 +392,7 @@ angular.module('common.oneSearch', [])
 
                     return rec;
                 });
-        }
+        };
 
 
         $rootScope.$on('$routeChangeSuccess', function(event,currentRoute){
@@ -366,6 +405,36 @@ angular.module('common.oneSearch', [])
     }])
 
     // Borrowed from https://github.com/fmquaglia/ngOrderObjectBy
+    /**
+     * @ngdoc filter
+     * @name oneSearch.filter:orderObjectBy
+     *
+     * @param {Array.<Object>} items An `Array` or `Objects` to order
+     * @param {string} field The field/property of the objects to order by
+     * @param {boolean} [reverse=false] Order objects in reverse
+     *
+     * @description
+     * Order's an array of objects by the value of a property in those objects.
+     *
+     * @example
+     * <pre>
+     *     var arrObj = [
+     *          {n: 10},
+     *          {n: 1},
+     *          {n: -5}
+     *      ];
+     *
+     *      var ordered = $filter('orderObjectBy')( _engines, 'n');
+     *      &#47;*
+     *        ordered is given an array of objects, ordered by `n`:
+     *        [
+     *          {n: -5},
+     *          {n: 1},
+     *          {n: 10}
+     *        ];
+     *      *&#47;
+     * </pre>
+     */
     .filter('orderObjectBy', function() {
         return function (items, field, reverse) {
             var filtered = [];

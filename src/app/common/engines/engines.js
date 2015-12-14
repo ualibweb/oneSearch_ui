@@ -1,10 +1,60 @@
 /**
  * @ngdoc overview
  * @name engines
- * @methodOf oneSearch
  *
  * @description
- * Engines are loaded and registered
+ * # Adding Engines to oneSearch
+ * <div class="alert alert-primary">Engines are configured and registered via the `oneSearchProvider`, {@link oneSearch.oneSearchProvider#engine see here for details}</div>
+ *
+ *
+ * ## The `engines module` acts as the entry point to load engine configs.
+ *
+ * ## Adding engines to oneSearch
+ *
+ * 1. Create a directory with the engines name under ``src/app/common/engines/ENGINE_NAME``
+ *      - This will contain the engine's config module, template, and LESS/CSS files
+ *
+ * 2. In the engines folder create the `engine config` module file: `ENGINE_NAME.js`:
+ *      - **Note:** be sure to add the `@ngdoc` comments, filling in the `properties` table, so the engine info will appear in these docs! You can use the example below as a template.
+ * <pre>
+ *     &#47;**
+ *       * @ngdoc object
+ *       * @name engines.type:ENGIEN_NAME
+ *       *
+ *       * @description
+ *       * Engine config properties
+ *       *
+ *       * | property | value |
+ *       * |----------|-------|
+ *       * | id       | ID_VAL      |
+ *       * | priority | WEIGHT      |
+ *       * | resultsPath | JSON_RESULTS_PATH     |
+ *       * | totalsPath | TOTALS_RESULTS_PATH     |
+ *       * | templateUrl | TEMPLATE_URL |
+ *       * | controller |  CONTROLLER  |
+ *       *
+ *       * @requires oneSearchProvider
+ *       *&#47;
+ *
+ *     angular.module('engines.ENGINE_NAME', [])
+ *          .config (...)
+ *          .controller(...);
+ * </pre>
+ *
+ * 3. Create a template for engine items - this template is applied to each item in the search results individually
+ *      - **Note:** template files should *always* end in `.tpl.html` (i.e., ENGINE_NAME.tpl.html)
+ *
+ * 4. *(optional)* Create LESS file to create custom styles for the engine's template
+ *
+ * 5. Add the `ENGINE_NAME` config module to the `common.engines` module's dependencies
+ * <pre>
+ *     angular.module('common.engines', [
+ *          'engines.scout',
+ *          'engines.catalog',
+ *          ...
+ *          'engines.ENGINE_NAME`
+ *     ])
+ * </pre>
  *
  */
 angular.module('common.engines', [
