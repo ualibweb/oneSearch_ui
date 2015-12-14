@@ -1,6 +1,64 @@
-<h1><code ng:non-bindable=""></code>
+<a href="https://github.com/ualibweb/oneSearch_ui/edit/master/src/app/common/engines/engines.js" class="improve-docs"><i class="icon-edit"> </i>Improve this doc</a><a href="https://github.com/ualibweb/oneSearch_ui/blob/9965ead/src/app/common/engines/engines.js#L60" class="view-source"><i class="icon-eye-open"> </i>View source</a><h1><code ng:non-bindable=""></code>
 <div><span class="hint"></span>
 </div>
 </h1>
-<div><div class="engines-page"><p>Engines are loaded and registered</p>
+<div><div class="engines-page"><h2 id="adding-engines-to-onesearch">Adding Engines to oneSearch</h2>
+<div class="alert alert-primary">Engines are configured and registered via the <code>oneSearchProvider</code>, <a href="#/api/oneSearch.oneSearchProvider#engine">see here for details</a></div>
+
+
+<h3 id="adding-engines-to-onesearch_the-acts-as-the-entry-point-to-load-engine-configs">The <code>engines module</code> acts as the entry point to load engine configs.</h3>
+<h3 id="adding-engines-to-onesearch_adding-engines-to-onesearch">Adding engines to oneSearch</h3>
+<ol>
+<li><p>Create a directory with the engines name under <code>src/app/common/engines/ENGINE_NAME</code></p>
+<ul>
+<li>This will contain the engine&#39;s config module, template, and LESS/CSS files</li>
+</ul>
+</li>
+<li><p>In the engines folder create the <code>engine config</code> module file: <code>ENGINE_NAME.js</code>:</p>
+<ul>
+<li><strong>Note:</strong> be sure to add the <code>@ngdoc</code> comments, filling in the <code>properties</code> table, so the engine info will appear in these docs! You can use the example below as a template.
+<pre class="prettyprint linenums">
+    &#47;**
+      * @ngdoc object
+      * @name engines.type:ENGIEN_NAME
+      *
+      * @description
+      * Engine config properties
+      *
+      * | property | value |
+      * |----------|-------|
+      * | id       | ID_VAL      |
+      * | priority | WEIGHT      |
+      * | resultsPath | JSON_RESULTS_PATH     |
+      * | totalsPath | TOTALS_RESULTS_PATH     |
+      * | templateUrl | TEMPLATE_URL |
+      * | controller |  CONTROLLER  |
+      *
+      * @requires oneSearchProvider
+      *&#47;
+
+    angular.module('engines.ENGINE_NAME', [])
+         .config (...)
+         .controller(...);
+</pre></li>
+</ul>
+</li>
+<li><p>Create a template for engine items - this template is applied to each item in the search results individually</p>
+<ul>
+<li><strong>Note:</strong> template files should <em>always</em> end in <code>.tpl.html</code> (i.e., ENGINE_NAME.tpl.html)</li>
+</ul>
+</li>
+<li><p><em>(optional)</em> Create LESS file to create custom styles for the engine&#39;s template</p>
+</li>
+<li><p>Add the <code>ENGINE_NAME</code> config module to the <code>common.engines</code> module&#39;s dependencies
+<pre class="prettyprint linenums">
+    angular.module('common.engines', [
+         'engines.scout',
+         'engines.catalog',
+         ...
+         'engines.ENGINE_NAME`
+    ])
+</pre>
+</li>
+</ol>
 </div></div>

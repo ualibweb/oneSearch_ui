@@ -1,13 +1,59 @@
-<a href="https://github.com/ualibweb/oneSearch_ui/edit/master/src/app/common/engines/scout/scout.js" class="improve-docs"><i class="icon-edit"> </i>Improve this doc</a><a href="https://github.com/ualibweb/oneSearch_ui/blob/9965ead/src/app/common/engines/scout/scout.js#L11" class="view-source"><i class="icon-eye-open"> </i>View source</a><h1><code ng:non-bindable="">scout</code>
+<a href="https://github.com/ualibweb/oneSearch_ui/edit/master/src/app/common/engines/scout/scout.js" class="improve-docs"><i class="icon-edit"> </i>Improve this doc</a><a href="https://github.com/ualibweb/oneSearch_ui/blob/9965ead/src/app/common/engines/scout/scout.js#L23" class="view-source"><i class="icon-eye-open"> </i>View source</a><h1><code ng:non-bindable="">scout</code>
 <div><span class="hint">object in module <code ng:non-bindable="">engines</code>
 </span>
 </div>
 </h1>
 <div><h2 id="description">Description</h2>
-<div class="description"><div class="engines-type-page engines-type-scout-page"><p>scout engine config</p>
+<div class="description"><div class="engines-type-page engines-type-scout-page"><p>Engine config properties</p>
+<table>
+<thead>
+<tr>
+<th>property</th>
+<th>value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>1</td>
+</tr>
+<tr>
+<td>title</td>
+<td>N/A <em>(defaults to <code>Scout</code>)</em></td>
+</tr>
+<tr>
+<td>priority</td>
+<td>4</td>
+</tr>
+<tr>
+<td>resultsPath</td>
+<td><code>Scout.SearchResult.Data.Records</code></td>
+</tr>
+<tr>
+<td>totalsPath</td>
+<td><code>Scout.SearchResult.Statistics.TotalHits</code></td>
+</tr>
+<tr>
+<td>mediaTypes</td>
+<td><ul><li><strong>path:</strong> <code>Header.PubTypeId</code></li><li><strong>types:</strong> <ul><li><strong>books</strong>: <code>[&#39;book&#39;, &#39;ebook&#39;]</code></li><li><strong>articles</strong>: <code>academicJournal</code></li></ul></li></ul></td>
+</tr>
+<tr>
+<td>filterQuery</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>templateUrl</td>
+<td><code>common/engines/scout/scout.tpl.html</code></td>
+</tr>
+<tr>
+<td>controller</td>
+<td><a href="#/api/engines.type:scout:ScoutCtrl">ScoutCtrl</a></td>
+</tr>
+</tbody>
+</table>
 </div></div>
 <h2 id="dependencies">Dependencies</h2>
-<ul class="dependencies"><li><code ng:non-bindable=""><a href="api/oneSearchProvider">oneSearchProvider</a></code>
+<ul class="dependencies"><li><code ng:non-bindable=""><a href="#/api/oneSearch.oneSearchProvider">oneSearchProvider</a></code>
 </li>
 </ul>
 </div>

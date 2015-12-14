@@ -18,7 +18,8 @@ NG_DOCS={
       "shortName": "bento.Bento",
       "type": "service",
       "moduleName": "bento",
-      "keywords": "$http $q $rootparams $rootscope angular angularjs api array bento box boxemenu boxes boxmenu config considered controller controllers data defined empty engine engine_name1 engine_name2 engines finished function generated getboxes hold holds instance json key loaded loading media mediatypes methods names null object onesearch onesearchprovider org organize param path pre-loaded preloaded promise reference registered registering removed resultspath retrieve return returned returns searching service structure template templates tpl track type types values yields"
+      "shortDescription": "This service uses the mediaTypes service to organize the engine results by media type",
+      "keywords": "$q $rootparams $rootscope api array bento books box boxemenu boxes catalog config contorller controller controllers data defined details displayed engine engines function getboxes getenginecontroller getenginetemplate hold holds info instance loaded media mediatype mediatypes names noresults null object objects onesearch onesearchprovider operational organize pre-loaded preloaded promise properties registered rendered retrieve scout search searching service status structure template templates title tpl true type type_name values yields"
     },
     {
       "section": "api",
@@ -27,7 +28,7 @@ NG_DOCS={
       "type": "directive",
       "moduleName": "bento",
       "shortDescription": "Define bento boxes to render specific media types",
-      "keywords": "$animate $compile $controller $rootscope $timeout api bento bento-box box boxes define directive media mediatype onesearch render represents specific types"
+      "keywords": "$animate $compile $controller $rootscope $timeout api bento bento-box box boxes define defined directive engine media mediatype onesearch render represents specific types"
     },
     {
       "section": "api",
@@ -37,6 +38,15 @@ NG_DOCS={
       "moduleName": "bento",
       "shortDescription": "Directive to generate anchor menu for all bento-boxes being rendered",
       "keywords": "$document $q $rootscope $timeout ac anchor api bento bento-boxes directive generate menu rendered"
+    },
+    {
+      "section": "api",
+      "id": "engines",
+      "shortName": "engines",
+      "type": "overview",
+      "moduleName": "engines",
+      "shortDescription": "Adding Engines to oneSearch",
+      "keywords": "acts add adding alert alert-primary angular api appear applied catalog class comments common config configs configured controller create custom dependencies details directory docs engine engine_name engines entry example file files filling folder html id_val individually info item items js json_results_path load module object onesearch onesearchprovider overview point priority properties property registered resultspath scout search src styles table template template_url templateurl totals_results_path totalspath tpl type weight"
     },
     {
       "section": "api",
@@ -53,8 +63,17 @@ NG_DOCS={
       "shortName": "acumen",
       "type": "object",
       "moduleName": "engines",
-      "shortDescription": "Acumen engine config",
-      "keywords": "acumen api config engine engines object onesearchprovider type"
+      "shortDescription": "Engine config properties (For more details, see oneSearchProvider.engine() documentation)",
+      "keywords": "acumen acumenctrl api box common config controller data details documentation engine engines filterquery html mediatypes metadata methods_engine numfound object onesearch onesearchprovider priority properties property resultspath templateurl title totalspath tpl type"
+    },
+    {
+      "section": "api",
+      "id": "engines.type:acumen:AcumenCtrl",
+      "shortName": "AcumenCtrl",
+      "type": "controller",
+      "moduleName": "engines",
+      "shortDescription": "TODO:   add proper description.",
+      "keywords": "add api controller description engines proper type"
     },
     {
       "section": "api",
@@ -62,8 +81,17 @@ NG_DOCS={
       "shortName": "catalog",
       "type": "object",
       "moduleName": "engines",
-      "shortDescription": "catalog engine config",
-      "keywords": "api catalog config engine engines object onesearchprovider type"
+      "shortDescription": "Engine config properties (For more details, see oneSearchProvider.engine() documentation)",
+      "keywords": "aa ab ac ad api bb bibformat bs catalog catalogctrl cb common config controller cs db details documentation ds eb engine engines es fb filterquery fs gb gs html ib jb js kb ks list mb mediatypes methods_engine ms ob object onesearch onesearchprovider os pb priority properties property ps rb resultspath rs tb templateurl title total totalspath tpl type"
+    },
+    {
+      "section": "api",
+      "id": "engines.type:catalog:CatalogCtrl",
+      "shortName": "CatalogCtrl",
+      "type": "controller",
+      "moduleName": "engines",
+      "shortDescription": "TODO:   add proper description.",
+      "keywords": "add api controller description engines proper type"
     },
     {
       "section": "api",
@@ -71,8 +99,8 @@ NG_DOCS={
       "shortName": "databases",
       "type": "object",
       "moduleName": "engines",
-      "shortDescription": "databases engine config",
-      "keywords": "api config databases engine engines object onesearchprovider type"
+      "shortDescription": "Engine config properties (For more details, see oneSearchProvider.engine() documentation)",
+      "keywords": "api box common config controller databases details documentation engine engines filterquery html mediatypes methods_engine object onesearch onesearchprovider priority properties property resultspath templateurl title totalresults totalspath tpl type"
     },
     {
       "section": "api",
@@ -80,8 +108,17 @@ NG_DOCS={
       "shortName": "ejournals",
       "type": "object",
       "moduleName": "engines",
-      "shortDescription": "ejournals engine config",
-      "keywords": "api config ejournals engine engines object onesearchprovider type"
+      "shortDescription": "Engine config properties",
+      "keywords": "api book common config controller ejouralsctrl ejournals engine engines filterquery html mediatypes object onesearch onesearchprovider periodical priority properties property resultspath templateurl title total totalspath tpl type"
+    },
+    {
+      "section": "api",
+      "id": "engines.type:ejournals:EjouralsCtrl",
+      "shortName": "EjouralsCtrl",
+      "type": "controller",
+      "moduleName": "engines",
+      "shortDescription": "TODO:   add proper description.",
+      "keywords": "add api controller description engines proper type"
     },
     {
       "section": "api",
@@ -89,8 +126,8 @@ NG_DOCS={
       "shortName": "faq",
       "type": "object",
       "moduleName": "engines",
-      "shortDescription": "faq engine config",
-      "keywords": "api config engine engines faq object onesearchprovider type"
+      "shortDescription": "Engine config properties",
+      "keywords": "api box common config controller engine engines faq filterquery googlecs html items lib mediatypes object onesearch onesearchprovider priority properties property resultspath searchinformation site templateurl title totalresults totalspath tpl type ua"
     },
     {
       "section": "api",
@@ -98,8 +135,8 @@ NG_DOCS={
       "shortName": "googleCS",
       "type": "object",
       "moduleName": "engines",
-      "shortDescription": "googleCS engine config",
-      "keywords": "api config engine engines googlecs object onesearchprovider type"
+      "shortDescription": "Engine config properties (For more details, see oneSearchProvider.engine() documentation)",
+      "keywords": "api box common config controller details documentation engine engines filterquery googlecs html items lib libraries mediatypes methods_engine object onesearch onesearchprovider priority properties property resultspath searchinformation templateurl title totalresults totalspath tpl type ua website"
     },
     {
       "section": "api",
@@ -107,8 +144,8 @@ NG_DOCS={
       "shortName": "libguides",
       "type": "object",
       "moduleName": "engines",
-      "shortDescription": "libguides engine config",
-      "keywords": "api config engine engines libguides object onesearchprovider type"
+      "shortDescription": "Engine config properties (For more details, see oneSearchProvider.engine() documentation)",
+      "keywords": "api box common config controller details documentation engine engines filterquery googlecs guides html items lib mediatypes methods_engine object onesearch onesearchprovider priority properties property resultspath searchinformation site templateurl title totalresults totalspath tpl type ua"
     },
     {
       "section": "api",
@@ -116,8 +153,8 @@ NG_DOCS={
       "shortName": "recommend",
       "type": "object",
       "moduleName": "engines",
-      "shortDescription": "recommend engine config",
-      "keywords": "api config engine engines object onesearchprovider recommend type"
+      "shortDescription": "Engine config properties (For more details, see oneSearchProvider.engine() documentation)",
+      "keywords": "api box common config controller details documentation engine engines filterquery html mediatypes methods_engine object onesearch onesearchprovider priority properties property recommend recommendations resultspath templateurl title totalspath tpl type"
     },
     {
       "section": "api",
@@ -125,8 +162,17 @@ NG_DOCS={
       "shortName": "scout",
       "type": "object",
       "moduleName": "engines",
-      "shortDescription": "scout engine config",
-      "keywords": "api config engine engines object onesearchprovider scout type"
+      "shortDescription": "Engine config properties",
+      "keywords": "academicjournal api book common config controller data ebook engine engines filterquery header html mediatypes object onesearch onesearchprovider priority properties property pubtypeid records resultspath scout scoutctrl searchresult statistics templateurl title totalhits totalspath tpl type"
+    },
+    {
+      "section": "api",
+      "id": "engines.type:scout:ScoutCtrl",
+      "shortName": "ScoutCtrl",
+      "type": "controller",
+      "moduleName": "engines",
+      "shortDescription": "TODO:   add proper description.",
+      "keywords": "add api controller description engines proper type"
     },
     {
       "section": "api",
@@ -134,7 +180,8 @@ NG_DOCS={
       "shortName": "mediaTypes",
       "type": "overview",
       "moduleName": "mediaTypes",
-      "keywords": "api mediatypes overview"
+      "shortDescription": "The mediaTypes module allows engines to easily split their results, grouped into different media types. See mediaTypesProvider for more details.",
+      "keywords": "allows api details easily engines grouped media mediatypes mediatypesprovider module overview split types"
     },
     {
       "section": "api",
@@ -159,8 +206,8 @@ NG_DOCS={
       "shortName": "oneSearch",
       "type": "overview",
       "moduleName": "oneSearch",
-      "shortDescription": "Central oneSearch module that defined all components and dependencies involved",
-      "keywords": "angular-filter api app attempt central common components conflicts defined dependencies duscroll engines interface involved javascripts lazy loaded module modules named namespace nganimate ngresource ngroute ngsanitize onesearch overview parent point prepended prevent registered ualib-ui ui-bootstrap"
+      "shortDescription": "",
+      "keywords": "_all add allows angular-filter api app attempt class common conflicts docs duscroll easily edit engines existing interface javascripts lazy lead loaded module modules multiple named namespace nganimate ngresource ngroute ngsanitize onesearch onesearchprovider overview parent point prepended prevent search searched ualib-ui ui-bootstrap"
     },
     {
       "section": "api",
@@ -168,8 +215,8 @@ NG_DOCS={
       "shortName": "oneSearch.dataFactory",
       "type": "service",
       "moduleName": "oneSearch",
-      "shortDescription": "Factory service to retrieve results for the search box suggestion dropdown",
-      "keywords": "$http api box datafactory dropdown factory method object onesearch promise retrieve returns search service standard suggestion"
+      "shortDescription": "Factory service to retrieve results for the search box suggestion dropdown generated by suggest-one-search directive.",
+      "keywords": "$http api box datafactory directive dropdown factory generated method object onesearch promise retrieve returns search service standard suggest-one-search suggestion"
     },
     {
       "section": "api",
@@ -182,20 +229,38 @@ NG_DOCS={
     },
     {
       "section": "api",
+      "id": "oneSearch.filter:orderObjectBy",
+      "shortName": "orderObjectBy",
+      "type": "filter",
+      "moduleName": "oneSearch",
+      "shortDescription": "Order&#39;s an array of objects by the value of a property in those objects.",
+      "keywords": "$filter _engines api array arrobj field filter items objects onesearch order ordered orderobjectby property reverse var"
+    },
+    {
+      "section": "api",
+      "id": "oneSearch.global:toArray",
+      "shortName": "toArray",
+      "type": "function",
+      "moduleName": "oneSearch",
+      "shortDescription": "Converts the given object into an Array of it&#39;s values",
+      "keywords": "api array arraynowplease convert converts cross don function global https js myobj object onesearch prop1 prop2 prop3 property returns streams toarray values var"
+    },
+    {
+      "section": "api",
       "id": "oneSearch.oneSearch",
       "shortName": "oneSearch.oneSearch",
       "type": "object",
       "moduleName": "oneSearch",
-      "keywords": "$enginestemplatefactory $filter $parse $q $rootscope api config configuration controller convenience defined determined engine engines function getenginecontroller getenginetemplate method object onesearch onesearchprovider order params reference registered request requests rest search searchall searchparams send template weight"
+      "keywords": "$enginestemplatefactory $filter $parse $q $rootscope adding api config configuration controller defined determined engine engines extended function getenginecontroller getenginetemplate method object onesearch onesearchprovider order params registered request requests rest search searchall searchparams send status template weight"
     },
     {
       "section": "api",
-      "id": "oneSearch.oneSearch:oneSearchCtrl",
-      "shortName": "oneSearchCtrl",
+      "id": "oneSearch.oneSearch:OneSearchCtrl",
+      "shortName": "OneSearchCtrl",
       "type": "controller",
       "moduleName": "oneSearch",
       "shortDescription": "Controller for oneSearch",
-      "keywords": "$location $onesearch $rootscope $scope $window api controller onesearch"
+      "keywords": "$location $onesearch $rootscope $scope $window api controller function method onesearch onesearchctrl search"
     },
     {
       "section": "api",
@@ -204,7 +269,16 @@ NG_DOCS={
       "type": "service",
       "moduleName": "oneSearch",
       "shortDescription": "This is the core of the oneSearch application.",
-      "keywords": "$scope $templatecache accept allows angular api appended application assign backend characters common config configuration control controller core custom defined defines details determining displayed easily engine engine_name engines example expects file filterquery float function functions googlecs googlecsctrl grab handler html identifier identifies independent items json lib libraries loaded machine manipulate mediatypes mediatypesprovider module number object onesearch onesearchprovider order parameter params path phase physical plug-able priority process properties provider query querying readable register registered representing request resources response result resultspath search searchable searchinformation service smaller space special string supported tells template templated templateurl title top total totalresults totalspath tpl ua url var website weight"
+      "keywords": "$scope $templatecache accept allows angular api appended application assign backend characters common config configuration configured control controller core custom defined defines details determining displayed docs easily engine engine_name engines example expects file filter filterquery float function functions googlecs googlecsctrl grab handler html identifier identifies independent items json lib libraries loaded machine manipulate mediatypes mediatypesprovider module number object onesearch onesearchprovider order parameter params path phase physical plug-able priority process provider query querying readable register registered representing request resources response result resultspath search searchable searchinformation service smaller space special string supported tells template templated templateurl title top total totalresults totalspath tpl ua var website weight"
+    },
+    {
+      "section": "api",
+      "id": "oneSearch.Search",
+      "shortName": "oneSearch.Search",
+      "type": "service",
+      "moduleName": "oneSearch",
+      "shortDescription": "Factory service use to make requests to the oneSearch API which will query and return an engine&#39;s results",
+      "keywords": "$http $q aborted allows api custom details engine engines factory limit maximum method number object onesearch parameters params promise query request requests return returns search service string"
     },
     {
       "section": "api",
@@ -232,21 +306,12 @@ NG_DOCS={
       "moduleName": "oneSearch",
       "shortDescription": "Checks to see if an Object or Array is empty",
       "keywords": "api array check checks empty false function http isempty isobjempty myobj obj object onesearch true type var"
-    },
-    {
-      "section": "api",
-      "id": "oneSearch.type:toArray",
-      "shortName": "toArray",
-      "type": "function",
-      "moduleName": "oneSearch",
-      "shortDescription": "Converts the given object into an Array of it&#39;s values",
-      "keywords": "api array arraynowplease convert converts cross don function https js myobj object onesearch prop1 prop2 prop3 property returns streams toarray type values var"
     }
   ],
   "apis": {
     "api": true
   },
-  "html5Mode": true,
+  "html5Mode": false,
   "editExample": true,
   "startPage": "/api/oneSearch",
   "scripts": [
