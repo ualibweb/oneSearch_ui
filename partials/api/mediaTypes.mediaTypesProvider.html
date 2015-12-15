@@ -1,0 +1,121 @@
+<a href="https://github.com/ualibweb/oneSearch_ui/edit/master/src/app/common/media-types/media-types.js" class="improve-docs"><i class="icon-edit"> </i>Improve this doc</a><a href="https://github.com/ualibweb/oneSearch_ui/blob/3906e8f/src/app/common/media-types/media-types.js#L123" class="view-source"><i class="icon-eye-open"> </i>View source</a><h1><code ng:non-bindable="">mediaTypesProvider</code>
+<div><span class="hint">service in module <code ng:non-bindable="">mediaTypes</code>
+</span>
+</div>
+</h1>
+<div><h2 id="description">Description</h2>
+<div class="description"><div class="mediatypes-mediatypesprovider-page"><p>This module extends the <code>engine object</code> with a <code>mediaTypes</code> property,
+allowing multiple engines pool their results into similar <code>media types</code>.</p>
+<p>The <code>mediaTypes</code> config object is defined as part of the engine&#39;s config object passed to the <a href="#/api/oneSearch.oneSearchProvider#methods_engine">oneSearchProvider.engine()</a> method.</p>
+<p>The <code>mediaTypes</code> config object has the following properties:</p>
+<ul>
+<li>path <em>(optional)</em> - <code>{string=}</code> - The JSON path to the <code>value</code> that determines a media type in a results object. This path extends the <code>resultsPath</code> from the <code>engine object</code></li>
+<li>types - <code>{object}</code> - Object where the properties are the name of the media type, and the values are the value which defines that type in the results object.<ul>
+<li>TYPE_NAME - <code>{string|Array.&lt;string&gt;}</code> - String or Array of strings for values that define the media type.</li>
+</ul>
+</li>
+</ul>
+<h3 id="description_example">Example</h3>
+<p>Here we have a search engine called <code>myEngine</code>. When creating the engine&#39;s config module, we specify what <code>mediaTypes</code> we want the engine&#39;s
+results to be split into.</p>
+<p>Each item in the <code>myEngine.results</code> Array from the JSON response has a <code>metadata</code> object with a <code>type</code> property,
+which defines the item&#39;s media type. Specifying the <code>mediaTypes.path</code> property as <code>metadata.type</code> will tell <code>oneSearch</code> to look for the media type
+values under <code>myEngine.results[index].metadata.type</code>.</p>
+<p>Search result items that do not match <code>mediaTypes</code> defined in an engine&#39;s config will be place into the <code>other</code> media type.</p>
+<div class="tabbable">
+ <div class="tab-pane" title="myEngine Results">
+     With the given <code>myEngine Config</code> and <code>JSON Response</code>, the search results would be organized by <code>mediaTypes</code>.
+
+     <strong>Note:</strong> all types not defined in <code>mediaTypes.types</code> of the <code>myEngine&#39;s</code> config are put into an <code>other</code> type
+
+     <div class="well">
+     <ul>
+         <li>
+             <code>books</code>
+             <ul>
+                 <li><code>Title of Book</code></li>
+                 <li><code>Title of E-Book</code></li>
+             </ul>
+         </li>
+         <li>
+             <code>articles</code>
+             <ul>
+                 <li><code>Title of Journal Article</code></li>
+             </ul>
+         </li>
+         <li>
+             <code>other</code>
+             <ul>
+                 <li><code>Title of Audio Recording</code></li>
+             </ul>
+         </li>
+     </ul>
+     </div>
+ </div>
+ <div class="tab-pane" title="myEngine Config">
+     <pre class="prettyprint linenums">
+              angular.module('engines.myEngine', [])
+
+               .config(['oneSearchProvider', function(oneSearchProvider){
+                    oneSearchProvider.engine('myEngine', {
+                        id: 90,
+                        priority: 15,
+                        resultsPath: 'myEngine.results',
+                        mediaTypes: {
+                            path: 'metadata.type',
+                            types: {
+                                books: ['book', 'ebook'],
+                                articles: 'academicJournal'
+                            }
+                        }
+                    });
+                });
+        </pre>
+ </div>
+ <div class="tab-pane" title="JSON Response">
+     <pre class="prettyprint linenums">
+         {
+         "myEngine": {
+             "results": [
+                 {
+                     "title": "Title of Book",
+                     "metadata": {
+                         "type": "book"
+                     }
+                 },
+                 {
+                     "title": "Title of E-Book",
+                     "metadata": {
+                         "type": "ebook"
+                     }
+                 },
+                 {
+                    "title": "Title of Journal Article",
+                     "metadata": {
+                         "type": "academicJournal"
+                     }
+                 },
+                 {
+                     "title": "Title of Audio Recording",
+                     "metadata": {
+                         "type": "audio"
+                     }
+                 }
+             ]
+         }
+     }
+     </pre>
+ </div>
+</div></div></div>
+<div class="member method"><h2 id="methods">Methods</h2>
+<ul class="methods"><li><a href="https://github.com/ualibweb/oneSearch_ui/blob/3906e8f/src/app/common/media-types/media-types.js#L151" class="view-source icon-eye-open"> </a><h3 id="methods_type">type(type, engine)</h3>
+<div class="type"><div class="mediatypes-mediatypesprovider-type-page"><p>This method is used by the <a href="#/api/oneSearch.oneSearchProvider">oneSearchProvider</a> to organize engines by their media types,
+if specified in the <a href="#/api/oneSearch.oneSearchProvider#methods_engine">engine object</a>.</p>
+<p>A <code>mediaTypes</code> property is looked for in the <code>engine</code> object. If no <code>mediaTypes</code> property is found, the engine is considered as its own media type.</p>
+</div><h5 id="methods_type_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>type</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="mediatypes-mediatypesprovider-type-page"><p>The <code>type</code> of media to look in an engine&#39;s search results</p>
+</div></td></tr><tr><td>engine</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="mediatypes-mediatypesprovider-type-page"><p>The name of the engine, defined when registering an engine with the <a href="#/api/oneSearch.oneSearchProvider">oneSearchProvider</a>.</p>
+</div></td></tr></tbody></table></div>
+</li>
+</ul>
+</div>
+</div>

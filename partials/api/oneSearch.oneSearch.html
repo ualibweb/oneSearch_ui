@@ -1,0 +1,56 @@
+<a href="https://github.com/ualibweb/oneSearch_ui/edit/master/src/app/common/one-search.js" class="improve-docs"><i class="icon-edit"> </i>Improve this doc</a><a href="https://github.com/ualibweb/oneSearch_ui/blob/3906e8f/src/app/common/one-search.js#L235" class="view-source"><i class="icon-eye-open"> </i>View source</a><h1><code ng:non-bindable="">oneSearch</code>
+<div><span class="hint">service in module <code ng:non-bindable="">oneSearch</code>
+</span>
+</div>
+</h1>
+<div><h2 id="description">Description</h2>
+<div class="description"><div class="onesearch-onesearch-page"><p>The <code>oneSearch</code> service acts as the access point to search engines during Angular&#39;s <code>run</code> phase (see Angular&#39;s <a href="https://code.angularjs.org/1.2.29/docs/guide/module#module-loading-dependencies">Module Loading &amp; dependencies</a> documentation}.
+Engines are configured and registered with <code>oneSearch</code> during the <code>configuration</code> phase. See <a href="#/api/oneSearch.oneSearchProvider">oneSearchProvider</a> docs for more details.</p>
+</div></div>
+<h2 id="dependencies">Dependencies</h2>
+<ul class="dependencies"><li><code ng:non-bindable=""><a href="#/api/ng.$q">$q</a></code>
+</li>
+<li><code ng:non-bindable=""><a href="#/api/ng.$parse">$parse</a></code>
+</li>
+<li><code ng:non-bindable=""><a href="#/api/ng.$filter">$filter</a></code>
+</li>
+<li><code ng:non-bindable=""><a href="#/api/ng.$rootScope">$rootScope</a></code>
+</li>
+<li><code ng:non-bindable=""><a href="#/api/ng.$enginesTemplateFactory">$enginesTemplateFactory</a></code>
+</li>
+<li><code ng:non-bindable=""><a href="#/api/oneSearch.SearchParams">SearchParams</a></code>
+</li>
+<li><code ng:non-bindable=""><a href="#/api/oneSearch.Search">Search</a></code>
+</li>
+</ul>
+<div class="member method"><h2 id="methods">Methods</h2>
+<ul class="methods"><li><a href="https://github.com/ualibweb/oneSearch_ui/blob/3906e8f/src/app/common/one-search.js#L340" class="view-source icon-eye-open"> </a><h3 id="methods_getenginecontroller">getEngineController(engine)</h3>
+<div class="getenginecontroller"><div class="onesearch-onesearch-getenginecontroller-page"><p>Gets the controller defined in an engine&#39;s config object</p>
+</div><h5 id="methods_getenginecontroller_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>engine</td><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="onesearch-onesearch-getenginecontroller-page"><p>Config object for an engine</p>
+</div></td></tr></tbody></table><h5 id="methods_getenginecontroller_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-string">string|function|null</a></td><td><div class="onesearch-onesearch-getenginecontroller-page"><p>Returns the name of a defined controller or the controller function defined with the given engine. If no
+controller was defined for the engine, then <code>null</code> is returned.</p>
+</div></td></tr></table></div>
+</li>
+<li><a href="https://github.com/ualibweb/oneSearch_ui/blob/3906e8f/src/app/common/one-search.js#L324" class="view-source icon-eye-open"> </a><h3 id="methods_getenginetemplate">getEngineTemplate(engine)</h3>
+<div class="getenginetemplate"><div class="onesearch-onesearch-getenginetemplate-page"><p>Gets the template defined in an engine&#39;s config object</p>
+</div><h5 id="methods_getenginetemplate_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>engine</td><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="onesearch-onesearch-getenginetemplate-page"><p>Config object for an engine</p>
+</div></td></tr></tbody></table><h5 id="methods_getenginetemplate_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-string">string|Promise.&lt;string&gt;</a></td><td><div class="onesearch-onesearch-getenginetemplate-page"><p>The template html as a string, or a promise
+for that string.</p>
+</div></td></tr></table></div>
+</li>
+<li><a href="https://github.com/ualibweb/oneSearch_ui/blob/3906e8f/src/app/common/one-search.js#L260" class="view-source icon-eye-open"> </a><h3 id="methods_searchall">searchAll(params)</h3>
+<div class="searchall"><div class="onesearch-onesearch-searchall-page"><p>Function to search all engines. The order requests are made is determined by the <a href="#/api/oneSearch.oneSearchProvider#methods_engine">priority</a> weight of each engine&#39;s configuration object</p>
+</div><h5 id="methods_searchall_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>params</td><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="onesearch-onesearch-searchall-page"><p>Params to send with REST API request</p>
+</div></td></tr></tbody></table></div>
+</li>
+</ul>
+</div>
+<div class="member property"><h2 id="properties">Properties</h2>
+<ul class="properties"><li><h3 id="properties_engines">engines</h3>
+<div class="engines"><div class="onesearch-onesearch-engines-page"><p>Object containing information about all engines registered through the <a href="#/api/oneSearch.oneSearchProvider">oneSearch.oneSearchProvider</a>. This <code>object</code> is extended upon
+search, adding the engine&#39;s results and status.</p>
+</div></div>
+</li>
+</ul>
+</div>
+</div>
