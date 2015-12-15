@@ -32,7 +32,7 @@ angular.module('oneSearch.common')
      *
      * @param {string} prompt The `placeholder` text to display in the search text box
      * @param {string} model Name of the `$scope` variable to store the search string
-     * @param {string} search Name of the `$scope` reference to the `search()` function defined in the {@link oneSearch.oneSearch:oneSearchCtrl}
+     * @param {string} search Name of the `$scope` reference to the `search()` function defined in the {@link oneSearch.oneSearch:OneSearchCtrl OneSearchCtrl}
      *
      * @description
      * Directive for the search box with suggestion dropdown

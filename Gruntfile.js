@@ -92,14 +92,18 @@ module.exports = function(grunt){
             options: {
                 dest: 'docs',
                 html5Mode: false,
-                startPage: '/api/oneSearch',
+                startPage: 'api/oneSearch',
                 sourceLink: true,
                 title: "oneSearch Docs",
-                titleLink: "/api/oneSearch"
+                titleLink: "api/oneSearch"
             },
             api: {
                 src: ['src/**/*.js', '!src/**/*.spec.js'],
                 title: 'API Documentation'
+            },
+            guide: {
+                src: ['src/guide/**/*.ngdoc'],
+                title: 'Guide'
             }
         },
         'gh-pages': {

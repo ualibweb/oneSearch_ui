@@ -5,9 +5,8 @@
  * @requires $routeProvider
  *
  * @description
- * Bento box module provides BentoBoxProvider, and route
- *
- * Default route pattern: `/#/bento/:search_term`
+ * # Default route pattern: <code>/#/bento/:search_term</code>
+ * Bento box module provides BentoBox route and {@link bento.Bento Bento} service.
  *
  */
 angular.module('bento', [])
@@ -31,7 +30,7 @@ angular.module('bento', [])
  * @requires $rootScope
  * @requires $rootParams
  * @requires oneSearch.oneSearch
- * @requires oneSearch.mediaTypes
+ * @requires mediaTypes.mediaTypes
  *
  * @description
  * This service uses the mediaTypes service to organize the engine results by media type

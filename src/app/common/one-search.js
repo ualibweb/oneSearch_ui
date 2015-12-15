@@ -89,14 +89,32 @@ angular.module('common.oneSearch', [])
          * @name oneSearch.Search#request
          * @methodOf oneSearch.Search
          *
-         * @param {Object} params Object of search parameters
+         * @param {Object} params Object of search parameters (defaults can be set via the {@link oneSearch.SearchParams SearchParams service}).
          * @param {string} params.s Search string
          * @param {integer|string} params.engine The `id` of the engine to search
          * @param {integer=} [params.limit=100] - Maximum number of results to return
          *
          * @description
          *
-         * @returns {Promise} Returns a custom `Promise` which allows the `$http` request to be aborted. See {@link oneSearch.oneSearch#engines} for details.
+         * @returns {Promise} Returns a custom `Promise` which allows the `$http` request to be aborted. Check the status of or abort a request using the `response` property.
+         *
+         * This custom promise contains all the standard {@link https://code.angularjs.org/1.2.29/docs/api/ng/service/$http#usage $http} return properties, but adds the `response` property:
+         * - **response.done** - `{boolean}` - `true` when the $http request is finished
+         * - **response.abort** - `{function}` - A function to abort a pending `$http` request
+         *
+         *
+         * <pre>
+         *     // Abort the request if it takes longer than 400ms
+         *     var search = Search.request(params);
+         *
+         *     $timeout(function(){
+         *          if (!search.request.done){
+         *              search.request.abort();
+         *          }
+         *     }, 400);
+         *
+         * </pre>
+         *
          */
 
         return {
@@ -108,7 +126,7 @@ angular.module('common.oneSearch', [])
      * @ngdoc service
      * @name oneSearch.oneSearchProvider
      *
-     * @requires mediaTypesProvider
+     * @requires mediaTypes.mediaTypesProvider
      *
      * @description
      * This is the core of the oneSearch application.
@@ -206,8 +224,12 @@ angular.module('common.oneSearch', [])
          * @requires $filter
          * @requires $rootScope
          * @requires $enginesTemplateFactory
-         * @requires SearchParams
-         * @requires Search
+         * @requires oneSearch.SearchParams
+         * @requires oneSearch.Search
+         *
+         * @description
+         * The `oneSearch` service acts as the access point to search engines during Angular's `run` phase (see Angular's {@link https://code.angularjs.org/1.2.29/docs/guide/module#module-loading-dependencies Module Loading & dependencies} documentation}.
+         * Engines are configured and registered with `oneSearch` during the `configuration` phase. See {@link oneSearch.oneSearchProvider oneSearchProvider} docs for more details.
          *
          */
 
@@ -233,7 +255,7 @@ angular.module('common.oneSearch', [])
                  * @param {Object} params Params to send with REST API request
                  *
                  * @description
-                 * Function to search all engines. The order requests are made is determined by the [priority]{@link oneSearch.oneSearchProvider#engine} weight of each engine's configuration object
+                 * Function to search all engines. The order requests are made is determined by the {@link oneSearch.oneSearchProvider#methods_engine priority} weight of each engine's configuration object
                  */
                 searchAll: function(params){
 
@@ -295,6 +317,9 @@ angular.module('common.oneSearch', [])
                  *
                  * @description
                  * Gets the template defined in an engine's config object
+                 *
+                 * @returns {string|Promise.<string>} The template html as a string, or a promise
+                 * for that string.
                  */
                 getEngineTemplate: function(engine){
                     return enginesTemplateFactory.get(engine);
@@ -308,6 +333,9 @@ angular.module('common.oneSearch', [])
                  *
                  * @description
                  * Gets the controller defined in an engine's config object
+                 *
+                 * @returns {string|function|null} Returns the name of a defined controller or the controller function defined with the given engine. If no
+                 * controller was defined for the engine, then `null` is returned.
                  */
                 getEngineController: function(engine){
                     return angular.isDefined(engine.controller) ? engine.controller : null;
@@ -325,10 +353,11 @@ angular.module('common.oneSearch', [])
      * @requires $rootScope
      * @requires $location
      * @requires $window
-     * @requires $oneSearch
+     * @requires oneSearch.oneSearch
      *
      * @description
-     * Controller for oneSearch
+     * This controller should warp the search box form. It will provide search variables/methods relative to it's `$scope`. Be sure to compensate if any
+     * directives under this controller define an isolated $scope.
      */
 
     .controller('OneSearchCtrl', ['$scope', '$location', '$rootScope', '$window', 'oneSearch', function($scope, $location, $rootScope, $window, oneSearch){
@@ -344,15 +373,29 @@ angular.module('common.oneSearch', [])
 
         /**
          * @ngdoc method
-         * @name oneSearch.oneSearch:OneSearchCtrl#search
+         * @name oneSearch.oneSearch:OneSearchCtrl#$scope.search
          * @methodOf oneSearch.oneSearch:OneSearchCtrl
          *
          * @description
-         * Search function on the `OneSearchCtrl's` $scope
+         * This function will first check if the `$scope.searchText` model has value. If so, it will
+         * 1. Trim any `/` characters from `$scope.searchText`
+         * 2. Cancel any pending searches
+         * 3. Route the browser to `#/bento/{$scope.searchText}`.
          *
+         * Currently only the {@link bento} route is supported. Other views/routes may be supported in the future.
+         *
+         * **Note:** This function will route relative to UA Libraries' `live` and `dev` URLs. If this function is executed outside a UALib domain, `www.lib.ua.edu` will be used by default.
          */
 
         $scope.search = function(){
+            /**
+             * @ngdoc property
+             * @name oneSearch.oneSearch:OneSearchCtrl:$scope.searchText
+             * @propertyOf oneSearch.oneSearch:OneSearchCtrl
+             *
+             *  @description
+             * The $scope model for the search string, bound to the input text box.
+             */
             if ($scope.searchText){
                 $scope.searchText = $scope.searchText.replace(/\//g, ' ').trim();
                 var searchText = encodeURIComponent($scope.searchText);

@@ -4,7 +4,7 @@
  *
  * @description
  * # Adding Engines to oneSearch
- * <div class="alert alert-primary">Engines are configured and registered via the `oneSearchProvider`, {@link oneSearch.oneSearchProvider#engine see here for details}</div>
+ * <div class="alert alert-primary">Engines are configured and registered via the `oneSearchProvider`, {@link oneSearch.oneSearchProvider#methods_engine see here for details}</div>
  *
  *
  * ## The `engines module` acts as the entry point to load engine configs.
@@ -85,8 +85,10 @@ angular.module('common.engines', [
      * @requires $templateCache
      *
      * @description
-     * This service uses the mediaTypes service to organize the engine results by media type
-     * and preloaded an engine's template and controller (if defined) if there are results for that engine.
+     * This service retrieves the templates registered with each engine's config.
+     *
+     * **Note:** Although templates can only be retrieved via URL or $templateCache at the moment, it is recommended with use the {@link engines.enginesTemplateFactory#methods_get enginesTemplateFactory.get()} method,
+     * as other template config methods may be supported in the future.
      */
     .service('enginesTemplateFactory', ['$http', '$templateCache', function($http, $templateCache){
 
@@ -100,7 +102,7 @@ angular.module('common.engines', [
          * @param {object} config An engine's config object
          *
          * @description
-         * Takes an engine's `config` object and returns a template
+         * Takes an engine's `config` object and returns a template or a promise to the template, depending on how the template is defined in the engine's config.
          **/
         this.get = function(config){
             // return template is "templateUrl" is defined. otherwise, return null
@@ -109,6 +111,22 @@ angular.module('common.engines', [
 
         // So far only templateUrl is supported - worked with both file and cached templates.
         // adopted from https://github.com/angular-ui/ui-router/blob/master/src/templateFactory.js
+        /**
+         * @ngdoc method
+         * @name engines.enginesTemplateFactory#fromUrl
+         * @methodOf engines.enginesTemplateFactory
+         *
+         * @param {string} url The URL or `$templateCache` path to the template.
+         *
+         * @description
+         * Takes a `URL` string and returns a promise to the template. `$templateCache` will be checked first. If no cached template is found, then
+         * it loads via `$http`.
+         *
+         * Adopted from {@link https://github.com/angular-ui/ui-router/blob/master/src/templateFactory.js}
+         *
+         * @returns {string|Promise.<string>} The template html as a string, or a promise
+         * for that string.
+         */
         this.fromUrl = function(url){
             if (url == null) return null;
             else return $http

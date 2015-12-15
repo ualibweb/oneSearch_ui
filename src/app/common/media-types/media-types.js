@@ -12,7 +12,113 @@ angular.module('common.mediaTypes', [])
      * @name mediaTypes.mediaTypesProvider
      *
      * @description
-     * Allows engines to organize their results into different `media types`. This is done via the engine's config object passed to the {@link oneSearch.oneSearchProvider#methods_engine oneSearchProvider.engine()} method.
+     * This module extends the `engine object` with a `mediaTypes` property,
+     * allowing multiple engines pool their results into similar `media types`.
+     *
+     * The `mediaTypes` config object is defined as part of the engine's config object passed to the {@link oneSearch.oneSearchProvider#methods_engine oneSearchProvider.engine()} method.
+     *
+     *
+     * The `mediaTypes` config object has the following properties:
+     * - path *(optional)* - `{string=}` - The JSON path to the `value` that determines a media type in a results object. This path extends the `resultsPath` from the `engine object`
+     * - types - `{object}` - Object where the properties are the name of the media type, and the values are the value which defines that type in the results object.
+     *      - TYPE_NAME - `{string|Array.<string>}` - String or Array of strings for values that define the media type.
+     *
+     * # Example
+     *
+     * Here we have a search engine called `myEngine`. When creating the engine's config module, we specify what `mediaTypes` we want the engine's
+     * results to be split into.
+     *
+     * Each item in the `myEngine.results` Array from the JSON response has a `metadata` object with a `type` property,
+     * which defines the item's media type. Specifying the `mediaTypes.path` property as `metadata.type` will tell `oneSearch` to look for the media type
+     * values under `myEngine.results[index].metadata.type`.
+     *
+     * Search result items that do not match `mediaTypes` defined in an engine's config will be place into the `other` media type.
+     *
+     * <div class="tabbable">
+     *  <div class="tab-pane" title="myEngine Results">
+     *      With the given `myEngine Config` and `JSON Response`, the search results would be organized by `mediaTypes`.
+     *
+     *      **Note:** all types not defined in `mediaTypes.types` of the `myEngine's` config are put into an `other` type
+     *
+     *      <div class="well">
+     *      <ul>
+     *          <li>
+     *              `books`
+     *              <ul>
+     *                  <li>`Title of Book`</li>
+     *                  <li>`Title of E-Book`</li>
+     *              </ul>
+     *          </li>
+     *          <li>
+     *              `articles`
+     *              <ul>
+     *                  <li>`Title of Journal Article`</li>
+     *              </ul>
+     *          </li>
+     *          <li>
+     *              `other`
+     *              <ul>
+     *                  <li>`Title of Audio Recording`</li>
+     *              </ul>
+     *          </li>
+     *      </ul>
+     *      </div>
+     *  </div>
+     *  <div class="tab-pane" title="myEngine Config">
+     *      <pre>
+              angular.module('engines.myEngine', [])
+
+               .config(['oneSearchProvider', function(oneSearchProvider){
+                    oneSearchProvider.engine('myEngine', {
+                        id: 90,
+                        priority: 15,
+                        resultsPath: 'myEngine.results',
+                        mediaTypes: {
+                            path: 'metadata.type',
+                            types: {
+                                books: ['book', 'ebook'],
+                                articles: 'academicJournal'
+                            }
+                        }
+                    });
+                });
+        </pre>
+     *  </div>
+     *  <div class="tab-pane" title="JSON Response">
+     *      <pre>
+     *          {
+     *          "myEngine": {
+     *              "results": [
+     *                  {
+     *                      "title": "Title of Book",
+     *                      "metadata": {
+     *                          "type": "book"
+     *                      }
+     *                  },
+     *                  {
+     *                      "title": "Title of E-Book",
+     *                      "metadata": {
+     *                          "type": "ebook"
+     *                      }
+     *                  },
+     *                  {
+     *                     "title": "Title of Journal Article",
+     *                      "metadata": {
+     *                          "type": "academicJournal"
+     *                      }
+     *                  },
+     *                  {
+     *                      "title": "Title of Audio Recording",
+     *                      "metadata": {
+     *                          "type": "audio"
+     *                      }
+     *                  }
+     *              ]
+     *          }
+     *      }
+     *      </pre>
+     *  </div>
+     * </div>
      */
 
     .provider('mediaTypes', [function mediaTypesProvider(){
@@ -33,10 +139,14 @@ angular.module('common.mediaTypes', [])
          * @methodOf mediaTypes.mediaTypesProvider
          *
          * @param {string} type The `type` of media to look in an engine's search results
-         * @param {object} engine The engine object
+         * @param {string} engine The name of the engine, defined when registering an engine with the {@link oneSearch.oneSearchProvider oneSearchProvider}.
          *
          * @description
-         * This method allows the {@link oneSearch.oneSearchProvider oneSearchProvider} to register engines with the media types, if specified in the {@link oneSearch.oneSearchProvider#methods_engine engine object}
+         * This method is used by the {@link oneSearch.oneSearchProvider oneSearchProvider} to organize engines by their media types,
+         * if specified in the {@link oneSearch.oneSearchProvider#methods_engine engine object}.
+         *
+         * A `mediaTypes` property is looked for in the `engine` object. If no `mediaTypes` property is found, the engine is considered as its own media type.
+         *
          */
         this.type = function(type, engine){
             if (!_types[type]){
