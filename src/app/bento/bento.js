@@ -9,7 +9,7 @@
  * Bento box module provides BentoBox route and {@link bento.Bento Bento} service.
  *
  */
-angular.module('bento', [])
+angular.module('oneSearch.bento', [])
 
     .config(['$routeProvider', function($routeProvider) {
         /**
