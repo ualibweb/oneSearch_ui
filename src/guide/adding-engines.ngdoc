@@ -7,13 +7,19 @@
 
 <div class="alert alert-primary">Engines are configured and registered via the `oneSearchProvider`, {@link api/oneSearch.oneSearchProvider see here for details}</div>
 
-## 1. Create a directory with the engines name under `src/app/common/engines/ENGINE_NAME`.
+## Step 1
+ 
+### Create a directory with the engines name under `src/app/common/engines/ENGINE_NAME`.
 
-     - This will contain the engine's config module, template, and LESS/CSS files
+     This will contain the engine's config module, template, and LESS/CSS files
 
-## 2. In the engines folder create the `engine config` module file: `myEngine.js`:
+## Step 2
 
-     -**Note:** be sure to add the `@ngdoc` comments, filling in the `properties` table, so the engine info will appear in these docs! You can use the example below as a template.
+### Create the engine config module 
+
+    In the engines folder create the `engine config` module file: `myEngine.js`:
+
+    **Note:** be sure to add the `@ngdoc` comments, filling in the `properties` table, so the engine info will appear in these docs! You can use the example below as a template.
 <pre>
     &#47;**
      &#64;ngdoc object
@@ -64,8 +70,11 @@
          ]);
 </pre>
 
-3. Create a template for engine items - this template is applied to each item in the search results individually
-     -*Note:** template files should *always* end in `.tpl.html` (i.e., ENGINE_NAME.tpl.html)
+## Step 3
+### Create a template for engine items
+
+this template is applied to each item in the search results individually
+     *Note:** template files should *always* end in `.tpl.html` (i.e., ENGINE_NAME.tpl.html)
 
 4. *(optional)* Create LESS file to create custom styles for the engine's template
 

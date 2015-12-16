@@ -1256,6 +1256,7 @@ angular.module('engines.acumen', [])
      * @name engines.type:acumen:AcumenCtrl
      *
      * @description
+     * Adds a `type` property to each item to display, from genres that may return with the API results.
      * <mark>TODO:</mark>   add proper description.
      */
 
