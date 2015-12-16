@@ -82,8 +82,8 @@ NG_DOCS={
       "shortName": "AcumenCtrl",
       "type": "controller",
       "moduleName": "engines",
-      "shortDescription": "TODO:   add proper description.",
-      "keywords": "add api controller description engines proper type"
+      "shortDescription": "Adds a type property to each item to display, from genres that may return with the API results.",
+      "keywords": "add adds api controller description display engines genres item proper property return type"
     },
     {
       "section": "api",
@@ -343,7 +343,7 @@ NG_DOCS={
       "type": "overview",
       "moduleName": "Adding Engines",
       "shortDescription": "Adding Engines to oneSearch",
-      "keywords": "$scope add adding alert alert-primary angular api appear applied books catalog class comments common config configured controller create custom dependencies details directory docs ebook engine engine_name engines example file files filling filter_query filterquery folder function guide html individually info item items js json mediatypes module myengine myenginectrl object onesearch onesearchprovider overview path priority properties property registered resultspath scout search src styles table template templateurl title totals totalspath tpl type types"
+      "keywords": "$scope add adding alert alert-primary angular api appear applied books catalog class comments common config configured controller create custom dependencies details directory docs ebook engine engine_name engines example file files filling filter_query filterquery folder function guide html individually info item items js json mediatypes module myengine myenginectrl object onesearch onesearchprovider overview path priority properties property registered resultspath scout search src step styles table template templateurl title totals totalspath tpl type types"
     }
   ],
   "apis": {
