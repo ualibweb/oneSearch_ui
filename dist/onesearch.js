@@ -2,7 +2,7 @@ angular.module('oneSearch.templates', ['bento/bento.tpl.html', 'common/directive
 
 angular.module("bento/bento.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("bento/bento.tpl.html",
-    "<div class=\"bento-box-container\">\n" +
+    "<div class=\"container bento-box-container\">\n" +
     "    <div class=\"bento-box-menu-container hidden-sm hidden-xs\">\n" +
     "        <nav class=\"bento-box-menu\" ui-scrollfix=\"+0\">\n" +
     "            <ul class=\"nav nav-justified\">\n" +
@@ -303,7 +303,76 @@ angular.module("common/engines/scout/scout.tpl.html", []).run(["$templateCache",
  * @ngdoc overview
  * @name index
  * @description
- * #test
+ * # Quick Start
+ *
+ * Run the following commands to install:
+ *
+ * ```shell
+ * npm install
+ * bower install
+ * ```
+ *
+ * <div class="alert alert-warning">
+ *     If you are unfamiliar with **Node.js**, **Grunt**, or **Bower** tools *or* have not installed them on your computer,
+ *     read through the instructions in the [Getting Started](#getting-started) section.
+ * </div>
+ *
+ * # Getting Started
+ *
+ * This package requires[Node.js](http://nodejs.org/) - an application platform which many development and automation tools may be run.
+ * Download [Node.js](http://nodejs.org/download/) and install it on your computer.
+ *
+ * > The **Node.js** platform is used to run development tools such as [Grunt](#getting-started_install-grunt) and [Bower](#getting-started_install-bower)
+ *
+ * Once `Node.js` is installed, use the `npm` (node package manager) command to install this project's node dependencies:
+ *
+ * ```shell
+ * npm install
+ * ```
+ *
+ * <div class="alert alert-info">
+ *     When the [npm install](https://docs.npmjs.com/cli/install) command is run without a package (e.g., `npm install <package_name>`),
+ *     it installs dependencies listed in the `package.json` file (located in the root directory of this project).
+ * </div>
+ *
+ *
+ * ## Install Grunt
+ * *This package requires Grunt `~0.4.5`*
+ *
+ * If you have not already installed `Grunt` on your computer, use the following command to install the `Grunt Command Line Interface (grunt-cli)`:
+ *
+ * ```shell
+ * npm install -g grunt-cli
+ * ```
+ * <div class="alert alert-info">
+ *     The **-g** option installs `grunt-cli` globally on you computer. You only need to run this command once.
+ * </div>
+ *
+ * > If you haven't used [Grunt](http://gruntjs.com/) before, be sure to check out the [Getting Started](http://gruntjs.com/getting-started) guide,
+ * > as it explains how to create a [Gruntfile](http://gruntjs.com/sample-gruntfile) as well as install and use Grunt plugins.
+ *
+ *
+ * ## Install Bower
+ *
+ * If `Bower` is not globally installed on your computer, run the following command:
+ *
+ * ```shell
+ * npm install -g bower
+ * ```
+ *
+ * [Bower](http://bower.io/) is also a package manager for front-end web frameworks such as jQuery, Angular, and Bootstrap.
+ * This project uses Bower to manage front-end third-party and peer dependencies.
+ *
+ * Once installed, you can download this project's `Bower` dependencies with the following command:
+ *
+ * ```shell
+ * bower install
+ * ```
+ *
+ * <div class="alert alert-info">
+ *     Similar to `npm install` if `Bower's install` command is not given a package name (e.g., `bower install <package_name>`), it will install
+ *     dependencies listed in the `bower.json` config file.
+ * </div>
  */
 /**
  * @ngdoc overview
@@ -991,7 +1060,7 @@ angular.module('oneSearch.common')
                 model: '=',
                 search: '='
             },
-            controller: function($scope, $window, $timeout, $document,  dataFactory){
+            controller: ['$scope', '$window', '$timeout', '$document', 'dataFactory', function($scope, $window, $timeout, $document,  dataFactory){
                 $scope.items = {};
                 $scope.filteredItems = [];
                 $scope.model = "";
@@ -1107,7 +1176,7 @@ angular.module('oneSearch.common')
                 $scope.gaTypeAhead = function(linkTitle){
                     ga('send', 'event', 'oneSearch', 'type_ahead_click', linkTitle);
                 };
-            },
+            }],
             link: function(scope, elem, attrs) {
                 scope.showSuggestions = false;
                 var suggestWatcher = scope.$watch('items', function(newVal, oldVal){
@@ -1260,7 +1329,7 @@ angular.module('engines.acumen', [])
      * <mark>TODO:</mark>   add proper description.
      */
 
-    .controller('AcumenCtrl', function($scope, $filter){
+    .controller('AcumenCtrl', ['$scope', '$filter', function($scope, $filter){
         var items = $scope.items;
 
         for (var i = 0, len = items.length; i < len; i++) {
@@ -1270,7 +1339,7 @@ angular.module('engines.acumen', [])
                 else items[i].type = items[i].type.sort().shift();
             }
         }
-    });
+    }]);
 angular.module('engines.catalog', [])
 
     /**
@@ -1331,7 +1400,7 @@ angular.module('engines.catalog', [])
      * <mark>TODO:</mark>   add proper description.
      */
 
-    .controller('CatalogCtrl', function($scope, $filter){
+    .controller('CatalogCtrl', ['$scope', '$filter', function($scope, $filter){
         var types = {
             bc: "Archive/Manuscript",
             cm: "Music Score",
@@ -1373,7 +1442,7 @@ angular.module('engines.catalog', [])
         }
 
         $scope.items = items;
-    });
+    }]);
 
 angular.module('engines.databases', [])
 
@@ -1457,7 +1526,7 @@ angular.module('engines.ejournals', [])
      * <mark>TODO:</mark>   add proper description.
      */
 
-    .controller('EjouralsCtrl', function($scope){
+    .controller('EjouralsCtrl', ['$scope', function($scope){
 
         var param;
         switch ($scope.mediaType){
@@ -1474,7 +1543,7 @@ angular.module('engines.ejournals', [])
         if (param){
             $scope.resourceLink = $scope.resourceLink.replace('SS_searchTypeAll=yes&SS_searchTypeBook=yes&SS_searchTypeJournal=yes&SS_searchTypeOther=yes', param);
         }
-    });
+    }]);
 /**
  * @ngdoc overview
  * @name engines
@@ -1822,7 +1891,7 @@ angular.module('engines.scout', [])
      * <mark>TODO:</mark>   add proper description.
      */
 
-    .controller('ScoutCtrl', function($scope){
+    .controller('ScoutCtrl', ['$scope', function($scope){
         var title; // Title variable to bind to $scope. ".BibRelationships.IsPartOfRelationships" title is used if no item title is present.
         var items = $scope.items;
         for (var i = 0; i < items.length; i++){
@@ -1896,7 +1965,7 @@ angular.module('engines.scout', [])
         }
 
         $scope.resourceLink = angular.copy(link);
-    });
+    }]);
 angular.module('filters.nameFilter', [])
 
     .filter('nameFilter', ['$filter', function($filter){
