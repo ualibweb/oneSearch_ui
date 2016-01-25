@@ -286,7 +286,7 @@ angular.module("common/engines/scout/scout.tpl.html", []).run(["$templateCache",
     "            </div>\n" +
     "\n" +
     "            <div class=\"details-container\" ng-if=\"item.RecordInfo.BibRecord.BibEntity.Subjects\">\n" +
-    "                <span class=\"text-muted\">Subejcts </span>\n" +
+    "                <span class=\"text-muted\">Subjects </span>\n" +
     "            <span class=\"details\"\n" +
     "                  ng-repeat=\"subject in item.RecordInfo.BibRecord.BibEntity.Subjects\"\n" +
     "                  ng-bind-html=\"subject.SubjectFull\"></span>\n" +
