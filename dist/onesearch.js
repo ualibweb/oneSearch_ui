@@ -366,7 +366,6 @@ angular.module("common/engines/scout/scout.tpl.html", []).run(["$templateCache",
  * @requires ngSanitize
  * @requires ui-bootstrap
  * @requires angular-filter
- * @requires duScroll
  * @requires ualib-ui
  * 
  * @description
@@ -386,7 +385,6 @@ angular.module('oneSearch', [
     'ngSanitize',
     'ui.bootstrap',
     'angular.filter',
-    'duScroll',
     'ualib.ui',
     'oneSearch.common',
     'oneSearch.templates',
@@ -407,9 +405,7 @@ angular.module('oneSearch', [
      */
     .value('SearchParams', {
         limit: 100
-    })
-
-    .value('duScrollOffset', 81);
+    });
 
 /**
  * @ngdoc overview
@@ -485,23 +481,6 @@ angular.module('oneSearch.bento', [])
          *  </pre>
          **/
         this.boxes = {};
-
-        /**
-         * @ngdoc object
-         * @name bento.Bento#boxeMenu
-         * @propertyOf bento.Bento
-         *
-         * @description
-         * Array of Objects containing info on the rendered boxes.
-         *
-         * Object properties:
-         * - `box` - `{string}` - Name of the box
-         * - `title` - '{string}` - Title displayed in the template
-         * - `loaded` - `{boolean}` - **Not Operational** status if all results for a box have been loaded
-         * - `noResults` - `{boolean}` - Results in `true` if there are no results from any engine registered to the box
-         *
-         **/
-        this.boxMenu = [];
 
         /**
          * @ngdoc object
@@ -682,7 +661,6 @@ angular.module('oneSearch.bento', [])
     .controller('BentoCtrl', ['$scope', 'Bento', function($scope, Bento){
         // When the route has changed/updated generate box results
         $scope.$on('$routeChangeSuccess', function(){
-            Bento.boxMenu = [];
             Bento.getBoxes();
         })
     }])
@@ -745,12 +723,6 @@ angular.module('oneSearch.bento', [])
 
                 // Preserve boxTitle text before any loading/waiting messages are inserted.
                 var boxTitle = titleElm.text();
-
-
-                // Box menu/index scope variables
-                if (!attrs.omitFromMenu){
-                    Bento.boxMenu.push({box: box, title: boxTitle, loaded: false, noResults: false});
-                }
 
                 //Enter the spinner animation, appending it to the title element
                 $animate.enter(spinner, titleElm, angular.element(titleElm[0].lastChild));
@@ -901,18 +873,6 @@ angular.module('oneSearch.bento', [])
                         }
                     }
 
-                    // Tell bentoMenu item it's loaded
-                    Bento.boxMenu = Bento.boxMenu.map(function(obj){
-                        if (obj.box === b){
-                            obj.loaded = true;
-
-                            if (isEmpty(Bento.boxes[b]['results'])){
-                                obj.noResults = true;
-                            }
-                        }
-                        return obj
-                    });
-
                     // Tell spinner to exit animation
                     $animate.leave(spinner);
 
@@ -925,64 +885,7 @@ angular.module('oneSearch.bento', [])
         }
     }])
 
-    /**
-     * @ngdoc directive
-     * @name bento.directive:bento-box-menu
-     *
-     * @requires $q
-     * @requires $rootScope
-     * @requires $document
-     * @requires $timeout
-     * @requires Bento
-     *
-     * @restrict AC
-     *
-     * @description
-     * Directive to generate anchor menu for all bento-boxes being rendered
-     *
-     */
 
-    .directive('bentoBoxMenu', ['Bento', '$document', '$rootScope', '$timeout', '$q', function(Bento, $document, $rootScope, $timeout, $q){
-        return {
-            restrict: 'AC',
-            replace: true,
-            link: function(scope, elm){
-                var selected;
-                var timeout;
-                scope.boxMenu = Bento.boxMenu;
-
-                scope.selectBox = function(box){
-                    if (timeout){
-                        $timeout.cancel(timeout);
-                        $document.off('scroll', onScroll);
-                    }
-
-                    deselect();
-                    select(box);
-
-                    timeout = $timeout(function(){
-                        $document.on('scroll', onScroll);
-                    }, 500);
-                };
-
-                var select = function(box){
-                    selected = angular.element(document.getElementById(box + '-parent'));
-                    selected.addClass('box-selected');
-                };
-
-                var deselect = function(){
-                    if (selected){
-                        selected.removeClass('box-selected');
-                    }
-                };
-
-                var onScroll = function(){
-                    deselect();
-                    $document.off('scroll', onScroll);
-                }
-            }
-        }
-    }])
 /**
  * Central registration module for all common components.
  * "Common" components are modules that can be used by any view or front-end controller,

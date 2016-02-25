@@ -83,7 +83,6 @@
  * @requires ngSanitize
  * @requires ui-bootstrap
  * @requires angular-filter
- * @requires duScroll
  * @requires ualib-ui
  * 
  * @description
@@ -103,7 +102,6 @@ angular.module('oneSearch', [
     'ngSanitize',
     'ui.bootstrap',
     'angular.filter',
-    'duScroll',
     'ualib.ui',
     'oneSearch.common',
     'oneSearch.templates',
@@ -124,6 +122,4 @@ angular.module('oneSearch', [
      */
     .value('SearchParams', {
         limit: 100
-    })
-
-    .value('duScrollOffset', 81);
+    });
