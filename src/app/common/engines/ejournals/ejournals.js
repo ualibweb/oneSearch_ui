@@ -25,7 +25,7 @@ angular.module('engines.ejournals', [])
         oneSearchProvider.engine('ejournals', {
             id: 4,
             priority: 6,
-            resultsPath: 'eJournals.results',
+            resultsPath: 'eJournals.list',
             totalsPath: 'eJournals.total',
             mediaTypes: {
                 path: 'type',
