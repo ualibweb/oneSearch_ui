@@ -961,7 +961,8 @@ angular.module('oneSearch.common')
                 $scope.onChange = function(){
                     //console.log("OnChange event.");
                     $scope.selected = true;
-                    var fixedString = $scope.model.replace(/\//g, " ");
+                    var fixedString = $scope.model.replace(/[&\/\\#+()$~%':*?<>{}]/g, ' ').trim();
+                    fixedString = fixedString.substring(0, 150);
 
                     if ($scope.model.length < 3 ||
                         ($scope.model.indexOf($scope.originalValue) < 0 && $scope.model.length >= $scope.originalValue.length) ||
@@ -2671,7 +2672,8 @@ angular.module('common.oneSearch', [])
              * The $scope model for the search string, bound to the input text box.
              */
             if ($scope.searchText){
-                $scope.searchText = $scope.searchText.replace(/[&\/\\#+()$~%':*?<>{}]/g, ' ').trim().substring(0, 150);
+                $scope.searchText = $scope.searchText.replace(/[&\/\\#+()$~%':*?<>{}]/g, ' ').trim();
+                $scope.searchText = $scope.searchText.substring(0, 150);
                 var searchText = encodeURIComponent($scope.searchText);
 
                 //Cancel any pending searches - prevents mixed results by canceling the ajax requests

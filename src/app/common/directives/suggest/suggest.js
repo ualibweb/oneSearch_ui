@@ -61,7 +61,8 @@ angular.module('oneSearch.common')
                 $scope.onChange = function(){
                     //console.log("OnChange event.");
                     $scope.selected = true;
-                    var fixedString = $scope.model.replace(/\//g, " ");
+                    var fixedString = $scope.model.replace(/[&\/\\#+()$~%':*?<>{}]/g, ' ').trim();
+                    fixedString = fixedString.substring(0, 150);
 
                     if ($scope.model.length < 3 ||
                         ($scope.model.indexOf($scope.originalValue) < 0 && $scope.model.length >= $scope.originalValue.length) ||
