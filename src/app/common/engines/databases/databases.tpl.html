@@ -8,7 +8,7 @@
         </div>
         <div class="databases-details" ng-if="(item.subjects | where:{type:1}).length > 0">
             <strong>Primary subjects: </strong>
-            <span ng-repeat="subj in item.subjects | where:{type:1}"></span>
+            <span ng-repeat="subj in item.subjects | where:{type:1}" ng-bind-html="subj.subject"></span>
         </div>
     </div>
 </div>
