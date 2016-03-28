@@ -6,9 +6,9 @@
         <div class="details-context">
             <span ng-if="item.coverage" ng-bind-html="item.coverage"></span>
         </div>
-        <div class="databases-details" ng-if="item.subjects">
-            <strong>Primary subjects: </strong>
-            <span ng-repeat="subj in item.subjects" ng-bind-html="subj.subject"></span>
+        <div class="details-container" ng-if="item.subjects">
+            <span class="text-muted">Subjects: </span>
+            <span class="detail">{{item.subjects.join(', ')}}</span>
         </div>
     </div>
 </div>

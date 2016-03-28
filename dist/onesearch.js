@@ -180,9 +180,9 @@ angular.module("common/engines/databases/databases.tpl.html", []).run(["$templat
     "        <div class=\"details-context\">\n" +
     "            <span ng-if=\"item.coverage\" ng-bind-html=\"item.coverage\"></span>\n" +
     "        </div>\n" +
-    "        <div class=\"databases-details\" ng-if=\"item.subjects\">\n" +
-    "            <strong>Primary subjects: </strong>\n" +
-    "            <span ng-repeat=\"subj in item.subjects\" ng-bind-html=\"subj.subject\"></span>\n" +
+    "        <div class=\"details-container\" ng-if=\"item.subjects\">\n" +
+    "            <span class=\"text-muted\">Subjects: </span>\n" +
+    "            <span class=\"detail\">{{item.subjects.join(', ')}}</span>\n" +
     "        </div>\n" +
     "    </div>\n" +
     "</div>");
