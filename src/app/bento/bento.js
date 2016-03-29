@@ -137,10 +137,10 @@ angular.module('oneSearch.bento', [])
                     if (box == 'articles'){
                         self.boxes[box].resultLimit = 6;
                     }
-                    else if (box == 'journals')
+                    else if (box == 'journals'){
                         self.boxes[box].resultLimit = 3;
                     }
-                    else if (box == 'books')
+                    else if (box == 'books'){
                         self.boxes[box].resultLimit = 2;
                     }
 
