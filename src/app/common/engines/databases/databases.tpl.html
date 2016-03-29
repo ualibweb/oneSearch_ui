@@ -8,7 +8,7 @@
         </div>
         <div class="details-container" ng-if="item.subjects">
             <span class="text-muted">Subjects: </span>
-            <span class="detail" ng-repeat="subj in item.subjects" ng-bind-html="subj.subject"></span>
+            <span class="detail" ng-repeat="subj in item.subjects">{{subj.subject}}{{$last ? '' : ', '}}</span>
         </div>
     </div>
 </div>
