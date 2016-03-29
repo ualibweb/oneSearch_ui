@@ -134,7 +134,7 @@ angular.module('oneSearch.bento', [])
                     var numEngines = self.boxes[box]['engines'].length;
                     var expecting = numResults + numEngines;
 
-                    console.log('box ' + box + ' number of results ' + numResults + ' number of engines' + numEngines +  'expecting ' + expecting);
+                    //console.log('box ' + box + ' number of results ' + numResults + ' number of engines' + numEngines +  'expecting ' + expecting);
                     if (box == 'articles'){
                         self.boxes[box].resultLimit = 6;
                     }
@@ -148,7 +148,7 @@ angular.module('oneSearch.bento', [])
                     }
                     else if (box == 'books') {
                         if (expecting < 3 && self.boxes[box].resultLimit == 2){
-                            console.log("HELLO -- IT'S DREW");
+
                             self.boxes[box].resultLimit = 3;
                         }
                         else if (expecting < 2 && self.boxes[box].resultLimit == 3){
