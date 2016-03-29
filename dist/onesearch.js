@@ -532,6 +532,7 @@ angular.module('oneSearch.bento', [])
         function initResultLimit(box){
             var numEngines = self.boxes[box]['engines'].length;
             var limit = numEngines > 1 ? 1 : (numEngines < 2 ? 3 : 2);
+            console.log(self.boxes);
             self.boxes[box].resultLimit = limit;
         }
 
