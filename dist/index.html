@@ -8,8 +8,13 @@
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://rawgit.com/ualibweb/roots-ualib/master/assets/css/main_bower.css">
     <link rel="stylesheet" type="text/css" href="https://rawgit.com/ualibweb/roots-ualib/master/assets/css/main.css">
+    <!-- env:dev -->
+    <link rel="stylesheet" type="text/css" href="onesearch.css">
+    <!-- env:dev:end -->
+
+    <!-- env:prod --#>
     <link rel="stylesheet" type="text/css" href="onesearch.min.css">
-    <!--<link rel="stylesheet" type="text/css" href="onesearch.css">-->
+    <!-- env:prod:end -->
 </head>
 <body>
 <div class="onesearch-container">
@@ -35,16 +40,13 @@
     <script src="https://rawgit.com/angular-ui/bootstrap/gh-pages/ui-bootstrap-tpls-0.12.0.min.js"></script>
     <script src="../bower_components/angular-scroll/angular-scroll.min.js"></script>
     <script src="../bower_components/ualib-ui/dist/ualib-ui.min.js"></script>
-    <!--<script src="onesearch.js"></script>-->
-    <script src="onesearch.min.js"></script>
-<script>
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-    ga('create', 'UA-2255842-1', 'auto');
-    ga('send', 'pageview');
-</script>
+    <!-- env:dev -->
+    <script src="onesearch.js"></script>
+    <!-- env:dev:end -->
+
+    <!-- env:prod --#>
+    <script src="onesearch.min.js"></script>
+    <!-- env:prod:end -->
 </body>
 </html>

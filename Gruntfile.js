@@ -16,12 +16,23 @@ module.exports = function(grunt){
             app: {
                 src: ['tmp/templates.js', 'src/app/**/*.js'],
                 dest: 'dist/onesearch.js'
-            },
-            index: {
-                src: 'src/index.html',
-                dest: 'dist/index.html',
+            }
+        },
+        dev_prod_switch: {
+            dev: {
                 options: {
-                    process: true
+                    environment: 'dev'
+                },
+                files: {
+                    'dist/index.html': 'src/index.html'
+                }
+            },
+            live: {
+                options: {
+                    environment: 'prod'
+                },
+                files: {
+                    'dist/index.html': 'src/index.html'
                 }
             }
         },
@@ -125,7 +136,8 @@ module.exports = function(grunt){
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-less');
     grunt.loadNpmTasks('grunt-bump');
+    grunt.loadNpmTasks('grunt-dev-prod-switch');
 
-    grunt.registerTask('default', ['html2js', 'concat', 'less:dev', 'clean', 'ngdocs']);
-    grunt.registerTask('build', ['html2js', 'concat', 'less:build', 'ngAnnotate', 'uglify', 'clean']);
+    grunt.registerTask('default', ['html2js', 'concat', 'less:dev', 'clean', 'ngdocs', 'dev_prod_switch:dev']);
+    grunt.registerTask('build', ['html2js', 'concat', 'less:build', 'ngAnnotate', 'uglify', 'clean', 'dev_prod_switch:live']);
 };

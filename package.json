@@ -19,6 +19,7 @@
     "grunt-contrib-less": "~1.0.0",
     "grunt-ng-annotate": "~1.0.1",
     "grunt-ngdocs": "~0.2.9",
-    "grunt-gh-pages": "~1.0.0"
+    "grunt-gh-pages": "~1.0.0",
+    "grunt-dev-prod-switch": "~0.1.8"
   }
 }
