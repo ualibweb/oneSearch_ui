@@ -20,6 +20,9 @@
     "grunt-ng-annotate": "~1.0.1",
     "grunt-ngdocs": "~0.2.9",
     "grunt-gh-pages": "~1.0.0",
-    "grunt-dev-prod-switch": "~0.1.8"
+    "grunt-dev-prod-switch": "~0.1.8",
+    "grunt-contrib-watch": "~1.0.0",
+    "grunt-contrib-connect": "~1.0.0",
+    "serve-static": "~1.10.2"
   }
 }

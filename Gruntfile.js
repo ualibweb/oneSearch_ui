@@ -1,4 +1,6 @@
 module.exports = function(grunt){
+    var serveStatic = require('serve-static');
+
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
         html2js: {
@@ -81,6 +83,36 @@ module.exports = function(grunt){
         clean: {
             app: ['tmp/']
         },
+        watch: {
+            src: {
+                options: {
+                    livereload: 35729
+                },
+                files: ['src/**/*.*'],
+                tasks: ['dev-build']
+            }
+        },
+        connect: {
+            dev: {
+                options: {
+                    livereload: 35729,
+                    open: true,
+                    base: {
+                        path: 'dist',
+                        options: {
+                            index: 'index.html'
+                        }
+                    },
+                    middleware: function(connect) {
+                        return [
+                            serveStatic('.tmp'),
+                            connect().use('/bower_components', serveStatic('./bower_components')),
+                            serveStatic('./dist')
+                        ];
+                    }
+                }
+            }
+        },
         bump: {
             options: {
                 files: ['package.json', 'bower.json'],
@@ -137,7 +169,11 @@ module.exports = function(grunt){
     grunt.loadNpmTasks('grunt-contrib-less');
     grunt.loadNpmTasks('grunt-bump');
     grunt.loadNpmTasks('grunt-dev-prod-switch');
+    grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-contrib-connect');
 
-    grunt.registerTask('default', ['html2js', 'concat', 'less:dev', 'clean', 'ngdocs', 'dev_prod_switch:dev']);
-    grunt.registerTask('build', ['html2js', 'concat', 'less:build', 'ngAnnotate', 'uglify', 'clean', 'dev_prod_switch:live']);
+    grunt.registerTask('default', ['connect:dev', 'watch']);
+    grunt.registerTask('dev-build', ['html2js', 'concat', 'less:dev', 'clean', 'ngdocs', 'dev_prod_switch:dev']);
+    grunt.registerTask('live-build', ['html2js', 'concat', 'less:build', 'ngAnnotate', 'uglify', 'clean', 'dev_prod_switch:live']);
+
 };

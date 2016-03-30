@@ -95,6 +95,7 @@
  * So, all modules at this point are prepended with `oneSearch.*`, and modules loaded in `oneSearch.common` are prepended with `common.*`, and so on.
  * This is a lazy attempt to prevent namespace conflicts with other javascripts._
  */
+
 angular.module('oneSearch', [
     'ngRoute',
     'ngResource',
