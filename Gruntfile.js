@@ -84,19 +84,31 @@ module.exports = function(grunt){
             app: ['tmp/']
         },
         watch: {
-            src: {
-                options: {
-                    livereload: 35729
-                },
-                files: ['src/**/*.*'],
-                tasks: ['dev-build']
+            less: {
+                files: ['src/**/*.less'],
+                tasks: ['less:dev']
+            },
+            ng: {
+                files: ['src/**/*.js', 'src/**/*.tpl.html'],
+                tasks: ['html2js', 'concat', 'clean', 'ngdocs']
+            },
+            index: {
+                files: ['src/index.html'],
+                tasks: ['dev_prod_switch:dev']
+            },
+            livereload: {
+                // Here we watch the files the sass task will compile to
+                // These files are sent to the live reload server after sass compiles to them
+                options: { livereload: true },
+                files: ['dist/**/*', 'docs/**/*']
             }
         },
         connect: {
-            dev: {
+            live: {
                 options: {
-                    livereload: 35729,
                     open: true,
+                    keepalive: true,
+                    hostname: 'localhost',
                     base: {
                         path: 'dist',
                         options: {
@@ -109,6 +121,39 @@ module.exports = function(grunt){
                             connect().use('/bower_components', serveStatic('./bower_components')),
                             serveStatic('./dist')
                         ];
+                    }
+                }
+            },
+            dev: {
+                options: {
+                    livereload: true,
+                    open: true,
+                    hostname: 'localhost',
+                    base: {
+                        path: 'dist',
+                        options: {
+                            index: 'index.html'
+                        }
+                    },
+                    middleware: function(connect) {
+                        return [
+                            serveStatic('.tmp'),
+                            connect().use('/bower_components', serveStatic('./bower_components')),
+                            serveStatic('./dist')
+                        ];
+                    }
+                }
+            },
+            docs: {
+                options: {
+                    livereload: true,
+                    open: true,
+                    hostname: 'localhost',
+                    base: {
+                        path: 'docs',
+                        options: {
+                            index: 'index.html'
+                        }
                     }
                 }
             }
@@ -173,7 +218,9 @@ module.exports = function(grunt){
     grunt.loadNpmTasks('grunt-contrib-connect');
 
     grunt.registerTask('default', ['connect:dev', 'watch']);
-    grunt.registerTask('dev-build', ['html2js', 'concat', 'less:dev', 'clean', 'ngdocs', 'dev_prod_switch:dev']);
-    grunt.registerTask('live-build', ['html2js', 'concat', 'less:build', 'ngAnnotate', 'uglify', 'clean', 'dev_prod_switch:live']);
+    grunt.registerTask('dev-build', ['html2js', 'concat', 'less:dev', 'clean', 'dev_prod_switch:dev']);
+    grunt.registerTask('live-build', ['html2js', 'concat', 'ngdocs', 'less:build', 'ngAnnotate', 'uglify', 'clean', 'dev_prod_switch:live']);
 
+    grunt.registerTask('docs', ['connect:docs', 'watch']);
+    grunt.registerTask('demo-live', ['connect:live', 'live-build']);
 };

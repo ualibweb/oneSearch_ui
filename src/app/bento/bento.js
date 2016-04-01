@@ -286,7 +286,7 @@ angular.module('oneSearch.bento', [])
 /**
      * bentoBox Directive
      *
-     * Each box is called using this directive, and is defined by a name. These names are first defined in an
+     * Each bento box is called using this directive, and is defined by a name. These names are first defined in an
      * engine's config while registering with the oneSearch Provider.
      *
      * Engine results, appropriate for each box, will be asynchronously appended to the HTML element with the following attribute:
@@ -315,7 +315,7 @@ angular.module('oneSearch.bento', [])
      * @restrict A
      *
      * @description
-     * Define bento boxes to render specific media types
+     * Define Bento Boxes to render specific media types
      *
      * @param {string} bento-box The name of the mediaType or engine the bento box represents. The mediaType name is defined
      */

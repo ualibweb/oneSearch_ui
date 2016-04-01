@@ -16,6 +16,14 @@
     <!-- env:prod -->
     <link rel="stylesheet" type="text/css" href="onesearch.min.css">
     <!-- env:prod:end -->
+
+    <style>
+        .dev_prod_label {
+            position: fixed;
+            bottom: 0;
+            right: 0;
+        }
+    </style>
 </head>
 <body>
 <div class="onesearch-container">
@@ -29,6 +37,19 @@
 </div>
     <div class="one-search-results" ng-view>
     </div>
+
+<div class="dev_prod_label">
+    <!-- env:prod -->
+    <div class="alert alert-danger">
+        Live
+    </div>
+    <!-- env:prod:end -->
+    <!-- env:dev -->
+    <div class="alert alert-info">
+        Dev
+    </div>
+    <!-- env:dev:end -->
+</div>
 
     <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.29/angular.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.29/angular-resource.min.js"></script>
@@ -47,6 +68,5 @@
     <!-- env:prod -->
     <script src="onesearch.min.js"></script>
     <!-- env:prod:end -->
-    <script src="//localhost:35729/livereload.js"></script>
 </body>
 </html>
