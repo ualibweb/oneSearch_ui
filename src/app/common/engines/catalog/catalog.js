@@ -91,7 +91,7 @@ angular.module('engines.catalog', [])
             var typeParam = '&limitTo=TYPE%3D';
             var params = typeParam + $scope.resourceLinkParams.join(typeParam);
             if ($scope.resourceLink.indexOf('limitTo=') > 0){
-                $scope.resourceLink = $scope.resourceLink.replace(/(&limitTo=.+?)&/, params);
+                $scope.resourceLink = $scope.resourceLink.replace(/(&limitTo=[^&]+)/, params);
             }
             else {
                 $scope.resourceLink += params;
