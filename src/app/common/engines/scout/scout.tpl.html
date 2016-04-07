@@ -31,8 +31,14 @@
                   ng-bind-html="subject.SubjectFull"></span>
             </div>
         </div>
-        <div ng-show="item.RecordInfo.BibRecord.BibRelationships.HasContributorRelationships || item.source || item.RecordInfo.BibRecord.BibEntity.Subjects">
-            <button type="button" class="btn btn-default btn-xs" ng-click="isCollapsed = !isCollapsed">{{!isCollapsed ? 'less' : 'more'}} detail</button>
-        </div>
+        <ul class="list-inline">
+            <li>
+                <a ng-href="{{resourceLink}}" class="external-link" ng-if="resourceLink" target="_{{engine}}" ng-click="gaMore()">Results in {{engineName}}</a>
+            </li>
+            <li ng-show="item.RecordInfo.BibRecord.BibRelationships.HasContributorRelationships || item.source || item.RecordInfo.BibRecord.BibEntity.Subjects">
+                <a href="" ng-click="isCollapsed = !isCollapsed">Item details <span class="fa" ng-class="{'fa-caret-down': isCollapsed, 'fa-caret-up': !isCollapsed}"></span></a>
+            </li>
+        </ul>
+
     </div>
 </div>

@@ -7,26 +7,34 @@
         <div class="details-context">
             <span ng-if="item.date" ng-bind-html="item.date"></span>
             <span ng-if="item.links[0]">
-                <span title="{{item.links[0].name}}">{{item.links[0].name | ltrim | truncate: 35: '...'}}</span>
+                <span title="{{item.links[0].name}}">{{item.links[0].name | ltrim | truncate: 45: '...'}}</span>
             </span>
         </div>
 
-        <div class="details-container" ng-if="item.authors">
-            <span class="text-muted">Authors </span>
-            <span class="details" ng-bind-html="item.authors"></span>
-        </div>
+        <div collapse="isCollapsed">
+            <div class="details-container" ng-if="item.authors">
+                <span class="text-muted">Authors </span>
+                <span class="details" ng-bind-html="item.authors"></span>
+            </div>
 
-        <div class="details-container" ng-if="item.links[1]">
-            <span class="text-muted">Other Sources </span>
-            <span class="details" ng-repeat="link in item.links | after:1 | limitTo : (sourceLimit ? 10 : 2)">
+            <div class="details-container" ng-if="item.links[1]">
+                <span class="text-muted">Other Sources </span>
+            <span class="details" ng-repeat="link in item.links | after: 1">
                 <a ng-href="{{link.href}}"
                    title="{{link.name}}"
                    class="source-link"
-                   ng-bind-html="link.name | ltrim | truncate: 35: '...': true"></a>
+                   ng-bind-html="link.name | truncate: 35: '...': true"></a>
             </span>
-            <div ng-show="item.links[3]">
-                <button type="button" class="btn btn-default btn-xs" ng-click="sourceLimit = !sourceLimit">{{sourceLimit? 'less' : 'more'}} sources</button>
             </div>
         </div>
+
+        <ul class="list-inline">
+            <li>
+                <a ng-href="{{resourceLink}}" class="external-link" ng-if="resourceLink" target="_{{engine}}" ng-click="gaMore()">Results in {{engineName}}</a>
+            </li>
+            <li ng-show="item.links[1]">
+                <a href="" ng-click="isCollapsed = !isCollapsed">Item details <span class="fa" ng-class="{'fa-caret-down': isCollapsed, 'fa-caret-up': !isCollapsed}"></span></a>
+            </li>
+        </ul>
     </div>
 </div>

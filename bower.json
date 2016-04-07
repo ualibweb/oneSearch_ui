@@ -1,5 +1,5 @@
 {
-  "name": "oneSearch_ui",
+  "name": "onesearch-ui",
   "version": "0.19.8",
   "homepage": "https://github.com/8bitsquid/oneSearch_ui",
   "authors": [
@@ -32,7 +32,6 @@
     "ualib-ui": "https://github.com/ualibweb/ui-components.git"
   },
   "devDependencies": {
-    "angular-ui-router": "~0.2.13",
     "restangular": "~1.5.1"
   }
 }

@@ -1,6 +1,11 @@
 <div class="media">
     <div class="media-body">
         <h4 class="media-heading"><a ng-href="{{item.link}}" title="{{item.title}}" target="_googlecs" ng-click="gaPush()">{{item.title | truncate: 40: '...': true}}</a></h4>
-        <p ng-bind-html="item.snippet"></p>
+        <p ng-bind-html="item.snippet | truncate: 100: '...': true"></p>
+        <ul class="list-inline">
+            <li>
+                <a ng-href="{{resourceLink}}" class="external-link" ng-if="resourceLink" target="_{{engine}}" ng-click="gaMore()">Results in {{engineName}}</a>
+            </li>
+        </ul>
     </div>
 </div>

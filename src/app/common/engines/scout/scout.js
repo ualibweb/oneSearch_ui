@@ -92,7 +92,7 @@ angular.module('engines.scout', [])
 
             //Search for "source"
             var bibRelationships = [];
-            if (angular.isDefined(items[i].RecordInfo.BibRecord.BibRelationships.IsPartOfRelationships)){
+            if (items[i].RecordInfo.BibRecord.hasOwnProperty('BibRelationships') && angular.isDefined(items[i].RecordInfo.BibRecord.BibRelationships.IsPartOfRelationships)){
 
                 bibRelationships = items[i].RecordInfo.BibRecord.BibRelationships.IsPartOfRelationships;
 

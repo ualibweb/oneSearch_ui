@@ -116,11 +116,11 @@ angular.module('oneSearch.bento', [])
             angular.forEach(self.boxes, function(box, type){
 
                 loadProgress(type, engine);
-            })
+            });
         }
 
         function initResultLimit(box){
-            var numEngines = self.boxes[box]['engines'].length;
+            var numEngines = self.boxes[box].engines.length;
             var limit = numEngines > 1 ? 1 : (numEngines < 2 ? 3 : 2);
             self.boxes[box].resultLimit = limit;
         }
@@ -131,7 +131,7 @@ angular.module('oneSearch.bento', [])
                 .then(function(results){
 
                     var numResults = Object.keys(results).length;
-                    var numEngines = self.boxes[box]['engines'].length;
+                    var numEngines = self.boxes[box].engines.length;
                     var expecting = numResults + numEngines;
 
                     //console.log('box ' + box + ' number of results ' + numResults + ' number of engines' + numEngines +  'expecting ' + expecting);
@@ -269,7 +269,7 @@ angular.module('oneSearch.bento', [])
                     });
             });
 
-        }
+        };
     }])
 
 /**
@@ -280,7 +280,7 @@ angular.module('oneSearch.bento', [])
         // When the route has changed/updated generate box results
         $scope.$on('$routeChangeSuccess', function(){
             Bento.getBoxes();
-        })
+        });
     }])
 
 /**
@@ -349,7 +349,7 @@ angular.module('oneSearch.bento', [])
                 var waitingMessage = angular.element(' <span class="unresponsive-msg">Awaiting results from provider</span>');
 
                 function checkEngineStatus(){
-                    var engines = angular.copy(Bento.boxes[box]['engines']);
+                    var engines = angular.copy(Bento.boxes[box].engines);
                     var en = [];
                     for (var e in oneSearch.engines){
                         if (engines.indexOf(e) > -1){
@@ -366,7 +366,7 @@ angular.module('oneSearch.bento', [])
                     }
 
                     if (en.length){
-                        engineTimeout = $timeout(checkEngineStatus, 500)
+                        engineTimeout = $timeout(checkEngineStatus, 500);
                     }
 
                 }
@@ -376,7 +376,7 @@ angular.module('oneSearch.bento', [])
                 //Watch the boxes "engines" Array
                 var boxWatcher = scope.$watchCollection(
                     function(){
-                        return Bento.boxes[box]['engines'];
+                        return Bento.boxes[box].engines;
                     },
                     function(newVal, oldVal) {
                         // Has the "engines" Array changed?
@@ -394,7 +394,7 @@ angular.module('oneSearch.bento', [])
                             //TODO: find more graceful way to know what engine is loaded?
                             for (var i = 0, len = oldVal.length; i < len; i++){
                                 var eng = oldVal[i];
-                                if (!(newVal.indexOf(eng) > -1)){
+                                if (newVal.indexOf(eng) < 0){
                                     engine = eng;
                                     break;
                                 }
@@ -405,7 +405,7 @@ angular.module('oneSearch.bento', [])
                             var engineScope = $rootScope.$new();
 
                             // Place engine results for the current box under an "items" object in the new local scope
-                            engineScope.items = Bento.boxes[box]['results'][engine];
+                            engineScope.items = Bento.boxes[box].results[engine];
 
 
                             if (engineScope.items && engineScope.items.length > 0){
@@ -418,8 +418,8 @@ angular.module('oneSearch.bento', [])
 
                                 // engineName used for "more" links. If 'title' property is not set in the engine's config, then use the string used when registering with the oneSearchProvider
                                 engineScope.engineName = oneSearch.engines[engine].title ? oneSearch.engines[engine].title : engine.charAt(0).toUpperCase() + engine.slice(1);
-                                engineScope.resourceLink = Bento.boxes[box]['resourceLinks'][engine] === "undefined" ? false : Bento.boxes[box]['resourceLinks'][engine];
-                                engineScope.resourceLinkParams = Bento.boxes[box]['resourceLinkParams'][engine];
+                                engineScope.resourceLink = Bento.boxes[box].resourceLinks[engine] === "undefined" ? false : Bento.boxes[box].resourceLinks[engine];
+                                engineScope.resourceLinkParams = Bento.boxes[box].resourceLinkParams[engine];
 
                                 if (oneSearch.engines[engine].resourceLink && oneSearch.engines[engine].resourceLink.params){
                                     engineScope.resourceLinkParams = oneSearch.engines[engine].resourceLink.params;
@@ -454,7 +454,7 @@ angular.module('oneSearch.bento', [])
 
                                     // Wrap the template in an element that specifies ng-repeat over the "items" object (i.e., the results),
                                     // gives the generic classes for items in a bento box.
-                                    var template = angular.element('<div class="animate-repeat bento-box-item" ng-repeat="item in items | limitTo: box.resultLimit">'+data+'</div><div class="resource-link-container"><a class="btn btn-link btn-sm" ng-href="{{resourceLink}}" ng-if="resourceLink" target="_{{engine}}" ng-click="gaMore()">More results from {{engineName}}  <span class="fa fa-fw fa-external-link"></span></a></div>');
+                                    var template = angular.element('<div class="animate-repeat bento-box-item" ng-repeat="item in items | limitTo: box.resultLimit">'+data+'</div>');
 
                                     // Compile wrapped template with the isolated scope's context
                                     var html = $compile(template)(engineScope);
@@ -468,7 +468,7 @@ angular.module('oneSearch.bento', [])
                             }
                             //if (box == "recommend") console.log(newVal.length);
                             // If new array is empty, the box is considered "loaded"
-                            if (newVal.length == 0){
+                            if (newVal.length === 0){
                                 done(box);
                             }
                         }
@@ -480,7 +480,7 @@ angular.module('oneSearch.bento', [])
                 function done(b){
                     //console.log({b: b, box: box});
                     // If there are no results, print generated message
-                    if (isEmpty(Bento.boxes[b]['results'])){
+                    if (isEmpty(Bento.boxes[b].results)){
 
                         if (attrs.hideIfEmpty){
                             elm.addClass('hidden');
@@ -500,6 +500,6 @@ angular.module('oneSearch.bento', [])
                     boxWatcher();
                 }
             }
-        }
-    }])
+        };
+    }]);
 

@@ -9,4 +9,4 @@ angular.module('oneSearch.common', [
     'common.oneSearch',
     'common.engines',
     'filters.nameFilter'
-])
+]);

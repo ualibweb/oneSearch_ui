@@ -3,6 +3,15 @@ module.exports = function(grunt){
 
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
+        jshint: {
+            options: {
+                jshintrc: '.jshintrc'
+            },
+            all: [
+                'Gruntfile.js',
+                'src/**/*.js'
+            ]
+        },
         html2js: {
             app: {
                 options:{
@@ -18,6 +27,13 @@ module.exports = function(grunt){
             app: {
                 src: ['tmp/templates.js', 'src/app/**/*.js'],
                 dest: 'dist/onesearch.js'
+            },
+            demo: {
+                options: {
+                    process: true
+                },
+                src: 'src/index.html',
+                dest: 'dist/index.html'
             }
         },
         dev_prod_switch: {
@@ -26,7 +42,7 @@ module.exports = function(grunt){
                     environment: 'dev'
                 },
                 files: {
-                    'dist/index.html': 'src/index.html'
+                    'dist/index.html': 'dist/index.html'
                 }
             },
             live: {
@@ -34,7 +50,7 @@ module.exports = function(grunt){
                     environment: 'prod'
                 },
                 files: {
-                    'dist/index.html': 'src/index.html'
+                    'dist/index.html': 'dist/index.html'
                 }
             }
         },
@@ -201,6 +217,9 @@ module.exports = function(grunt){
             firstTarget: {
                 src: ['**/*']
             }
+        },
+        auto_install: {
+            local: {}
         }
     });
 
@@ -216,11 +235,13 @@ module.exports = function(grunt){
     grunt.loadNpmTasks('grunt-dev-prod-switch');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-connect');
+    grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-auto-install');
 
-    grunt.registerTask('default', ['connect:dev', 'watch']);
-    grunt.registerTask('dev-build', ['html2js', 'concat', 'less:dev', 'clean', 'dev_prod_switch:dev']);
-    grunt.registerTask('live-build', ['html2js', 'concat', 'ngdocs', 'less:build', 'ngAnnotate', 'uglify', 'clean', 'dev_prod_switch:live']);
+    grunt.registerTask('default', ['dev-build', 'dev_prod_switch:dev', 'connect:dev', 'watch']);
+    grunt.registerTask('dev-build', ['auto_install', 'html2js', 'concat', 'ngdocs', 'less:dev', 'clean', 'dev_prod_switch:dev']);
+    grunt.registerTask('live-build', ['auto_install', 'html2js', 'concat', 'ngdocs', 'less:build', 'ngAnnotate', 'uglify', 'clean', 'dev_prod_switch:live']);
 
     grunt.registerTask('docs', ['connect:docs', 'watch']);
-    grunt.registerTask('demo-live', ['connect:live', 'live-build']);
+    grunt.registerTask('demo-live', ['live-build', 'dev_prod_switch:live', 'connect:live']);
 };

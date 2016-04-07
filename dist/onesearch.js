@@ -6,58 +6,123 @@ angular.module("bento/bento.tpl.html", []).run(["$templateCache", function($temp
     "    <div class=\"row\">\n" +
     "        <div class=\"col-md-4\">\n" +
     "            <div class=\"bento-box\" bento-box=\"articles\">\n" +
-    "                <h2>Articles</h2>\n" +
+    "                <h2>\n" +
+    "                    Articles\n" +
+    "                    <small>\n" +
+    "                        <span class=\"fa fa-info-circle\"\n" +
+    "                              tooltip-placement=\"bottom\"\n" +
+    "                              tooltip=\"Keyword search in journal titles, and full text article content in Scout.\"></span>\n" +
+    "                    </small>\n" +
+    "                </h2>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "        <div class=\"col-md-4\">\n" +
     "            <div class=\"bento-box\" bento-box=\"books\">\n" +
-    "                <h2>Books</h2>\n" +
+    "                <h2>\n" +
+    "                    Books\n" +
+    "                    <small>\n" +
+    "                        <span class=\"fa fa-info-circle\"\n" +
+    "                              tooltip-placement=\"bottom\"\n" +
+    "                              tooltip=\"Keyword search in book titles using both the Libraries' Catalog and Scout.\"></span>\n" +
+    "                    </small>\n" +
+    "                </h2>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "        <div class=\"col-sm-12 col-md-4\">\n" +
     "            <div class=\"bento-box\" bento-box=\"journals\">\n" +
-    "                <h2>Journals</h2>\n" +
+    "                <h2>\n" +
+    "                    Journals\n" +
+    "                    <small>\n" +
+    "                        <span class=\"fa fa-info-circle\"\n" +
+    "                              tooltip-placement=\"bottom\"\n" +
+    "                              tooltip=\"Keyword search in journal titles and journal collections, in both Scout and our E-Resources database.\"></span>\n" +
+    "                    </small>\n" +
+    "                </h2>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "    </div>\n" +
     "    <div class=\"row\">\n" +
     "        <div class=\"col-md-4\">\n" +
     "            <div class=\"bento-box\" bento-box=\"databases\">\n" +
-    "                <h2>Databases</h2>\n" +
+    "                <h2>\n" +
+    "                    Databases\n" +
+    "                    <small>\n" +
+    "                        <span class=\"fa fa-info-circle\"\n" +
+    "                              tooltip-placement=\"bottom\"\n" +
+    "                              tooltip=\"Keyword search in titles and databases descriptions from our own Databases Page.\"></span>\n" +
+    "                    </small>\n" +
+    "                </h2>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "        <div class=\"col-md-4\">\n" +
     "            <div class=\"bento-box\" bento-box=\"googleCS\">\n" +
-    "                <h2 id=\"site-search\">Libraries' Website</h2>\n" +
+    "                <h2 id=\"site-search\">\n" +
+    "                    Libraries' Website\n" +
+    "                    <small>\n" +
+    "                        <span class=\"fa fa-info-circle\"\n" +
+    "                              tooltip-placement=\"bottom\"\n" +
+    "                              tooltip=\"Targeted, full-text search of library website pages and sections.\"></span>\n" +
+    "                    </small>\n" +
+    "                </h2>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "        <div class=\"col-md-4\">\n" +
     "            <div class=\"bento-box\" bento-box=\"acumen\">\n" +
-    "                <h2 id=\"acumen\">Acumen</h2>\n" +
+    "                <h2 id=\"acumen\">\n" +
+    "                    Acumen\n" +
+    "                    <small>\n" +
+    "                        <span class=\"fa fa-info-circle\"\n" +
+    "                              tooltip-placement=\"bottom\"\n" +
+    "                              tooltip=\"Returns a keyword search in titles and full text of our Special Collections Digital Archive.\"></span>\n" +
+    "                    </small>\n" +
+    "                </h2>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "    </div>\n" +
     "    <div class=\"row\">\n" +
     "        <div class=\"col-md-4\">\n" +
     "            <div class=\"bento-box\" bento-box=\"other\">\n" +
-    "                <h2>Other Items & Media</h2>\n" +
+    "                <h2>\n" +
+    "                    Other Items & Media\n" +
+    "                    <small>\n" +
+    "                        <span class=\"fa fa-info-circle\"\n" +
+    "                              tooltip-placement=\"bottom\"\n" +
+    "                              tooltip=\"Keyword and item type search in the Libraries' catalog and Scout, retrieving media items - videos, DVDs, CDs, etc.\"></span>\n" +
+    "                    </small>\n" +
+    "                </h2>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "        <div class=\"col-md-4\">\n" +
     "            <div class=\"bento-box\" bento-box=\"faq\">\n" +
-    "                <h2>FAQ</h2>\n" +
+    "                <h2>\n" +
+    "                    FAQ\n" +
+    "                    <small>\n" +
+    "                        <span class=\"fa fa-info-circle\"\n" +
+    "                              tooltip-placement=\"bottom\"\n" +
+    "                              tooltip='Full text keyword search via our Google search engine interface, through our FAQ repository, also known as \"Ask a Librarian.\"'></span>\n" +
+    "                    </small>\n" +
+    "                </h2>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "        <div class=\"col-md-4\">\n" +
     "            <div class=\"bento-box\" bento-box=\"libguides\">\n" +
-    "                <h2>Research Guides</h2>\n" +
+    "                <h2>\n" +
+    "                    Research Guides\n" +
+    "                    <small>\n" +
+    "                        <span class=\"fa fa-info-circle\"\n" +
+    "                              tooltip-placement=\"bottom\"\n" +
+    "                              tooltip=\"Uses Google API to run a keyword search in titles and full text for our research guides.\"></span>\n" +
+    "                    </small>\n" +
+    "                </h2>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "    </div>\n" +
     "    <div class=\"row\">\n" +
     "        <div class=\"col-md-12\">\n" +
     "            <div class=\"bento-box well\" bento-box=\"recommend\" hide-if-empty=\"true\" omit-from-menu=\"true\">\n" +
-    "                <h2>Recommended Links</h2>\n" +
+    "                <h2>\n" +
+    "                    Recommended Links\n" +
+    "                </h2>\n" +
     "\n" +
     "            </div>\n" +
     "        </div>\n" +
@@ -131,7 +196,7 @@ angular.module("common/engines/acumen/acumen.tpl.html", []).run(["$templateCache
   $templateCache.put("common/engines/acumen/acumen.tpl.html",
     "<div class=\"media\">\n" +
     "    <a class=\"pull-left\" ng-href=\"http://acumen.lib.ua.edu/{{item.link}}\" title=\"{{item.title}}\" target=\"_acumen\">\n" +
-    "        <img ng-src=\"{{item.thumb_path}}\">\n" +
+    "        <img ng-src=\"{{item.thumb_path}}\" alt=\"{{item.title}}\">\n" +
     "    </a>\n" +
     "    <div class=\"media-body\">\n" +
     "        <h4 class=\"media-heading\">\n" +
@@ -141,7 +206,12 @@ angular.module("common/engines/acumen/acumen.tpl.html", []).run(["$templateCache
     "            <span ng-if=\"item.date\" ng-bind-html=\"item.date\"></span>\n" +
     "            <span ng-if=\"item.type\" ng-bind-html=\"item.type | ucfirst\"></span>\n" +
     "        </div>\n" +
-    "        <p>{{item.description | truncate: 125: '...': true}}</p>\n" +
+    "        <p>{{item.description | truncate: 100: '...': true}}</p>\n" +
+    "        <ul class=\"list-inline\">\n" +
+    "            <li>\n" +
+    "                <a ng-href=\"{{resourceLink}}\" class=\"external-link\" ng-if=\"resourceLink\" target=\"_{{engine}}\" ng-click=\"gaMore()\">Results in {{engineName}}</a>\n" +
+    "            </li>\n" +
+    "        </ul>\n" +
     "    </div>\n" +
     "</div>");
 }]);
@@ -160,12 +230,20 @@ angular.module("common/engines/catalog/catalog.tpl.html", []).run(["$templateCac
     "            <span ng-if=\"item.mediaType\" ng-bind-html=\"item.mediaType\"></span>\n" +
     "            <span ng-if=\"item.issn\">ISSN: {{item.issn}}</span>\n" +
     "        </div>\n" +
-    "        <div class=\"details-container\" ng-if=\"item.author\">\n" +
+    "        <div collapse=\"isCollapsed\" class=\"details-container\" ng-if=\"item.author\">\n" +
     "            <span class=\"text-muted\">Author(s)</span>\n" +
     "            <span class=\"detail\">\n" +
     "                <span ng-bind-html=\"item.author | lowercase | ucfirst\"></span>\n" +
     "            </span>\n" +
     "        </div>\n" +
+    "        <ul class=\"list-inline\">\n" +
+    "            <li>\n" +
+    "                <a ng-href=\"{{resourceLink}}\" class=\"external-link\" ng-if=\"resourceLink\" target=\"_{{engine}}\" ng-click=\"gaMore()\">Results in {{engineName}}</a>\n" +
+    "            </li>\n" +
+    "            <li ng-show=\"item.author\">\n" +
+    "                <a href=\"\" ng-click=\"isCollapsed = !isCollapsed\">Item details <span class=\"fa\" ng-class=\"{'fa-caret-down': isCollapsed, 'fa-caret-up': !isCollapsed}\"></span></a>\n" +
+    "            </li>\n" +
+    "        </ul>\n" +
     "    </div>\n" +
     "</div>");
 }]);
@@ -199,27 +277,35 @@ angular.module("common/engines/ejournals/ejournals.tpl.html", []).run(["$templat
     "        <div class=\"details-context\">\n" +
     "            <span ng-if=\"item.date\" ng-bind-html=\"item.date\"></span>\n" +
     "            <span ng-if=\"item.links[0]\">\n" +
-    "                <span title=\"{{item.links[0].name}}\">{{item.links[0].name | ltrim | truncate: 35: '...'}}</span>\n" +
+    "                <span title=\"{{item.links[0].name}}\">{{item.links[0].name | ltrim | truncate: 45: '...'}}</span>\n" +
     "            </span>\n" +
     "        </div>\n" +
     "\n" +
-    "        <div class=\"details-container\" ng-if=\"item.authors\">\n" +
-    "            <span class=\"text-muted\">Authors </span>\n" +
-    "            <span class=\"details\" ng-bind-html=\"item.authors\"></span>\n" +
-    "        </div>\n" +
+    "        <div collapse=\"isCollapsed\">\n" +
+    "            <div class=\"details-container\" ng-if=\"item.authors\">\n" +
+    "                <span class=\"text-muted\">Authors </span>\n" +
+    "                <span class=\"details\" ng-bind-html=\"item.authors\"></span>\n" +
+    "            </div>\n" +
     "\n" +
-    "        <div class=\"details-container\" ng-if=\"item.links[1]\">\n" +
-    "            <span class=\"text-muted\">Other Sources </span>\n" +
-    "            <span class=\"details\" ng-repeat=\"link in item.links | after:1 | limitTo : (sourceLimit ? 10 : 2)\">\n" +
+    "            <div class=\"details-container\" ng-if=\"item.links[1]\">\n" +
+    "                <span class=\"text-muted\">Other Sources </span>\n" +
+    "            <span class=\"details\" ng-repeat=\"link in item.links | after: 1\">\n" +
     "                <a ng-href=\"{{link.href}}\"\n" +
     "                   title=\"{{link.name}}\"\n" +
     "                   class=\"source-link\"\n" +
-    "                   ng-bind-html=\"link.name | ltrim | truncate: 35: '...': true\"></a>\n" +
+    "                   ng-bind-html=\"link.name | truncate: 35: '...': true\"></a>\n" +
     "            </span>\n" +
-    "            <div ng-show=\"item.links[3]\">\n" +
-    "                <button type=\"button\" class=\"btn btn-default btn-xs\" ng-click=\"sourceLimit = !sourceLimit\">{{sourceLimit? 'less' : 'more'}} sources</button>\n" +
     "            </div>\n" +
     "        </div>\n" +
+    "\n" +
+    "        <ul class=\"list-inline\">\n" +
+    "            <li>\n" +
+    "                <a ng-href=\"{{resourceLink}}\" class=\"external-link\" ng-if=\"resourceLink\" target=\"_{{engine}}\" ng-click=\"gaMore()\">Results in {{engineName}}</a>\n" +
+    "            </li>\n" +
+    "            <li ng-show=\"item.links[1]\">\n" +
+    "                <a href=\"\" ng-click=\"isCollapsed = !isCollapsed\">Item details <span class=\"fa\" ng-class=\"{'fa-caret-down': isCollapsed, 'fa-caret-up': !isCollapsed}\"></span></a>\n" +
+    "            </li>\n" +
+    "        </ul>\n" +
     "    </div>\n" +
     "</div>");
 }]);
@@ -229,7 +315,12 @@ angular.module("common/engines/google-cs/google-cs.tpl.html", []).run(["$templat
     "<div class=\"media\">\n" +
     "    <div class=\"media-body\">\n" +
     "        <h4 class=\"media-heading\"><a ng-href=\"{{item.link}}\" title=\"{{item.title}}\" target=\"_googlecs\" ng-click=\"gaPush()\">{{item.title | truncate: 40: '...': true}}</a></h4>\n" +
-    "        <p ng-bind-html=\"item.snippet\"></p>\n" +
+    "        <p ng-bind-html=\"item.snippet | truncate: 100: '...': true\"></p>\n" +
+    "        <ul class=\"list-inline\">\n" +
+    "            <li>\n" +
+    "                <a ng-href=\"{{resourceLink}}\" class=\"external-link\" ng-if=\"resourceLink\" target=\"_{{engine}}\" ng-click=\"gaMore()\">Results in {{engineName}}</a>\n" +
+    "            </li>\n" +
+    "        </ul>\n" +
     "    </div>\n" +
     "</div>");
 }]);
@@ -275,9 +366,15 @@ angular.module("common/engines/scout/scout.tpl.html", []).run(["$templateCache",
     "                  ng-bind-html=\"subject.SubjectFull\"></span>\n" +
     "            </div>\n" +
     "        </div>\n" +
-    "        <div ng-show=\"item.RecordInfo.BibRecord.BibRelationships.HasContributorRelationships || item.source || item.RecordInfo.BibRecord.BibEntity.Subjects\">\n" +
-    "            <button type=\"button\" class=\"btn btn-default btn-xs\" ng-click=\"isCollapsed = !isCollapsed\">{{!isCollapsed ? 'less' : 'more'}} detail</button>\n" +
-    "        </div>\n" +
+    "        <ul class=\"list-inline\">\n" +
+    "            <li>\n" +
+    "                <a ng-href=\"{{resourceLink}}\" class=\"external-link\" ng-if=\"resourceLink\" target=\"_{{engine}}\" ng-click=\"gaMore()\">Results in {{engineName}}</a>\n" +
+    "            </li>\n" +
+    "            <li ng-show=\"item.RecordInfo.BibRecord.BibRelationships.HasContributorRelationships || item.source || item.RecordInfo.BibRecord.BibEntity.Subjects\">\n" +
+    "                <a href=\"\" ng-click=\"isCollapsed = !isCollapsed\">Item details <span class=\"fa\" ng-class=\"{'fa-caret-down': isCollapsed, 'fa-caret-up': !isCollapsed}\"></span></a>\n" +
+    "            </li>\n" +
+    "        </ul>\n" +
+    "\n" +
     "    </div>\n" +
     "</div>");
 }]);
@@ -527,11 +624,11 @@ angular.module('oneSearch.bento', [])
             angular.forEach(self.boxes, function(box, type){
 
                 loadProgress(type, engine);
-            })
+            });
         }
 
         function initResultLimit(box){
-            var numEngines = self.boxes[box]['engines'].length;
+            var numEngines = self.boxes[box].engines.length;
             var limit = numEngines > 1 ? 1 : (numEngines < 2 ? 3 : 2);
             self.boxes[box].resultLimit = limit;
         }
@@ -542,7 +639,7 @@ angular.module('oneSearch.bento', [])
                 .then(function(results){
 
                     var numResults = Object.keys(results).length;
-                    var numEngines = self.boxes[box]['engines'].length;
+                    var numEngines = self.boxes[box].engines.length;
                     var expecting = numResults + numEngines;
 
                     //console.log('box ' + box + ' number of results ' + numResults + ' number of engines' + numEngines +  'expecting ' + expecting);
@@ -680,7 +777,7 @@ angular.module('oneSearch.bento', [])
                     });
             });
 
-        }
+        };
     }])
 
 /**
@@ -691,7 +788,7 @@ angular.module('oneSearch.bento', [])
         // When the route has changed/updated generate box results
         $scope.$on('$routeChangeSuccess', function(){
             Bento.getBoxes();
-        })
+        });
     }])
 
 /**
@@ -760,7 +857,7 @@ angular.module('oneSearch.bento', [])
                 var waitingMessage = angular.element(' <span class="unresponsive-msg">Awaiting results from provider</span>');
 
                 function checkEngineStatus(){
-                    var engines = angular.copy(Bento.boxes[box]['engines']);
+                    var engines = angular.copy(Bento.boxes[box].engines);
                     var en = [];
                     for (var e in oneSearch.engines){
                         if (engines.indexOf(e) > -1){
@@ -777,7 +874,7 @@ angular.module('oneSearch.bento', [])
                     }
 
                     if (en.length){
-                        engineTimeout = $timeout(checkEngineStatus, 500)
+                        engineTimeout = $timeout(checkEngineStatus, 500);
                     }
 
                 }
@@ -787,7 +884,7 @@ angular.module('oneSearch.bento', [])
                 //Watch the boxes "engines" Array
                 var boxWatcher = scope.$watchCollection(
                     function(){
-                        return Bento.boxes[box]['engines'];
+                        return Bento.boxes[box].engines;
                     },
                     function(newVal, oldVal) {
                         // Has the "engines" Array changed?
@@ -805,7 +902,7 @@ angular.module('oneSearch.bento', [])
                             //TODO: find more graceful way to know what engine is loaded?
                             for (var i = 0, len = oldVal.length; i < len; i++){
                                 var eng = oldVal[i];
-                                if (!(newVal.indexOf(eng) > -1)){
+                                if (newVal.indexOf(eng) < 0){
                                     engine = eng;
                                     break;
                                 }
@@ -816,7 +913,7 @@ angular.module('oneSearch.bento', [])
                             var engineScope = $rootScope.$new();
 
                             // Place engine results for the current box under an "items" object in the new local scope
-                            engineScope.items = Bento.boxes[box]['results'][engine];
+                            engineScope.items = Bento.boxes[box].results[engine];
 
 
                             if (engineScope.items && engineScope.items.length > 0){
@@ -829,8 +926,8 @@ angular.module('oneSearch.bento', [])
 
                                 // engineName used for "more" links. If 'title' property is not set in the engine's config, then use the string used when registering with the oneSearchProvider
                                 engineScope.engineName = oneSearch.engines[engine].title ? oneSearch.engines[engine].title : engine.charAt(0).toUpperCase() + engine.slice(1);
-                                engineScope.resourceLink = Bento.boxes[box]['resourceLinks'][engine] === "undefined" ? false : Bento.boxes[box]['resourceLinks'][engine];
-                                engineScope.resourceLinkParams = Bento.boxes[box]['resourceLinkParams'][engine];
+                                engineScope.resourceLink = Bento.boxes[box].resourceLinks[engine] === "undefined" ? false : Bento.boxes[box].resourceLinks[engine];
+                                engineScope.resourceLinkParams = Bento.boxes[box].resourceLinkParams[engine];
 
                                 if (oneSearch.engines[engine].resourceLink && oneSearch.engines[engine].resourceLink.params){
                                     engineScope.resourceLinkParams = oneSearch.engines[engine].resourceLink.params;
@@ -865,7 +962,7 @@ angular.module('oneSearch.bento', [])
 
                                     // Wrap the template in an element that specifies ng-repeat over the "items" object (i.e., the results),
                                     // gives the generic classes for items in a bento box.
-                                    var template = angular.element('<div class="animate-repeat bento-box-item" ng-repeat="item in items | limitTo: box.resultLimit">'+data+'</div><div class="resource-link-container"><a class="btn btn-link btn-sm" ng-href="{{resourceLink}}" ng-if="resourceLink" target="_{{engine}}" ng-click="gaMore()">More results from {{engineName}}  <span class="fa fa-fw fa-external-link"></span></a></div>');
+                                    var template = angular.element('<div class="animate-repeat bento-box-item" ng-repeat="item in items | limitTo: box.resultLimit">'+data+'</div>');
 
                                     // Compile wrapped template with the isolated scope's context
                                     var html = $compile(template)(engineScope);
@@ -879,7 +976,7 @@ angular.module('oneSearch.bento', [])
                             }
                             //if (box == "recommend") console.log(newVal.length);
                             // If new array is empty, the box is considered "loaded"
-                            if (newVal.length == 0){
+                            if (newVal.length === 0){
                                 done(box);
                             }
                         }
@@ -891,7 +988,7 @@ angular.module('oneSearch.bento', [])
                 function done(b){
                     //console.log({b: b, box: box});
                     // If there are no results, print generated message
-                    if (isEmpty(Bento.boxes[b]['results'])){
+                    if (isEmpty(Bento.boxes[b].results)){
 
                         if (attrs.hideIfEmpty){
                             elm.addClass('hidden');
@@ -911,8 +1008,8 @@ angular.module('oneSearch.bento', [])
                     boxWatcher();
                 }
             }
-        }
-    }])
+        };
+    }]);
 
 
 /**
@@ -926,7 +1023,7 @@ angular.module('oneSearch.common', [
     'common.oneSearch',
     'common.engines',
     'filters.nameFilter'
-])
+]);
 angular.module('oneSearch.common')
     /**
      * @ngdoc service
@@ -1348,7 +1445,7 @@ angular.module('engines.catalog', [])
             var typeParam = '&limitTo=TYPE%3D';
             var params = typeParam + $scope.resourceLinkParams.join(typeParam);
             if ($scope.resourceLink.indexOf('limitTo=') > 0){
-                $scope.resourceLink = $scope.resourceLink.replace(/(&limitTo=.+?)&/, params);
+                $scope.resourceLink = $scope.resourceLink.replace(/(&limitTo=[^&]+)/, params);
             }
             else {
                 $scope.resourceLink += params;
@@ -1824,7 +1921,7 @@ angular.module('engines.scout', [])
 
             //Search for "source"
             var bibRelationships = [];
-            if (angular.isDefined(items[i].RecordInfo.BibRecord.BibRelationships.IsPartOfRelationships)){
+            if (items[i].RecordInfo.BibRecord.hasOwnProperty('BibRelationships') && angular.isDefined(items[i].RecordInfo.BibRecord.BibRelationships.IsPartOfRelationships)){
 
                 bibRelationships = items[i].RecordInfo.BibRecord.BibRelationships.IsPartOfRelationships;
 

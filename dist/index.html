@@ -9,11 +9,11 @@
     <link rel="stylesheet" type="text/css" href="https://rawgit.com/ualibweb/roots-ualib/master/assets/css/main_bower.css">
     <link rel="stylesheet" type="text/css" href="https://rawgit.com/ualibweb/roots-ualib/master/assets/css/main.css">
 
-    <!-- env:dev --#>
+    <!-- env:dev -->
     <link rel="stylesheet" type="text/css" href="onesearch.css">
     <!-- env:dev:end -->
 
-    <!-- env:prod -->
+    <!-- env:prod --#>
     <link rel="stylesheet" type="text/css" href="onesearch.min.css">
     <!-- env:prod:end -->
 
@@ -23,9 +23,49 @@
             bottom: 0;
             right: 0;
         }
+
+        .navbar {
+            margin-bottom: 0;
+        }
+
+        .nav .alert {
+            margin-bottom: 0;
+        }
     </style>
 </head>
 <body>
+
+<nav class="navbar navbar-default">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">oneSearch-ui demo</a>
+        </div>
+
+
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <!-- env:prod --#>
+                    <div class="alert alert-danger">
+                        Live Build
+                    </div>
+                    <!-- env:prod:end -->
+                    <!-- env:dev -->
+                    <div class="alert alert-info">
+                        Dev Build
+                    </div>
+                    <!-- env:dev:end -->
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
 <div class="onesearch-container">
     <div class="container" ng-controller="OneSearchCtrl">
         <form ng-submit="search()" class="onesearch-form">
@@ -35,21 +75,11 @@
         </form>
     </div>
 </div>
-    <div class="one-search-results" ng-view>
+    <div class="wrap">
+        <div class="one-search-results" ng-view>
+        </div>
     </div>
 
-<div class="dev_prod_label">
-    <!-- env:prod -->
-    <div class="alert alert-danger">
-        Live
-    </div>
-    <!-- env:prod:end -->
-    <!-- env:dev --#>
-    <div class="alert alert-info">
-        Dev
-    </div>
-    <!-- env:dev:end -->
-</div>
 
     <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.29/angular.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.29/angular-resource.min.js"></script>
@@ -61,11 +91,11 @@
     <script src="/bower_components/angular-scroll/angular-scroll.min.js"></script>
     <script src="/bower_components/ualib-ui/dist/ualib-ui.min.js"></script>
 
-    <!-- env:dev --#>
+    <!-- env:dev -->
     <script src="onesearch.js"></script>
     <!-- env:dev:end -->
 
-    <!-- env:prod -->
+    <!-- env:prod --#>
     <script src="onesearch.min.js"></script>
     <!-- env:prod:end -->
 </body>
