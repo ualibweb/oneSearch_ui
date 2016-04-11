@@ -10,7 +10,7 @@ angular.module("bento/bento.tpl.html", []).run(["$templateCache", function($temp
     "                    Articles\n" +
     "                    <small>\n" +
     "                        <span class=\"fa fa-info-circle\"\n" +
-    "                              tooltip-placement=\"bottom\"\n" +
+    "                              tooltip-placement=\"right\"\n" +
     "                              tooltip=\"Keyword search in journal titles, and full text article content in Scout.\"></span>\n" +
     "                    </small>\n" +
     "                </h2>\n" +
@@ -22,7 +22,7 @@ angular.module("bento/bento.tpl.html", []).run(["$templateCache", function($temp
     "                    Books\n" +
     "                    <small>\n" +
     "                        <span class=\"fa fa-info-circle\"\n" +
-    "                              tooltip-placement=\"bottom\"\n" +
+    "                              tooltip-placement=\"right\"\n" +
     "                              tooltip=\"Keyword search in book titles using both the Libraries' Catalog and Scout.\"></span>\n" +
     "                    </small>\n" +
     "                </h2>\n" +
@@ -34,7 +34,7 @@ angular.module("bento/bento.tpl.html", []).run(["$templateCache", function($temp
     "                    Journals\n" +
     "                    <small>\n" +
     "                        <span class=\"fa fa-info-circle\"\n" +
-    "                              tooltip-placement=\"bottom\"\n" +
+    "                              tooltip-placement=\"right\"\n" +
     "                              tooltip=\"Keyword search in journal titles and journal collections, in both Scout and our E-Resources database.\"></span>\n" +
     "                    </small>\n" +
     "                </h2>\n" +
@@ -48,7 +48,7 @@ angular.module("bento/bento.tpl.html", []).run(["$templateCache", function($temp
     "                    Databases\n" +
     "                    <small>\n" +
     "                        <span class=\"fa fa-info-circle\"\n" +
-    "                              tooltip-placement=\"bottom\"\n" +
+    "                              tooltip-placement=\"right\"\n" +
     "                              tooltip=\"Keyword search in titles and databases descriptions from our own Databases Page.\"></span>\n" +
     "                    </small>\n" +
     "                </h2>\n" +
@@ -60,7 +60,7 @@ angular.module("bento/bento.tpl.html", []).run(["$templateCache", function($temp
     "                    Libraries' Website\n" +
     "                    <small>\n" +
     "                        <span class=\"fa fa-info-circle\"\n" +
-    "                              tooltip-placement=\"bottom\"\n" +
+    "                              tooltip-placement=\"right\"\n" +
     "                              tooltip=\"Targeted, full-text search of library website pages and sections.\"></span>\n" +
     "                    </small>\n" +
     "                </h2>\n" +
@@ -72,7 +72,7 @@ angular.module("bento/bento.tpl.html", []).run(["$templateCache", function($temp
     "                    Acumen\n" +
     "                    <small>\n" +
     "                        <span class=\"fa fa-info-circle\"\n" +
-    "                              tooltip-placement=\"bottom\"\n" +
+    "                              tooltip-placement=\"right\"\n" +
     "                              tooltip=\"Returns a keyword search in titles and full text of our Special Collections Digital Archive.\"></span>\n" +
     "                    </small>\n" +
     "                </h2>\n" +
@@ -86,7 +86,7 @@ angular.module("bento/bento.tpl.html", []).run(["$templateCache", function($temp
     "                    Other Items & Media\n" +
     "                    <small>\n" +
     "                        <span class=\"fa fa-info-circle\"\n" +
-    "                              tooltip-placement=\"bottom\"\n" +
+    "                              tooltip-placement=\"right\"\n" +
     "                              tooltip=\"Keyword and item type search in the Libraries' catalog and Scout, retrieving media items - videos, DVDs, CDs, etc.\"></span>\n" +
     "                    </small>\n" +
     "                </h2>\n" +
@@ -98,7 +98,7 @@ angular.module("bento/bento.tpl.html", []).run(["$templateCache", function($temp
     "                    FAQ\n" +
     "                    <small>\n" +
     "                        <span class=\"fa fa-info-circle\"\n" +
-    "                              tooltip-placement=\"bottom\"\n" +
+    "                              tooltip-placement=\"right\"\n" +
     "                              tooltip='Full text keyword search via our Google search engine interface, through our FAQ repository, also known as \"Ask a Librarian.\"'></span>\n" +
     "                    </small>\n" +
     "                </h2>\n" +
@@ -110,7 +110,7 @@ angular.module("bento/bento.tpl.html", []).run(["$templateCache", function($temp
     "                    Research Guides\n" +
     "                    <small>\n" +
     "                        <span class=\"fa fa-info-circle\"\n" +
-    "                              tooltip-placement=\"bottom\"\n" +
+    "                              tooltip-placement=\"right\"\n" +
     "                              tooltip=\"Uses Google API to run a keyword search in titles and full text for our research guides.\"></span>\n" +
     "                    </small>\n" +
     "                </h2>\n" +
@@ -123,7 +123,6 @@ angular.module("bento/bento.tpl.html", []).run(["$templateCache", function($temp
     "                <h2>\n" +
     "                    Recommended Links\n" +
     "                </h2>\n" +
-    "\n" +
     "            </div>\n" +
     "        </div>\n" +
     "    </div>\n" +
