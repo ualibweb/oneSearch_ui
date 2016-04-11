@@ -32,11 +32,11 @@
             </div>
         </div>
         <ul class="list-inline">
-            <li>
-                <a ng-href="{{resourceLink}}" class="external-link" ng-if="resourceLink" target="_{{engine}}" ng-click="gaMore()">Results in {{engineName}}</a>
-            </li>
             <li ng-show="item.RecordInfo.BibRecord.BibRelationships.HasContributorRelationships || item.source || item.RecordInfo.BibRecord.BibEntity.Subjects">
                 <a href="" ng-click="isCollapsed = !isCollapsed">Item details <span class="fa" ng-class="{'fa-caret-down': isCollapsed, 'fa-caret-up': !isCollapsed}"></span></a>
+            </li>
+            <li>
+                <a ng-href="{{resourceLink}}" class="external-link" ng-if="resourceLink" target="_{{engine}}" ng-click="gaMore()">Results in {{engineName}}</a>
             </li>
         </ul>
 
