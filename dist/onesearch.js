@@ -35,7 +35,7 @@ angular.module("bento/bento.tpl.html", []).run(["$templateCache", function($temp
     "                    <small>\n" +
     "                        <span class=\"fa fa-info-circle\"\n" +
     "                              tooltip-placement=\"right\"\n" +
-    "                              tooltip=\"Keyword search in journal titles and journal collections, in both Scout and our E-Resources database.\"></span>\n" +
+    "                              tooltip=\"Keyword search in journal titles and journal collections, in both Scout and our E-Resources.\"></span>\n" +
     "                    </small>\n" +
     "                </h2>\n" +
     "            </div>\n" +
@@ -69,7 +69,7 @@ angular.module("bento/bento.tpl.html", []).run(["$templateCache", function($temp
     "        <div class=\"col-md-4\">\n" +
     "            <div class=\"bento-box\" bento-box=\"acumen\">\n" +
     "                <h2 id=\"acumen\">\n" +
-    "                    Acumen\n" +
+    "                    Acumen <small>Digital Archives</small>\n" +
     "                    <small>\n" +
     "                        <span class=\"fa fa-info-circle\"\n" +
     "                              tooltip-placement=\"right\"\n" +
