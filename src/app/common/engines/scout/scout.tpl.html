@@ -14,7 +14,9 @@
         <div collapse="isCollapsed" ng-show="(item.RecordInfo.BibRecord.BibRelationships.HasContributorRelationships || item.source || item.RecordInfo.BibRecord.BibEntity.Subjects)">
             <div class="details-container" ng-if="item.RecordInfo.BibRecord.BibRelationships.HasContributorRelationships">
                 <span class="text-muted">Authors </span>
-            <span class="details"
+            <span class="details"...
+                  ..
+
                   ng-repeat="author in item.RecordInfo.BibRecord.BibRelationships.HasContributorRelationships | unique: 'PersonEntity.Name.NameFull'"
                   ng-bind-html="author.PersonEntity.Name.NameFull | lowercase | ucfirst"></span>
             </div>
