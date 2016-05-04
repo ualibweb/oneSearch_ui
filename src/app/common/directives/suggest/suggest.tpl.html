@@ -3,8 +3,11 @@
            ng-model="model" ng-change="onChange()" ng-trim="false" autocomplete="off" />
     <div class="input-group-btn">
         <button type="submit" class="btn btn-onesearch btn-primary"><span class="fa fa-search"></span></button>
+
     </div>
+
 </div>
+<div class="input-group-checkbox" id="scoutCheckbox"><span style="font-size: 11pt; position:relative; top:-2px;">Only search Scout</span>&nbsp;<input type="checkbox" ng-model="scoutCheckbox" ng-change="checkboxChange()"></input></div>
 <div class="suggest" ng-show="showSuggestions && selected && (items.suggest.length > 0 || items.recommend.length > 0 || items.subjects[0].subjects.length > 0 || items.faq.length > 0)">
     <div ng-if="items.suggest.length > 0">
         <ul class="nav nav-pills nav-stacked">

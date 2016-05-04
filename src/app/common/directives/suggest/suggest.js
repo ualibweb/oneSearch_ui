@@ -45,7 +45,7 @@ angular.module('oneSearch.common')
                 model: '=',
                 search: '='
             },
-            controller: function($scope, $window, $timeout, $document,  dataFactory){
+            controller: function($scope, $window, $timeout, $document,  dataFactory, Bento){
                 $scope.items = {};
                 $scope.filteredItems = [];
                 $scope.model = "";
@@ -58,8 +58,16 @@ angular.module('oneSearch.common')
                 // hides the list initially
                 $scope.selected = false;
 
+                $scope.checkboxChange = function(){
+                    console.log("CHECKBOX CHANGE CALLED;")
+                    Bento.getBoxes();
+                };
+
                 $scope.onChange = function(){
                     //console.log("OnChange event.");
+
+                    //window.location = 'http://search.ebscohost.com/login.aspx?direct=true&site=eds-live&;scope=site&type=0&custid=s4594951&groupid=main&profid=eds&mode=and&authtype=ip,guest&bquery=test'; //params['s']
+
                     $scope.selected = true;
                     var fixedString = $scope.model.replace(/[&\/\\#+()$~%':*?<>{}]/g, ' ').trim();
                     fixedString = fixedString.substring(0, 150);

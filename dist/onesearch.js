@@ -136,8 +136,11 @@ angular.module("common/directives/suggest/suggest.tpl.html", []).run(["$template
     "           ng-model=\"model\" ng-change=\"onChange()\" ng-trim=\"false\" autocomplete=\"off\" />\n" +
     "    <div class=\"input-group-btn\">\n" +
     "        <button type=\"submit\" class=\"btn btn-onesearch btn-primary\"><span class=\"fa fa-search\"></span></button>\n" +
+    "\n" +
     "    </div>\n" +
+    "\n" +
     "</div>\n" +
+    "<div class=\"input-group-checkbox\" id=\"scoutCheckbox\"><span style=\"font-size: 11pt; position:relative; top:-2px;\">Only search Scout</span>&nbsp;<input type=\"checkbox\" ng-model=\"scoutCheckbox\" ng-change=\"checkboxChange()\"></input></div>\n" +
     "<div class=\"suggest\" ng-show=\"showSuggestions && selected && (items.suggest.length > 0 || items.recommend.length > 0 || items.subjects[0].subjects.length > 0 || items.faq.length > 0)\">\n" +
     "    <div ng-if=\"items.suggest.length > 0\">\n" +
     "        <ul class=\"nav nav-pills nav-stacked\">\n" +
@@ -348,7 +351,9 @@ angular.module("common/engines/scout/scout.tpl.html", []).run(["$templateCache",
     "        <div collapse=\"isCollapsed\" ng-show=\"(item.RecordInfo.BibRecord.BibRelationships.HasContributorRelationships || item.source || item.RecordInfo.BibRecord.BibEntity.Subjects)\">\n" +
     "            <div class=\"details-container\" ng-if=\"item.RecordInfo.BibRecord.BibRelationships.HasContributorRelationships\">\n" +
     "                <span class=\"text-muted\">Authors </span>\n" +
-    "            <span class=\"details\"\n" +
+    "            <span class=\"details\"...\n" +
+    "                  ..\n" +
+    "\n" +
     "                  ng-repeat=\"author in item.RecordInfo.BibRecord.BibRelationships.HasContributorRelationships | unique: 'PersonEntity.Name.NameFull'\"\n" +
     "                  ng-bind-html=\"author.PersonEntity.Name.NameFull | lowercase | ucfirst\"></span>\n" +
     "            </div>\n" +
@@ -1070,7 +1075,7 @@ angular.module('oneSearch.common')
                 model: '=',
                 search: '='
             },
-            controller: ['$scope', '$window', '$timeout', '$document', 'dataFactory', function($scope, $window, $timeout, $document,  dataFactory){
+            controller: ['$scope', '$window', '$timeout', '$document', 'dataFactory', 'Bento', function($scope, $window, $timeout, $document,  dataFactory, Bento){
                 $scope.items = {};
                 $scope.filteredItems = [];
                 $scope.model = "";
@@ -1083,8 +1088,16 @@ angular.module('oneSearch.common')
                 // hides the list initially
                 $scope.selected = false;
 
+                $scope.checkboxChange = function(){
+                    console.log("CHECKBOX CHANGE CALLED;")
+                    Bento.getBoxes();
+                };
+
                 $scope.onChange = function(){
                     //console.log("OnChange event.");
+
+                    //window.location = 'http://search.ebscohost.com/login.aspx?direct=true&site=eds-live&;scope=site&type=0&custid=s4594951&groupid=main&profid=eds&mode=and&authtype=ip,guest&bquery=test'; //params['s']
+
                     $scope.selected = true;
                     var fixedString = $scope.model.replace(/[&\/\\#+()$~%':*?<>{}]/g, ' ').trim();
                     fixedString = fixedString.substring(0, 150);
@@ -2450,6 +2463,13 @@ angular.module('common.oneSearch', [])
 
         function search(params){
 
+            var checkbox = document.querySelector('#scoutCheckbox input');
+            if (checkbox.checked) {
+                window.location = 'http://search.ebscohost.com/login.aspx?direct=true&site=eds-live&;scope=site&type=0&custid=s4594951&groupid=main&profid=eds&mode=and&authtype=ip,guest&bquery=' + params['s'];
+            }
+
+            console.log("TEST");
+
             var canceller = $q.defer();
             var url = '//wwwdev2.lib.ua.edu/oneSearch/api/search/' + params['s'] + '/engine/' + params['engine'] + '/limit/' + params['limit'];
 
@@ -2786,6 +2806,7 @@ angular.module('common.oneSearch', [])
          *
          * **Note:** This function will route relative to UA Libraries' `live` and `dev` URLs. If this function is executed outside a UALib domain, `www.lib.ua.edu` will be used by default.
          */
+
 
         $scope.search = function(){
             /**

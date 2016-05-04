@@ -50,6 +50,13 @@ angular.module('common.oneSearch', [])
 
         function search(params){
 
+            var checkbox = document.querySelector('#scoutCheckbox input');
+            if (checkbox.checked) {
+                window.location = 'http://search.ebscohost.com/login.aspx?direct=true&site=eds-live&;scope=site&type=0&custid=s4594951&groupid=main&profid=eds&mode=and&authtype=ip,guest&bquery=' + params['s'];
+            }
+
+            console.log("TEST");
+
             var canceller = $q.defer();
             var url = '//wwwdev2.lib.ua.edu/oneSearch/api/search/' + params['s'] + '/engine/' + params['engine'] + '/limit/' + params['limit'];
 
@@ -386,6 +393,7 @@ angular.module('common.oneSearch', [])
          *
          * **Note:** This function will route relative to UA Libraries' `live` and `dev` URLs. If this function is executed outside a UALib domain, `www.lib.ua.edu` will be used by default.
          */
+
 
         $scope.search = function(){
             /**
