@@ -417,7 +417,8 @@ angular.module('common.oneSearch', [])
             var checkbox = document.querySelector('#scoutCheckbox input');
             var searchtext = document.querySelector('#osTextField').value;
 
-            if ((checkbox.checked) && (searchtext !== '')) {
+
+            if (checkbox && (checkbox.checked) && (searchtext !== '')) {
                 window.location = 'http://search.ebscohost.com/login.aspx?direct=true&site=eds-live&;scope=site&type=0&custid=s4594951&groupid=main&profid=eds&mode=and&authtype=ip,guest&bquery=' + searchtext;
             }
             else {

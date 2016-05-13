@@ -140,7 +140,7 @@ angular.module("common/directives/suggest/suggest.tpl.html", []).run(["$template
     "    </div>\n" +
     "\n" +
     "</div>\n" +
-    "<div class=\"input-group-checkbox\" id=\"scoutCheckbox\"><span style=\"font-size: 11pt; position:relative; top:-2px;\">Only search Scout</span>&nbsp;<input type=\"checkbox\" ng-model=\"scoutCheckbox\" ng-change=\"checkboxChange()\"></input></div>\n" +
+    "\n" +
     "<div class=\"suggest\" ng-show=\"showSuggestions && selected && (items.suggest.length > 0 || items.recommend.length > 0 || items.subjects[0].subjects.length > 0 || items.faq.length > 0)\">\n" +
     "    <div ng-if=\"items.suggest.length > 0\">\n" +
     "        <ul class=\"nav nav-pills nav-stacked\">\n" +
@@ -2827,7 +2827,8 @@ angular.module('common.oneSearch', [])
             var checkbox = document.querySelector('#scoutCheckbox input');
             var searchtext = document.querySelector('#osTextField').value;
 
-            if ((checkbox.checked) && (searchtext !== '')) {
+
+            if (checkbox && (checkbox.checked) && (searchtext !== '')) {
                 window.location = 'http://search.ebscohost.com/login.aspx?direct=true&site=eds-live&;scope=site&type=0&custid=s4594951&groupid=main&profid=eds&mode=and&authtype=ip,guest&bquery=' + searchtext;
             }
             else {
