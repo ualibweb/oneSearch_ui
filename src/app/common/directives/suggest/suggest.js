@@ -167,10 +167,8 @@ angular.module('oneSearch.common')
                 $scope.gaTypeAhead = function(linkTitle){
                     ga('send', 'event', 'oneSearch', 'type_ahead_click', linkTitle);
                 };
-                $scope.gaScoutOnly = function(){
-                    console.log("SCOUT ONLY CHECKED");
-                    ga('send', 'event', 'oneSearch', 'scout_checkbox_click');
-                };
+
+
 
             },
             link: function(scope, elem, attrs) {

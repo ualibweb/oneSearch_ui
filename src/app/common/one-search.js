@@ -419,6 +419,7 @@ angular.module('common.oneSearch', [])
 
 
             if (checkbox && (checkbox.checked) && (searchtext !== '')) {
+                ga('send', 'event', 'oneSearch', 'scout_checkbox_click');
                 window.location = 'http://search.ebscohost.com/login.aspx?direct=true&site=eds-live&;scope=site&type=0&custid=s4594951&groupid=main&profid=eds&mode=and&authtype=ip,guest&bquery=' + searchtext;
             }
             else {
