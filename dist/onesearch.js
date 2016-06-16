@@ -31,7 +31,7 @@ angular.module("bento/bento.tpl.html", []).run(["$templateCache", function($temp
     "        <div class=\"col-sm-12 col-md-4\">\n" +
     "            <div class=\"bento-box\" bento-box=\"journals\">\n" +
     "                <h2>\n" +
-    "                    Journals\n" +
+    "                    Journals <!--Test-->\n" +
     "                    <small>\n" +
     "                        <span class=\"fa fa-info-circle\"\n" +
     "                              tooltip-placement=\"right\"\n" +
@@ -1636,7 +1636,7 @@ angular.module('common.engines', [
     'engines.faq',
     'engines.libguides',
     'engines.ejournals',
-    'engines.recommend'
+    'engines.recommend' //test
 ])
 /**
  * @Service enginesTemplateFactory

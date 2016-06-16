@@ -66,7 +66,7 @@ angular.module('common.engines', [
     'engines.faq',
     'engines.libguides',
     'engines.ejournals',
-    'engines.recommend'
+    'engines.recommend' //test
 ])
 /**
  * @Service enginesTemplateFactory
