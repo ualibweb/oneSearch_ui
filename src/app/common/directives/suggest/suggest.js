@@ -94,7 +94,7 @@ angular.module('oneSearch.common')
                                 .then(function(data) {
                                     $scope.items.recommend = data;
                                 });
-                            dataFactory.get('//wwwdev2.lib.ua.edu/staffDir/api/subject/' + encodeURI(fixedString) + '/match/startwith')
+                            dataFactory.get('//wwwdev2.lib.ua.edu/staffDir/api/subject/' + encodeURI(fixedString) + '/match/startwith/suggest')
                                 .then(function(data) {
                                     $scope.items.subjects = data;
                                 });
@@ -167,7 +167,6 @@ angular.module('oneSearch.common')
                 $scope.gaTypeAhead = function(linkTitle){
                     ga('send', 'event', 'oneSearch', 'type_ahead_click', linkTitle);
                 };
-
 
 
             },
