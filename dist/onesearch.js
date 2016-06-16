@@ -2045,7 +2045,7 @@ angular.module('engines.scout', [])
  * |----------|-------|
  * | id       | 128      |
  * | priority | 5      |
- * | resultsPath | Staff Directory     |
+ * | resultsPath | StaffDirectory     |
  * | templateUrl | common/engines/recommend/staff-directory.tpl.html|
  * | controller |  N/A  |
  *
@@ -2059,10 +2059,10 @@ angular.module('engines.staffdirectory', [])
             priority: 5,
             resultsPath: 'StaffDirectory',
             templateUrl: 'common/engines/staff-directory/staff-directory.tpl.html',
-            controller: 'StaffDirCtrl'
+            controller: 'StaffDirectoryCtrl'
         })
     }])
-.controller('StaffDirCtrl', ['$scope', function($scope){
+.controller('StaffDirectoryCtrl', ['$scope', function($scope){
 
     var items = $scope.items;
 
