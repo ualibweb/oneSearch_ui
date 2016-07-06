@@ -31,7 +31,7 @@ angular.module("bento/bento.tpl.html", []).run(["$templateCache", function($temp
     "        <div class=\"col-sm-12 col-md-4\">\n" +
     "            <div class=\"bento-box\" bento-box=\"staffdirectory\">\n" +
     "                <h2>\n" +
-    "                    Ask An Expert\n" +
+    "                    Research Help\n" +
     "                    <small>\n" +
     "                        <span class=\"fa fa-info-circle\"\n" +
     "                              tooltip-placement=\"right\"\n" +
