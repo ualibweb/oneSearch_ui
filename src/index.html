@@ -69,8 +69,16 @@
 <div class="onesearch-container">
     <div class="container" ng-controller="OneSearchCtrl">
         <form ng-submit="search()" class="onesearch-form">
+            <!-- @if NODE_ENV='local' -->
+            <div class="checkbox scout-checkbox">
+                <label>
+                    <input type="checkbox" ng-model="scoutCheckbox">
+                Only search Scout
 
+                </label>
+            </div><!-- @endif -->
             <suggest-one-search prompt="Search journals, articles, books, website & more" model="searchText" search="search">
+
 
         </form>
     </div>

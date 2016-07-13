@@ -50,20 +50,6 @@ angular.module('common.oneSearch', [])
 
         function search(params){
 
-            var checkbox = document.querySelector('#scoutCheckbox input');
-            var searchtext = document.querySelector('#osTextField').value;
-
-
-/*
-            console.log('SEARCHTEXT IS ');
-            console.log(searchtext);
-            if ((checkbox.checked) && (searchtext != null)) {
-                window.location = 'http://search.ebscohost.com/login.aspx?direct=true&site=eds-live&;scope=site&type=0&custid=s4594951&groupid=main&profid=eds&mode=and&authtype=ip,guest&bquery=' + params['s'];
-            }
-            else {
-                break;
-            }*/
-
 
             var canceller = $q.defer();
             var url = '//wwwdev2.lib.ua.edu/oneSearch/api/search/' + params['s'] + '/engine/' + params['engine'] + '/limit/' + params['limit'];
@@ -413,12 +399,12 @@ angular.module('common.oneSearch', [])
              * The $scope model for the search string, bound to the input text box.
              */
 
+            //Redirect to Scout if "Only search Scout" is checked
+            var checkbox = $scope.scoutCheckbox;
+            var searchtext = $scope.searchText;
 
-            var checkbox = document.querySelector('#scoutCheckbox input');
-            var searchtext = document.querySelector('#osTextField').value;
 
-
-            if (checkbox && (checkbox.checked) && (searchtext !== '')) {
+            if ((checkbox == true) && (searchtext !== '')) {
                 ga('send', 'event', 'oneSearch', 'scout_checkbox_click');
                 window.location = 'http://search.ebscohost.com/login.aspx?direct=true&site=eds-live&;scope=site&type=0&custid=s4594951&groupid=main&profid=eds&mode=and&authtype=ip,guest&bquery=' + searchtext;
             }
