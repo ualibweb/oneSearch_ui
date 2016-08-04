@@ -94,7 +94,7 @@ angular.module('oneSearch.common')
                                 .then(function(data) {
                                     $scope.items.recommend = data;
                                 });
-                            dataFactory.get('//wwwdev2.lib.ua.edu/staffDir/api/subject/' + encodeURI(fixedString) + '/match/startwith/suggest')
+                            dataFactory.get('//wwwdev2.lib.ua.edu/staffDir/api/subject/' + encodeURI(fixedString) + '/match/startwith')
                                 .then(function(data) {
                                     $scope.items.subjects = data;
                                 });

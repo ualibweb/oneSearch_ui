@@ -1,22 +1,24 @@
-<div class="media">
-    <div class="media-left">
-        <a href="#">
-            <img class="media-object" style="width: 128px;" src='{{item.photo}}' >
-        </a>
-    </div>
-    <div class="media-body">
-        <div class="media-heading">
-            <ul class="list-unstyled">
-                <li><a ng-href="#/staffdir/{{item.emailPrefix}}" ng-if="item.profile">
-                    {{item.name}}
-                </a></li>
-                <span ng-if="!item.profile">
-                    <li>{{item.name}}</li>
-                </span>
-                <li>{{item.title}}</li>
-                <!--<div class="media-heading">{{item.department}}</div>-->
-                <li><a href="mailto:{{item.email}}">{{item.email}}</a></li>
-            </ul>
+<div class="col-md-4">
+    <div class="media">
+        <div class="media-left">
+            <a href="#">
+                <img class="media-object" style="width: 128px;" src='https://wwwdev2.lib.ua.edu/staffDir/staffImages/{{item.photo}}' >
+            </a>
+        </div>
+        <div class="media-body">
+            <div class="media-heading">
+                <ul class="list-unstyled">
+                    <li><a ng-href="#/staffdir/{{item.emailPrefix}}" ng-if="item.profile">
+                        {{item.firstName}} {{item.lastName}}
+                    </a></li>
+                    <li ng-if="!item.profile">{{item.firstName}} {{item.lastName}} </li>
+                    <li>{{item.subject}}</li>
+
+                    <li>{{item.title}}</li>
+                    <!--<div class="media-heading">{{item.department}}</div>-->
+                    <li><a href="mailto:{{item.email}}">{{item.email}}</a></li>
+                </ul>
+            </div>
         </div>
     </div>
 </div>

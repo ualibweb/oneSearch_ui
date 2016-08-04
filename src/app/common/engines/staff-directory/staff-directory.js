@@ -21,7 +21,7 @@ angular.module('engines.staffdirectory', [])
         oneSearchProvider.engine('staffdirectory', {
             id: 128,
             priority: 5,
-            resultsPath: 'StaffDirectory',
+            resultsPath: 'staffDir',
             templateUrl: 'common/engines/staff-directory/staff-directory.tpl.html',
             controller: 'StaffDirectoryCtrl'
         })
