@@ -402,9 +402,7 @@ angular.module("common/engines/staff-directory/staff-directory.tpl.html", []).ru
     "<div class=\"col-md-4\">\n" +
     "    <div class=\"media\">\n" +
     "        <div class=\"media-left\">\n" +
-    "            <a href=\"#\">\n" +
     "                <img class=\"media-object\" style=\"width: 128px;\" src='https://wwwdev2.lib.ua.edu/staffDir/staffImages/{{item.photo}}' >\n" +
-    "            </a>\n" +
     "        </div>\n" +
     "        <div class=\"media-body\">\n" +
     "            <div class=\"media-heading\">\n" +
