@@ -1,4 +1,4 @@
-angular.module('oneSearch.templates', ['bento/bento.tpl.html', 'common/directives/suggest/suggest.tpl.html', 'common/engines/acumen/acumen.tpl.html', 'common/engines/catalog/catalog.tpl.html', 'common/engines/databases/databases.tpl.html', 'common/engines/ejournals/ejournals.tpl.html', 'common/engines/google-cs/google-cs.tpl.html', 'common/engines/recommend/recommend.tpl.html', 'common/engines/scout/scout.tpl.html']);
+angular.module('oneSearch.templates', ['bento/bento.tpl.html', 'common/directives/suggest/suggest.tpl.html', 'common/engines/acumen/acumen.tpl.html', 'common/engines/catalog/catalog.tpl.html', 'common/engines/databases/databases.tpl.html', 'common/engines/ejournals/ejournals.tpl.html', 'common/engines/google-cs/google-cs.tpl.html', 'common/engines/recommend/recommend.tpl.html', 'common/engines/scout/scout.tpl.html', 'common/engines/staff-directory/staff-directory.tpl.html']);
 
 angular.module("bento/bento.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("bento/bento.tpl.html",
@@ -36,6 +36,20 @@ angular.module("bento/bento.tpl.html", []).run(["$templateCache", function($temp
     "                        <span class=\"fa fa-info-circle\"\n" +
     "                              tooltip-placement=\"right\"\n" +
     "                              tooltip=\"Keyword search in journal titles and journal collections, in both Scout and our E-Resources.\"></span>\n" +
+    "                    </small>\n" +
+    "                </h2>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "    <div class=\"row\">\n" +
+    "        <div class=\"col-md-12\">\n" +
+    "            <div class=\"bento-box\" hide-if-empty=\"true\" bento-box=\"staffdirectory\" style=\"min-height:0px; margin-bottom: 15px;\">\n" +
+    "                <h2>\n" +
+    "                    Research Help\n" +
+    "                    <small>\n" +
+    "                            <span class=\"fa fa-info-circle\"\n" +
+    "                                  tooltip-placement=\"right\"\n" +
+    "                                  tooltip=\"Contact a librarian directly for help with your research.\"></span>\n" +
     "                    </small>\n" +
     "                </h2>\n" +
     "            </div>\n" +
@@ -381,6 +395,42 @@ angular.module("common/engines/scout/scout.tpl.html", []).run(["$templateCache",
     "\n" +
     "    </div>\n" +
     "</div>");
+}]);
+
+angular.module("common/engines/staff-directory/staff-directory.tpl.html", []).run(["$templateCache", function($templateCache) {
+  $templateCache.put("common/engines/staff-directory/staff-directory.tpl.html",
+    "<div class=\"col-md-4\">\n" +
+    "    <div class=\"media\">\n" +
+    "        <div class=\"media-left\">\n" +
+    "            <a href=\"#\">\n" +
+    "                <img class=\"media-object\" style=\"width: 128px;\" src='https://wwwdev2.lib.ua.edu/staffDir/staffImages/{{item.photo}}' >\n" +
+    "            </a>\n" +
+    "        </div>\n" +
+    "        <div class=\"media-body\">\n" +
+    "            <div class=\"media-heading\">\n" +
+    "                <dl class=\"list-unstyled\">\n" +
+    "                    <dt>Name</dt>\n" +
+    "                    <dd><a ng-href=\"#/staffdir/{{item.emailPrefix}}\" ng-if=\"item.profile\">\n" +
+    "                        {{item.firstName}} {{item.lastName}}\n" +
+    "                    </a></dd>\n" +
+    "                    <dd ng-if=\"!item.profile\">{{item.firstName}} {{item.lastName}} </dd>\n" +
+    "                    <dt>Subject</dt>\n" +
+    "                    <dd>{{item.subject}}</dd>\n" +
+    "                    <dt>Phone</dt>\n" +
+    "                    <dd>{{item.title}}</dd>\n" +
+    "                    <!--<div class=\"media-heading\">{{item.department}}</div>-->\n" +
+    "                    <dt>Email</dt>\n" +
+    "                    <dd><a href=\"mailto:{{item.email}}?subject=Research Help Request\" ng-click=\"gaResearchRequest(item.firstName + ' ' + item.lastName)\">{{item.email}}</a></dd>\n" +
+    "                </dl>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "</div>\n" +
+    "\n" +
+    "\n" +
+    "\n" +
+    "\n" +
+    "");
 }]);
 
 /**
@@ -958,6 +1008,9 @@ angular.module('oneSearch.bento', [])
                                         $scope.gaMore = function(){
                                             ga('send', 'event', 'oneSearch', 'more_click', 'more_' + gaBox);
                                         };
+                                        $scope.gaResearchRequest = function(name){
+                                            ga('send', 'event', 'oneSearch', 'research_request', name);
+                                        }
 
                                     }];
 
@@ -1076,7 +1129,7 @@ angular.module('oneSearch.common')
                 model: '=',
                 search: '='
             },
-            controller: ['$scope', '$window', '$timeout', '$document', 'dataFactory', 'Bento', function($scope, $window, $timeout, $document,  dataFactory, Bento){
+            controller: function($scope, $window, $timeout, $document,  dataFactory, Bento){
                 $scope.items = {};
                 $scope.filteredItems = [];
                 $scope.model = "";
@@ -1201,7 +1254,7 @@ angular.module('oneSearch.common')
 
 
 
-            }],
+            },
             link: function(scope, elem, attrs) {
                 scope.showSuggestions = false;
                 var suggestWatcher = scope.$watch('items', function(newVal, oldVal){
@@ -1354,7 +1407,7 @@ angular.module('engines.acumen', [])
      * <mark>TODO:</mark>   add proper description.
      */
 
-    .controller('AcumenCtrl', ['$scope', '$filter', function($scope, $filter){
+    .controller('AcumenCtrl', function($scope, $filter){
         var items = $scope.items;
 
         for (var i = 0, len = items.length; i < len; i++) {
@@ -1364,7 +1417,7 @@ angular.module('engines.acumen', [])
                 else items[i].type = items[i].type.sort().shift();
             }
         }
-    }]);
+    });
 angular.module('engines.catalog', [])
 
     /**
@@ -1425,7 +1478,7 @@ angular.module('engines.catalog', [])
      * <mark>TODO:</mark>   add proper description.
      */
 
-    .controller('CatalogCtrl', ['$scope', '$filter', function($scope, $filter){
+    .controller('CatalogCtrl', function($scope, $filter){
         var types = {
             bc: "Archive/Manuscript",
             cm: "Music Score",
@@ -1467,7 +1520,7 @@ angular.module('engines.catalog', [])
         }
 
         $scope.items = items;
-    }]);
+    });
 
 angular.module('engines.databases', [])
 
@@ -1551,7 +1604,7 @@ angular.module('engines.ejournals', [])
      * <mark>TODO:</mark>   add proper description.
      */
 
-    .controller('EjouralsCtrl', ['$scope', function($scope){
+    .controller('EjouralsCtrl', function($scope){
 
         var param;
         switch ($scope.mediaType){
@@ -1568,7 +1621,7 @@ angular.module('engines.ejournals', [])
         if (param){
             $scope.resourceLink = $scope.resourceLink.replace('SS_searchTypeAll=yes&SS_searchTypeBook=yes&SS_searchTypeJournal=yes&SS_searchTypeOther=yes', param);
         }
-    }]);
+    });
 /**
  * @ngdoc overview
  * @name engines
@@ -1637,7 +1690,8 @@ angular.module('common.engines', [
     'engines.faq',
     'engines.libguides',
     'engines.ejournals',
-    'engines.recommend'
+    'engines.recommend',
+    'engines.staffdirectory'
 ])
 /**
  * @Service enginesTemplateFactory
@@ -1916,7 +1970,7 @@ angular.module('engines.scout', [])
      * <mark>TODO:</mark>   add proper description.
      */
 
-    .controller('ScoutCtrl', ['$scope', function($scope){
+    .controller('ScoutCtrl', function($scope){
         var title; // Title variable to bind to $scope. ".BibRelationships.IsPartOfRelationships" title is used if no item title is present.
         var items = $scope.items;
         for (var i = 0; i < items.length; i++){
@@ -1990,7 +2044,51 @@ angular.module('engines.scout', [])
         }
 
         $scope.resourceLink = angular.copy(link);
-    }]);
+    });
+/**
+ * @ngdoc object
+ * @name engines.type:ENGIEN_NAME
+ *
+ * @description
+ * Engine config properties
+ *
+ * | property | value |
+ * |----------|-------|
+ * | id       | 128      |
+ * | priority | 5      |
+ * | resultsPath | StaffDirectory     |
+ * | templateUrl | common/engines/recommend/staff-directory.tpl.html|
+ * | controller |  N/A  |
+ *
+ * @requires oneSearchProvider
+ */
+
+angular.module('engines.staffdirectory', [])
+    .config(['oneSearchProvider', function(oneSearchProvider){
+        oneSearchProvider.engine('staffdirectory', {
+            id: 128,
+            priority: 5,
+            resultsPath: 'staffDir',
+            templateUrl: 'common/engines/staff-directory/staff-directory.tpl.html',
+            controller: 'StaffDirectoryCtrl'
+        })
+    }])
+    .controller('StaffDirectoryCtrl', function($scope){
+
+        var items = $scope.items;
+
+        for (var i = 0, len = items.length; i < len; i++) {
+
+            if (items[i].email) {
+                //console.log(items[i].type);
+                var rx = /^([\w-]+(?:\.[\w-]+)*)/;
+                var prefix = items[i].email.match(rx);
+                if (prefix !== null) {
+                    items[i].emailPrefix = prefix[0];
+                }
+            }
+        }
+    });
 angular.module('filters.nameFilter', [])
 
     .filter('nameFilter', ['$filter', function($filter){

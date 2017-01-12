@@ -446,6 +446,9 @@ angular.module('oneSearch.bento', [])
                                         $scope.gaMore = function(){
                                             ga('send', 'event', 'oneSearch', 'more_click', 'more_' + gaBox);
                                         };
+                                        $scope.gaResearchRequest = function(name){
+                                            ga('send', 'event', 'oneSearch', 'research_request', name);
+                                        }
 
                                     }];
 

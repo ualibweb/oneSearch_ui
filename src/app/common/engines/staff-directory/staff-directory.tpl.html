@@ -1,0 +1,31 @@
+<div class="col-md-4">
+    <div class="media">
+        <div class="media-left">
+            <a href="#">
+                <img class="media-object" style="width: 128px;" src='https://wwwdev2.lib.ua.edu/staffDir/staffImages/{{item.photo}}' >
+            </a>
+        </div>
+        <div class="media-body">
+            <div class="media-heading">
+                <dl class="list-unstyled">
+                    <dt>Name</dt>
+                    <dd><a ng-href="#/staffdir/{{item.emailPrefix}}" ng-if="item.profile">
+                        {{item.firstName}} {{item.lastName}}
+                    </a></dd>
+                    <dd ng-if="!item.profile">{{item.firstName}} {{item.lastName}} </dd>
+                    <dt>Subject</dt>
+                    <dd>{{item.subject}}</dd>
+                    <dt>Phone</dt>
+                    <dd>{{item.title}}</dd>
+                    <!--<div class="media-heading">{{item.department}}</div>-->
+                    <dt>Email</dt>
+                    <dd><a href="mailto:{{item.email}}?subject=Research Help Request" ng-click="gaResearchRequest(item.firstName + ' ' + item.lastName)">{{item.email}}</a></dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
