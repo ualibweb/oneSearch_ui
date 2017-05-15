@@ -1,7 +1,8 @@
 <div class="col-md-4">
     <div class="media">
         <div class="media-left">
-                <img class="media-object" style="width: 128px;" src='https://wwwdev2.lib.ua.edu/staffDir/staffImages/{{item.photo}}' >
+                <img ng-if="item.photo" class="media-object" style="width: 128px;" src='https://wwwdev2.lib.ua.edu/staffDir/staffImages/{{item.photo}}' alt="Staff Directory Image of {{item.firstName}} {{item.lastName}}" />
+                <img ng-if="!item.photo" class="media-object" style="width: 128px;" src="https://www.lib.ua.edu/wp-content/themes/roots-ualib/assets/img/user-profile.png" alt="Staff Directory Image of {{item.firstName}} {{item.lastName}}" />
         </div>
         <div class="media-body">
             <div class="media-heading">
