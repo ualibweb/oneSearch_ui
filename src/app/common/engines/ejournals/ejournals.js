@@ -25,13 +25,13 @@ angular.module('engines.ejournals', [])
         oneSearchProvider.engine('ejournals', {
             id: 4,
             priority: 6,
-            resultsPath: 'eJournals.list',
-            totalsPath: 'eJournals.total',
+            resultsPath: 'eJournals.SearchResult.Data.Records',
+            totalsPath: 'Scout.SearchResult.Statistics.TotalHits',
             mediaTypes: {
-                path: 'type',
+                path: 'Header.ResourceType',
                 types: {
-                    books: 'book',
-                    journals: 'periodical'
+                    books: 'Book',
+                    journals: 'Journal'
                 }
             },
             templateUrl: 'common/engines/ejournals/ejournals.tpl.html',
@@ -47,21 +47,80 @@ angular.module('engines.ejournals', [])
      * <mark>TODO:</mark>   add proper description.
      */
 
-    .controller('EjouralsCtrl', function($scope){
+    .controller('EjouralsCtrl', function($scope) {
 
-        var param;
-        switch ($scope.mediaType){
-            case 'books':
-                param = 'SS_searchTypeBook=yes';
-                break;
-            case 'journals':
-                param = 'SS_searchTypeJournal=yes';
-                break;
-            case 'other':
-                param = 'SS_searchTypeOther=yes'
+        var title; // Title variable to bind to $scope. ".BibRelationships.IsPartOfRelationships" title is used if no item title is present.
+        var ISSN;
+        var items = $scope.items;
+        var year;
+
+        for (var i = 0; i < items.length; i++) {
+
+            //Reset title, ISSN, year
+            title = '';
+            ISSN = '';
+            year = '';
+
+            //Check if item has a title
+            if (items[i].RecordInfo.BibRecord.BibEntity.Titles) {
+                title = items[i].RecordInfo.BibRecord.BibEntity.Titles[0].TitleFull;
+
+                //Set item title
+                if (title) {
+                    items[i].title = title;
+                }
+
+            }
+
+            //Check if item has an ISSN
+            if (items[i].RecordInfo.BibRecord.BibEntity.Identifiers) {
+
+                for (j = 0; j < items[i].RecordInfo.BibRecord.BibEntity.Identifiers.length; j++) {
+                    var ISSNType = items[i].RecordInfo.BibRecord.BibEntity.Identifiers[j]['Type'];
+                    if (ISSNType == 'issn-online') {
+                        ISSN = items[i].RecordInfo.BibRecord.BibEntity.Identifiers[j]['Value'];
+                        ISSN = ISSN.slice(0, 4) + '-' + ISSN.slice(4, 8);
+                        break;
+                    }
+                    else if (ISSNType == 'issn-print') {
+                        ISSN = items[i].RecordInfo.BibRecord.BibEntity.Identifiers[j]['Value'];
+                        ISSN = ISSN.slice(0, 4) + '-' + ISSN.slice(4, 8);
+                    }
+
+                }
+
+                //Set ISSN
+                if (ISSN) {
+                    items[i].ISSN = ISSN
+                }
+
+            }
+
+            //Check if item has a year.  Display the earliest available year for full text holdings
+            if (typeof(items[i].FullTextHoldings !== 'undefined')) {
+                for (j = 0; j < items[i].FullTextHoldings.length; j++) {
+                    var currentYear = items[i].FullTextHoldings[j].CoverageDates[0].StartDate;
+
+                    currentYear = parseInt(currentYear.slice(0,4));
+                    if (year !== ''){
+                        if (currentYear < year){
+                            year = currentYear;
+                        }
+                    }
+                    else {
+                        year = parseInt(currentYear);
+                    }
+
+                }
+            }
+
+            //Set year
+            if (year) {
+                items[i].year = year;
+            }
+
+
         }
 
-        if (param){
-            $scope.resourceLink = $scope.resourceLink.replace('SS_searchTypeAll=yes&SS_searchTypeBook=yes&SS_searchTypeJournal=yes&SS_searchTypeOther=yes', param);
-        }
+        $scope.items = items;
     });

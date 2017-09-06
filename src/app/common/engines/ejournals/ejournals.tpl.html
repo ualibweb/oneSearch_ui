@@ -1,40 +1,25 @@
 <div class="media">
     <div class="media-body">
         <h4 class="media-heading">
-            <a ng-href="{{item.links[0].href}}" title="{{item.title}}" target="_ejournals" ng-click="gaPush()">{{item.title | ltrim | truncate: 50: '...': true}}</a>
+            <a ng-href="{{item.PLink}}"
+               title="{{item.Items[0].Data}}"
+               target="_scout"
+               ng-bind-html="item.title | lowercase | ucfirst | truncate: 80: '...': true" ng-click="gaPush()"></a>
+
         </h4>
-
         <div class="details-context">
-            <span ng-if="item.date" ng-bind-html="item.date"></span>
-            <span ng-if="item.links[0]">
-                <span title="{{item.links[0].name}}">{{item.links[0].name | ltrim | truncate: 45: '...'}}</span>
-            </span>
-        </div>
-
-        <div collapse="isCollapsed">
-            <div class="details-container" ng-if="item.authors">
-                <span class="text-muted">Authors </span>
-                <span class="details" ng-bind-html="item.authors"></span>
-            </div>
-
-            <div class="details-container" ng-if="item.links[1]">
-                <span class="text-muted">Other Sources </span>
-            <span class="details" ng-repeat="link in item.links | after: 1">
-                <a ng-href="{{link.href}}"
-                   title="{{link.name}}"
-                   class="source-link"
-                   ng-bind-html="link.name | truncate: 35: '...': true"></a>
-            </span>
-            </div>
+            <span ng-if="item.year">{{item.year}}</span>
+            <span ng-if="item.ISSN">ISSN: {{item.ISSN}}</span>
+            <span ng-if="item.mediaType">{{item.mediaType}} </span>
+            <span ng-if="item.FullText.Text.Availability">Full Text Online</span>
         </div>
 
         <ul class="list-inline">
-            <li ng-show="item.links[1]">
-                <a href="" ng-click="isCollapsed = !isCollapsed">Item details <span class="fa" ng-class="{'fa-caret-down': isCollapsed, 'fa-caret-up': !isCollapsed}"></span></a>
-            </li>
             <li>
                 <a ng-href="{{resourceLink}}" class="external-link" ng-if="resourceLink" target="_{{engine}}" ng-click="gaMore()">Results in {{engineName}}</a>
             </li>
         </ul>
+
+
     </div>
 </div>
