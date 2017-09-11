@@ -2,7 +2,6 @@
     <div class="media-body">
         <h4 class="media-heading">
             <a ng-href="{{item.PLink}}"
-               title="{{item.Items[0].Data}}"
                target="_scout"
                ng-bind-html="item.title | lowercase | ucfirst | truncate: 80: '...': true" ng-click="gaPush()"></a>
 
