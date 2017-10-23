@@ -4,6 +4,11 @@ angular.module("bento/bento.tpl.html", []).run(["$templateCache", function($temp
   $templateCache.put("bento/bento.tpl.html",
     "<div class=\"container bento-box-container\">\n" +
     "    <div class=\"row\">\n" +
+    "        <div class=\"col-md-12\">\n" +
+    "            <h1 class=\"h2\">OneSearch Results</h1>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "    <div class=\"row\">\n" +
     "        <div class=\"col-md-4\">\n" +
     "            <div class=\"bento-box\" bento-box=\"articles\">\n" +
     "                <h2>\n" +
@@ -146,10 +151,11 @@ angular.module("bento/bento.tpl.html", []).run(["$templateCache", function($temp
 angular.module("common/directives/suggest/suggest.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("common/directives/suggest/suggest.tpl.html",
     "<div class=\"input-group input-group-lg\">\n" +
+    "    <label class=\"sr-only\" for=\"osTextField\">Search terms</label>\n" +
     "    <input type=\"text\" name=\"search\" class=\"form-control onesearch-text\" placeholder=\"{{prompt}}\" id=\"osTextField\"\n" +
     "           ng-model=\"model\" ng-change=\"onChange()\" ng-trim=\"false\" autocomplete=\"off\" />\n" +
     "    <div class=\"input-group-btn\">\n" +
-    "        <button type=\"submit\" class=\"btn btn-onesearch btn-primary\"><span class=\"fa fa-search\"></span></button>\n" +
+    "        <button type=\"submit\" class=\"btn btn-onesearch btn-primary\"><span class=\"fa fa-search\" aria-hidden=\"true\"></span><span class=\"sr-only\">Search OneSearch</span></button>\n" +
     "\n" +
     "    </div>\n" +
     "\n" +
@@ -1112,7 +1118,7 @@ angular.module('oneSearch.common')
                 model: '=',
                 search: '='
             },
-            controller: ['$scope', '$window', '$timeout', '$document', 'dataFactory', 'Bento', function($scope, $window, $timeout, $document,  dataFactory, Bento){
+            controller: function($scope, $window, $timeout, $document,  dataFactory, Bento){
                 $scope.items = {};
                 $scope.filteredItems = [];
                 $scope.model = "";
@@ -1237,7 +1243,7 @@ angular.module('oneSearch.common')
 
 
 
-            }],
+            },
             link: function(scope, elem, attrs) {
                 scope.showSuggestions = false;
                 var suggestWatcher = scope.$watch('items', function(newVal, oldVal){
@@ -1390,7 +1396,7 @@ angular.module('engines.acumen', [])
      * <mark>TODO:</mark>   add proper description.
      */
 
-    .controller('AcumenCtrl', ['$scope', '$filter', function($scope, $filter){
+    .controller('AcumenCtrl', function($scope, $filter){
         var items = $scope.items;
 
         for (var i = 0, len = items.length; i < len; i++) {
@@ -1400,7 +1406,7 @@ angular.module('engines.acumen', [])
                 else items[i].type = items[i].type.sort().shift();
             }
         }
-    }]);
+    });
 angular.module('engines.catalog', [])
 
     /**
@@ -1461,7 +1467,7 @@ angular.module('engines.catalog', [])
      * <mark>TODO:</mark>   add proper description.
      */
 
-    .controller('CatalogCtrl', ['$scope', '$filter', function($scope, $filter){
+    .controller('CatalogCtrl', function($scope, $filter){
         var types = {
             bc: "Archive/Manuscript",
             cm: "Music Score",
@@ -1503,7 +1509,7 @@ angular.module('engines.catalog', [])
         }
 
         $scope.items = items;
-    }]);
+    });
 
 angular.module('engines.databases', [])
 
@@ -1587,7 +1593,7 @@ angular.module('engines.ejournals', [])
      * <mark>TODO:</mark>   add proper description.
      */
 
-    .controller('EjouralsCtrl', ['$scope', function($scope) {
+    .controller('EjouralsCtrl', function($scope) {
 
         var title; // Title variable to bind to $scope. ".BibRelationships.IsPartOfRelationships" title is used if no item title is present.
         var ISSN;
@@ -1671,7 +1677,7 @@ angular.module('engines.ejournals', [])
         }
 
         $scope.items = items;
-    }]);
+    });
 /**
  * @ngdoc overview
  * @name engines
@@ -2020,7 +2026,7 @@ angular.module('engines.scout', [])
      * <mark>TODO:</mark>   add proper description.
      */
 
-    .controller('ScoutCtrl', ['$scope', function($scope){
+    .controller('ScoutCtrl', function($scope){
         var title; // Title variable to bind to $scope. ".BibRelationships.IsPartOfRelationships" title is used if no item title is present.
         var items = $scope.items;
         for (var i = 0; i < items.length; i++){
@@ -2094,7 +2100,7 @@ angular.module('engines.scout', [])
         }
 
         $scope.resourceLink = angular.copy(link);
-    }]);
+    });
 /**
  * @ngdoc object
  * @name engines.type:ENGIEN_NAME
@@ -2123,7 +2129,7 @@ angular.module('engines.staffdirectory', [])
             controller: 'StaffDirectoryCtrl'
         })
     }])
-    .controller('StaffDirectoryCtrl', ['$scope', function($scope){
+    .controller('StaffDirectoryCtrl', function($scope){
 
         var items = $scope.items;
 
@@ -2138,7 +2144,7 @@ angular.module('engines.staffdirectory', [])
                 }
             }
         }
-    }]);
+    });
 angular.module('filters.nameFilter', [])
 
     .filter('nameFilter', ['$filter', function($filter){
