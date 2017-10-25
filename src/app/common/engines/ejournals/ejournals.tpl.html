@@ -1,11 +1,11 @@
 <div class="media">
     <div class="media-body">
-        <h4 class="media-heading">
+        <h3 class="h4 media-heading">
             <a ng-href="{{item.PLink}}"
                target="_scout"
                ng-bind-html="item.title | lowercase | ucfirst | truncate: 80: '...': true" ng-click="gaPush()"></a>
 
-        </h4>
+        </h3>
         <div class="details-context">
             <span ng-if="item.year">{{item.year}}</span>
             <span ng-if="item.ISSN">ISSN: {{item.ISSN}}</span>

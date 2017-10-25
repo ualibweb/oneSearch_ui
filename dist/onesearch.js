@@ -217,13 +217,13 @@ angular.module("common/directives/suggest/suggest.tpl.html", []).run(["$template
 angular.module("common/engines/acumen/acumen.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("common/engines/acumen/acumen.tpl.html",
     "<div class=\"media\">\n" +
-    "    <a class=\"pull-left\" ng-href=\"http://acumen.lib.ua.edu/{{item.link}}\" title=\"{{item.title}}\" target=\"_acumen\">\n" +
+    "    <a class=\"pull-left\" ng-href=\"http://acumen.lib.ua.edu/{{item.link}}\"  target=\"_acumen\">\n" +
     "        <img ng-src=\"{{item.thumb_path}}\" alt=\"{{item.title}}\">\n" +
     "    </a>\n" +
     "    <div class=\"media-body\">\n" +
-    "        <h4 class=\"media-heading\">\n" +
-    "            <a ng-href=\"http://acumen.lib.ua.edu/{{item.link}}\" target=\"_acumen\" title=\"{{item.title}}\" ng-click=\"gaPush()\">{{item.title | truncate: 40: '...': true}}</a>\n" +
-    "        </h4>\n" +
+    "        <h3 class=\"h4 media-heading\">\n" +
+    "            <a ng-href=\"http://acumen.lib.ua.edu/{{item.link}}\" target=\"_acumen\"  ng-click=\"gaPush()\">{{item.title | truncate: 40: '...': true}}</a>\n" +
+    "        </h3>\n" +
     "        <div class=\"details-context\">\n" +
     "            <span ng-if=\"item.date\" ng-bind-html=\"item.date\"></span>\n" +
     "            <span ng-if=\"item.type\" ng-bind-html=\"item.type | ucfirst\"></span>\n" +
@@ -242,11 +242,10 @@ angular.module("common/engines/catalog/catalog.tpl.html", []).run(["$templateCac
   $templateCache.put("common/engines/catalog/catalog.tpl.html",
     "<div class=\"media\">\n" +
     "    <div class=\"media-body\">\n" +
-    "        <h4 class=\"media-heading\">\n" +
+    "        <h3 class=\"h4 media-heading\">\n" +
     "            <a ng-href=\"{{item.href}}\"\n" +
-    "               title=\"{{item.title}}\"\n" +
     "               ng-bind-html=\"item.title | truncate: 50: '...': true\" target=\"_catalog\" ng-click=\"gaPush()\"></a>\n" +
-    "        </h4>\n" +
+    "        </h3>\n" +
     "        <div class=\"details-context\">\n" +
     "            <span ng-if=\"item.year && item.year | number\" ng-bind-html=\"item.year\"></span>\n" +
     "            <span ng-if=\"item.mediaType\" ng-bind-html=\"item.mediaType\"></span>\n" +
@@ -274,9 +273,9 @@ angular.module("common/engines/databases/databases.tpl.html", []).run(["$templat
   $templateCache.put("common/engines/databases/databases.tpl.html",
     "<div class=\"media\">\n" +
     "    <div class=\"media-body\">\n" +
-    "        <h4 class=\"media-heading\">\n" +
+    "        <h3 class=\"h4 media-heading\">\n" +
     "            <a ng-href=\"{{item.url}}\" title=\"{{item.title}}\" target=\"_databases\" ng-click=\"gaPush()\">{{item.title | truncate: 40: '...': true}}</a>\n" +
-    "        </h4>\n" +
+    "        </h3>\n" +
     "        <div class=\"details-context\">\n" +
     "            <span ng-if=\"item.coverage\" ng-bind-html=\"item.coverage\"></span>\n" +
     "        </div>\n" +
@@ -292,12 +291,12 @@ angular.module("common/engines/ejournals/ejournals.tpl.html", []).run(["$templat
   $templateCache.put("common/engines/ejournals/ejournals.tpl.html",
     "<div class=\"media\">\n" +
     "    <div class=\"media-body\">\n" +
-    "        <h4 class=\"media-heading\">\n" +
+    "        <h3 class=\"h4 media-heading\">\n" +
     "            <a ng-href=\"{{item.PLink}}\"\n" +
     "               target=\"_scout\"\n" +
     "               ng-bind-html=\"item.title | lowercase | ucfirst | truncate: 80: '...': true\" ng-click=\"gaPush()\"></a>\n" +
     "\n" +
-    "        </h4>\n" +
+    "        </h3>\n" +
     "        <div class=\"details-context\">\n" +
     "            <span ng-if=\"item.year\">{{item.year}}</span>\n" +
     "            <span ng-if=\"item.ISSN\">ISSN: {{item.ISSN}}</span>\n" +
@@ -320,7 +319,7 @@ angular.module("common/engines/google-cs/google-cs.tpl.html", []).run(["$templat
   $templateCache.put("common/engines/google-cs/google-cs.tpl.html",
     "<div class=\"media\">\n" +
     "    <div class=\"media-body\">\n" +
-    "        <h4 class=\"media-heading\"><a ng-href=\"{{item.link}}\" title=\"{{item.title}}\" target=\"_googlecs\" ng-click=\"gaPush()\">{{item.title | truncate: 40: '...': true}}</a></h4>\n" +
+    "        <h3 class=\"h4 media-heading\"><a ng-href=\"{{item.link}}\" title=\"{{item.title}}\" target=\"_googlecs\" ng-click=\"gaPush()\">{{item.title | truncate: 40: '...': true}}</a></h3>\n" +
     "        <p ng-bind-html=\"item.snippet | truncate: 100: '...': true\"></p>\n" +
     "        <ul class=\"list-inline\">\n" +
     "            <li>\n" +
@@ -341,12 +340,12 @@ angular.module("common/engines/scout/scout.tpl.html", []).run(["$templateCache",
   $templateCache.put("common/engines/scout/scout.tpl.html",
     "<div class=\"media\">\n" +
     "    <div class=\"media-body\">\n" +
-    "        <h4 class=\"media-heading\">\n" +
+    "        <h3 class=\"h4 media-heading\">\n" +
     "            <a ng-href=\"{{item.PLink}}\"\n" +
     "               title=\"{{item.Items[0].Data}}\"\n" +
     "               target=\"_scout\"\n" +
     "               ng-bind-html=\"item.title | lowercase | ucfirst | truncate: 80: '...': true\" ng-click=\"gaPush()\"></a>\n" +
-    "        </h4>\n" +
+    "        </h3>\n" +
     "        <div class=\"details-context\">\n" +
     "            <span ng-if=\"item.RecordInfo.BibRecord.BibRelationships.IsPartOfRelationships[0].BibEntity.Dates[0]\">{{item.RecordInfo.BibRecord.BibRelationships.IsPartOfRelationships[0].BibEntity.Dates[0].Y}} </span>\n" +
     "            <span ng-if=\"item.mediaType\">{{item.mediaType}} </span>\n" +

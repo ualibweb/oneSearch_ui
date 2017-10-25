@@ -1,11 +1,11 @@
 <div class="media">
     <div class="media-body">
-        <h4 class="media-heading">
+        <h3 class="h4 media-heading">
             <a ng-href="{{item.PLink}}"
                title="{{item.Items[0].Data}}"
                target="_scout"
                ng-bind-html="item.title | lowercase | ucfirst | truncate: 80: '...': true" ng-click="gaPush()"></a>
-        </h4>
+        </h3>
         <div class="details-context">
             <span ng-if="item.RecordInfo.BibRecord.BibRelationships.IsPartOfRelationships[0].BibEntity.Dates[0]">{{item.RecordInfo.BibRecord.BibRelationships.IsPartOfRelationships[0].BibEntity.Dates[0].Y}} </span>
             <span ng-if="item.mediaType">{{item.mediaType}} </span>

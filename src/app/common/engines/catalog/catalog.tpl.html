@@ -1,10 +1,9 @@
 <div class="media">
     <div class="media-body">
-        <h4 class="media-heading">
+        <h3 class="h4 media-heading">
             <a ng-href="{{item.href}}"
-               title="{{item.title}}"
                ng-bind-html="item.title | truncate: 50: '...': true" target="_catalog" ng-click="gaPush()"></a>
-        </h4>
+        </h3>
         <div class="details-context">
             <span ng-if="item.year && item.year | number" ng-bind-html="item.year"></span>
             <span ng-if="item.mediaType" ng-bind-html="item.mediaType"></span>
