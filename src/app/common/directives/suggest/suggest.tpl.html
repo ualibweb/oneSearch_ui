@@ -34,7 +34,7 @@
             </div>
             <div class="col-sm-4 suggest-col" ng-show="items.subjects[0].subjects.length > 0">
                 <div class="">
-                    <h4>Research Guides&#39; Subjects <a href="http://guides.lib.ua.edu/" class="small" ng-mousedown="go('http://guides.lib.ua.edu/')">more</a></h4>
+                    <h4>Research Guides&#39; Subjects <a href="http://guides.lib.ua.edu/" class="small" ng-mousedown="go('http://guides.lib.ua.edu/')">more guides</a></h4>
                     <div ng-repeat="person in items.subjects | limitTo:10">
                         <div ng-repeat="subject in person.subjects | limitTo:2">
                             <a ng-if="subject.link.length > 7" ng-href="{{subject.link}}" ng-mousedown="go(subject.link)" ng-click="gaSuggestion(subject.subject)">
@@ -50,7 +50,7 @@
             </div>
             <div class="col-sm-4 suggest-col" ng-show="items.faq.length > 0">
                 <div class="">
-                    <h4>FAQ <a href="http://ask.lib.ua.edu/" class="small" ng-mousedown="go('http://ask.lib.ua.edu/')">more</a></h4>
+                    <h4>FAQ <a href="http://ask.lib.ua.edu/" class="small" ng-mousedown="go('http://ask.lib.ua.edu/')">more FAQs</a></h4>
                     <div ng-repeat="faq in items.faq | limitTo:5">
                         <a ng-href="{{faq.link}}" ng-mousedown="go(faq.link)"  ng-click="gaSuggestion(faq.title)" ng-bind-html="faq.title">
                         </a>
