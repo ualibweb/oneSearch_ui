@@ -28,7 +28,6 @@ angular.module('engines.libguides', [])
             title: 'Research Guides',
             priority: 2,
             resultsPath: 'LibGuides',
-            totalsPath: '',
             templateUrl: 'common/engines/libguides/libguides.tpl.html'
         })
     }])

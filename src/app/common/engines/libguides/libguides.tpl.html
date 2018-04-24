@@ -1,6 +1,6 @@
 <div class="media">
     <div class="media-body">
-        <h3 class="h4 media-heading"><a ng-href="{{item.link}}"  target="_libguides" ng-click="gaPush()">{{item.name | truncate: 40: '...': true}}</a></h3>
+        <h3 class="h4 media-heading"><a ng-href="{{item.url}}"  target="_libguides" ng-click="gaPush()">{{item.name | truncate: 40: '...': true}}</a></h3>
         <p ng-bind-html="item.description | truncate: 100: '...': true"></p>
         <ul class="list-inline">
             <li>

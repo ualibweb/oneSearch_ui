@@ -24,10 +24,9 @@ angular.module('engines.faq', [])
     .config(['oneSearchProvider', function(oneSearchProvider){
         oneSearchProvider.engine('faq', {
             id: 1024,
+            title: 'LibAnswers',
             priority: 2,
             resultsPath: 'LibAnswers.query.results',
-            totalsPath: 'GoogleCS.searchInformation.totalResults',
-            filterQuery: 'site:ask.lib.ua.edu',
             templateUrl: 'common/engines/faq/faq.tpl.html'
         })
     }])
