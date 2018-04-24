@@ -10,5 +10,10 @@
             <span class="text-muted">Subjects: </span>
             <span class="detail" ng-repeat="subj in item.subjects">{{subj.subject}}{{$last ? '' : ', '}}</span>
         </div>
+        <ul class="list-inline">
+            <li>
+                <a ng-href="{{resourceLink}}" class="external-link" ng-if="resourceLink" target="_{{engine}}" ng-click="gaMore()">Results in {{engineName}}</a>
+            </li>
+        </ul>
     </div>
 </div>

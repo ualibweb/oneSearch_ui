@@ -1,0 +1,13 @@
+<div class="media">
+    <div class="media-body">
+        <h3 class="h4 media-heading"><a ng-href="{{item.link}}" target="_libguides" ng-click="gaPush()">{{item.question | truncate: 40: '...': true}}</a></h3>
+        <ul class="list-inline">
+            <li>
+                <a ng-href="{{resourceLink}}" class="external-link" ng-if="resourceLink" target="_{{engine}}" ng-click="gaMore()">Results in {{engineName}}</a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+
+

@@ -23,11 +23,11 @@ angular.module('engines.faq', [])
      */
     .config(['oneSearchProvider', function(oneSearchProvider){
         oneSearchProvider.engine('faq', {
-            id: 16,
+            id: 1024,
             priority: 2,
-            resultsPath: 'GoogleCS.items',
+            resultsPath: 'LibAnswers.query.results',
             totalsPath: 'GoogleCS.searchInformation.totalResults',
             filterQuery: 'site:ask.lib.ua.edu',
-            templateUrl: 'common/engines/google-cs/google-cs.tpl.html'
+            templateUrl: 'common/engines/faq/faq.tpl.html'
         })
     }])
