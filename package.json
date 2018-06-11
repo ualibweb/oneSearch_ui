@@ -26,5 +26,8 @@
     "get-installed-path": "~1.0.2",
     "grunt-contrib-jshint": "~1.0.0",
     "grunt-auto-install": "~0.3.0"
+  },
+  "dependencies": {
+    "grunt": "^1.0.3"
   }
 }
