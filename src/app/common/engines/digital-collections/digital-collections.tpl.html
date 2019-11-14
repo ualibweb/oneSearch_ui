@@ -1,0 +1,15 @@
+<div class="media">
+    <a class="pull-left" ng-href="https://digitalcollections.libraries.ua.edu/digital/collection/{{item.collectionAlias}}/id/{{item.itemId}}/rec/1"  target="_digital-collections">
+        <img ng-src="https://digitalcollections.libraries.ua.edu/digital/{{item.thumbnailUri}}" alt="{{item.title}}">
+    </a>
+    <div class="media-body">
+        <h3 class="h4 media-heading">
+            <a ng-href="https://digitalcollections.libraries.ua.edu/digital/collection/{{item.collectionAlias}}/id/{{item.itemId}}/rec/1" target="_digital-collections"  ng-click="gaPush()">{{item.title | truncate: 40: '...': true}}</a>
+        </h3>
+        <ul class="list-inline">
+            <li>
+                <a ng-href="{{resourceLink}}" class="external-link" ng-if="resourceLink" target="_{{engine}}" ng-click="gaMore()">Results in {{engineName}}</a>
+            </li>
+        </ul>
+    </div>
+</div>

@@ -58,7 +58,7 @@
  *
  */
 angular.module('common.engines', [
-    'engines.acumen',
+    'engines.digitalcollections',
     'engines.catalog',
     'engines.databases',
     'engines.scout',
