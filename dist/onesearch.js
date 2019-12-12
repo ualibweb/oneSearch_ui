@@ -1,4 +1,4 @@
-angular.module('oneSearch.templates', ['bento/bento.tpl.html', 'common/directives/suggest/suggest.tpl.html', 'common/engines/catalog/catalog.tpl.html', 'common/engines/databases/databases.tpl.html', 'common/engines/digital-collections/digital-collections.tpl.html', 'common/engines/ejournals/ejournals.tpl.html', 'common/engines/google-cs/google-cs.tpl.html', 'common/engines/ir/ir.tpl.html', 'common/engines/libguides/libguides.tpl.html', 'common/engines/recommend/recommend.tpl.html', 'common/engines/scout/scout.tpl.html', 'common/engines/staff-directory/staff-directory.tpl.html']);
+angular.module('oneSearch.templates', ['bento/bento.tpl.html', 'common/directives/suggest/suggest.tpl.html', 'common/engines/catalog/catalog.tpl.html', 'common/engines/databases/databases.tpl.html', 'common/engines/digital-collections/digital-collections.tpl.html', 'common/engines/ejournals/ejournals.tpl.html', 'common/engines/google-cs/google-cs.tpl.html', 'common/engines/libguides/libguides.tpl.html', 'common/engines/recommend/recommend.tpl.html', 'common/engines/scout/scout.tpl.html', 'common/engines/staff-directory/staff-directory.tpl.html']);
 
 angular.module("bento/bento.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("bento/bento.tpl.html",
@@ -325,16 +325,6 @@ angular.module("common/engines/google-cs/google-cs.tpl.html", []).run(["$templat
     "        </ul>\n" +
     "    </div>\n" +
     "</div>");
-}]);
-
-angular.module("common/engines/ir/ir.tpl.html", []).run(["$templateCache", function($templateCache) {
-  $templateCache.put("common/engines/ir/ir.tpl.html",
-    "<div class=\"media\">\n" +
-    "	<div class=\"media-body\">\n" +
-    "		<h3 class=\"h4 media-heading\">{{item.title | truncate: 40: '...': true}}</h3>\n" +
-    "	</div>\n" +
-    "</div>\n" +
-    "");
 }]);
 
 angular.module("common/engines/libguides/libguides.tpl.html", []).run(["$templateCache", function($templateCache) {
@@ -1536,6 +1526,7 @@ angular.module('engines.digitalcollections', [])
     .config(['oneSearchProvider', function(oneSearchProvider) {
         oneSearchProvider.engine('digitalcollections', {
             id: 8,
+            title: 'Digital Collections',
             priority: 3,
             resultsPath: 'digitalCollections.items',
             templateUrl: 'common/engines/digital-collections/digital-collections.tpl.html',
@@ -1882,40 +1873,6 @@ angular.module('engines.googleCS', [])
             templateUrl: 'common/engines/google-cs/google-cs.tpl.html'
         })
     }])
-angular.module('engines.ir', [])
-
-    /**
-     * @ngdoc object
-     * @name engines.type:ir
-     *
-     * @description
-     * Engine config properties (For more details, see {@link oneSearch.oneSearchProvider#methods_engine oneSearchProvider.engine()} documentation)
-     *
-     * | property    | value                           |
-     * |-------------|---------------------------------|
-     * | id          | 2048                            |
-     * | title       | Ir                              |
-     * | priority    | 1                               |
-     * | resultsPath | `Ir.results`                    |
-     * | totalsPath  | `Ir.totals`                     |
-     * | mediaTypes  | N/A *(appears as its own box)*  |
-     * | filterQuery | N/A                             |
-     * | templateUrl | `common/engines/ir/ir.tpl.html` |
-     * | controller  | N/A                             |
-     *
-     * @requires oneSearchProvider
-     */
-
-    .config(['oneSearchProvider', function(oneSearchProvider){
-        oneSearchProvider.engine('ir', {
-            id: 2048,
-            priority: 1,
-            resultsPath: 'Ir.results',
-            totalsPath: 'Ir.totals',
-            templateUrl: 'common/engines/ir/ir.tpl.html'
-        })
-    }])
-
 angular.module('engines.libguides', [])
 
     /**
