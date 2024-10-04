@@ -490,11 +490,9 @@ angular.module('oneSearch.bento', [])
                             elm.addClass('hidden');
                         }
                         else{
-                            if (b == "articles"){
-                                elm.append("<strong>Your search term may be too broad, please try a more specific term</strong>");
-                            } else {
-                                elm.append("<strong>No Results</strong>");
-                            }
+                           
+                            elm.append("<strong>No Results</strong>");
+                            
                             elm.addClass('text-muted');
                         }
                     }
